@@ -1,8 +1,17 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'android'
+            keyPassword 'android'
+            storePassword 'android'
+            storeFile file('C:\\Android\\.android\\debug.keystore')
+        }
+    }
     compileSdkVersion 31
     buildToolsVersion "31.0.0"
 
@@ -35,4 +44,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation 'com.google.firebase:firebase-analytics'
+
 }
