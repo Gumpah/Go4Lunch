@@ -1,11 +1,22 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
 
-    <!--Main activity-->
+    <!--Main activity / xml -->
     <string name="contentDesc_loginBackground">Image d\'arrière plan de l\'écran de connexion</string>
     <string name="contentDesc_loginLogo">Logo de l\'application</string>
 
     <string name="button_facebookSignIn">Connexion avec Facebook</string>
     <string name="button_googleSignIn">Connexion avec Google</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">359538029220576</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb359538029220576</string>
+
+    <!--Main activity / java -->
+    <string name="connection_succeed">Connexion réussie</string>
+    <string name="sign_in_cancelled">Connexion annulée</string>
+    <string name="no_internet_connection">Connexion réseau impossible</string>
+    <string name="unknown_error">Connexion impossible</string>
+
 
 </resources>
