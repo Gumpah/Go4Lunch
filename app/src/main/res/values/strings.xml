@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
+
+    <!--Main activity-->
+    <string name="contentDesc_loginBackground">Image d\'arrière plan de l\'écran de connexion</string>
+    <string name="contentDesc_loginLogo">Logo de l\'application</string>
+
+    <string name="button_facebookSignIn">Connexion avec Facebook</string>
+    <string name="button_googleSignIn">Connexion avec Google</string>
+
 </resources>
