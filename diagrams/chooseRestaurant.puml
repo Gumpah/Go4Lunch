@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+note : Page actuelle : Page\nde détail d'un restaurant
+:Utilisateur clique sur le bouton de choix de restaurant;
+stop
+
+@enduml

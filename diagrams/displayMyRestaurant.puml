@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+:Utilisateur clique sur le bouton de menu;
+:Utilisateur clique sur le bouton "Mon restaurant";
+:Affichage de la page "Mon restaurant";
+
+if (L'utilisateur a-t-il choisi un restaurant ?) then (oui)
+    :La page affiche le restaurant choisi;
+else (non)
+    :La page affiche "Aucun restaurant choisi";
+endif
+stop
+
+@enduml

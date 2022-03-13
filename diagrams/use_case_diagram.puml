@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+top to bottom direction
+
+:Utilisateur: as U
+
+usecase "Se connecter" as UC1
+usecase "Afficher la liste des restaurants" as UC3
+usecase "Afficher la carte des restaurants" as UC4
+usecase "Afficher la liste des collègues sur l'application" as UC5
+usecase "Afficher la fiche d'un restaurant" as UC6
+usecase "Choisir un restaurant" as UC7
+usecase "Appeler un restaurant" as UC8
+usecase "Aimer un restaurant (like)" as UC9
+usecase "Ouvrir le site d'un restaurant" as UC10
+usecase "Afficher la liste des collègues ayant choisi un restaurant ?" as UC11
+usecase "Faire une recherche de restaurant (sur chaque vue)" as UC12
+usecase "Afficher l'écran des paramètres" as UC14
+usecase "Modifier les paramètres" as UC15
+usecase "Afficher ses informations de profil" as UC16
+usecase "Afficher la liste de ses restaurants choisis" as UC17
+
+
+usecase "Se déconnecter" as UC12
+
+
+U --> UC1
+
+UC1 <.. UC3 : includes
+UC1 <.. UC4 : includes
+UC1 <.. UC5 : includes
+
+UC3 <.. UC6 : extends
+UC4 <.. UC6 : extends
+UC5 <.. UC6 : extends
+
+UC6 <.. UC7 : extends
+UC6 <.. UC8 : extends
+UC6 <.. UC9 : extends
+UC6 <.. UC10 : extends
+UC6 <.. UC11 : extends
+
+UC1 <. UC12 : extends
+
+UC14 ..> UC1
+UC16 ..> UC1
+UC17 .> UC1
+
+UC15 ..> UC14 : includes
+
+@enduml

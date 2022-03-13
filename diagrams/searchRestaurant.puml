@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+note : Page actuelle : List View ou\nMap View ou Workmates
+:Utilisateur clique l'icône de recherche;
+:Utilisateur entre sa recherche dans le champ;
+:Affichage des éléments comprenant la chaîne de caractères entrée;
+stop
+
+@enduml

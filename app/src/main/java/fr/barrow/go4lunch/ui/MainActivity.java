@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
@@ -15,8 +13,6 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
@@ -31,12 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
+            this::onSignInResult
     );
 
     @Override
@@ -61,21 +52,15 @@ public class MainActivity extends AppCompatActivity {
     public void signOut() {
         AuthUI.getInstance()
                 .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
+                .addOnCompleteListener(task -> {
+                    // When completed
                 });
     }
 
     private void setupListeners(){
         // Login Button
-        binding.buttonSignInFacebook.setOnClickListener(view -> {
-            createSignInIntent(new AuthUI.IdpConfig.FacebookBuilder().build());
-        });
-        binding.buttonSignInGoogle.setOnClickListener(view -> {
-            createSignInIntent(new AuthUI.IdpConfig.GoogleBuilder().build());
-        });
+        binding.buttonSignInFacebook.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.FacebookBuilder().build()));
+        binding.buttonSignInGoogle.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.GoogleBuilder().build()));
     }
 
     private void initUI(){
@@ -89,27 +74,27 @@ public class MainActivity extends AppCompatActivity {
 
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
-            showSnackbar(getString(R.string.connection_succeed));
+            showSnackBar(getString(R.string.connection_succeed));
         } else {
             // Sign in failed
             if (response == null) {
                 // User pressed back button
-                showSnackbar(getString(R.string.sign_in_cancelled));
+                showSnackBar(getString(R.string.sign_in_cancelled));
                 return;
             }
 
             if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                showSnackbar(getString(R.string.no_internet_connection));
+                showSnackBar(getString(R.string.no_internet_connection));
                 return;
             }
 
-            showSnackbar(getString(R.string.unknown_error));
+            showSnackBar(getString(R.string.unknown_error));
             Log.e("MainActivity", "Sign-in error: ", response.getError());
         }
     }
 
     // Show Snack Bar with a message
-    private void showSnackbar( String message){
+    private void showSnackBar(String message){
         Snackbar.make(binding.constraintLayoutMainActivity, message, Snackbar.LENGTH_SHORT).show();
     }
 }

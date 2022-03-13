@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+note : Page actuelle : List View ou Map View
+:Utilisateur clique sur un restaurant;
+:Affichage de la page de détail du restaurant;
+stop
+
+
+@enduml

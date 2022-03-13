@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+note : Page actuelle : Paramètres
+:Utilisateur modifie ses paramètres;
+:Utilisateur clique sur le bouton "Sauvegarder";
+stop
+
+@enduml

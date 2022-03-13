@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+:Utilisateur clique sur l'icône "Workmates" du menu;
+:Affichage de la liste des collègues;
+stop
+
+@enduml

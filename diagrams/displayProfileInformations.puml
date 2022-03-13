@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+:Utilisateur clique sur le bouton de menu;
+:Ouverture du menu contenant les informations de profil;
+stop
+
+@enduml

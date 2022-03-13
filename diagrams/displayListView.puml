@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+:Utilisateur clique sur l'icône "List view" du menu;
+:Affichage de la vue des restaurants sous forme de list;
+stop
+
+@enduml

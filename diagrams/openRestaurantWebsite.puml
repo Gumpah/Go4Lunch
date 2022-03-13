@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+note : Utilisateur est connecté
+note : Page actuelle : Page\nde détail d'un restaurant
+
+if (Est-ce qu'un site web est disponible ?) then (oui)
+    :Utilisateur clique sur le bouton de site web du Restaurant;
+else (non)
+    stop
+endif
+
+stop
+
+@enduml
