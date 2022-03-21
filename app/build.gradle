@@ -44,11 +44,14 @@ dependencies {
 
     //FIREBASE
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
-    implementation 'com.google.firebase:firebase-analytics:20.1.0'
+    implementation 'com.google.firebase:firebase-analytics:20.1.1'
 
     //FIREBASE UI
     implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
 
     implementation 'com.facebook.android:facebook-login:13.0.0'
+
+    //MAPBOX
+    implementation "com.mapbox.navigation:android:2.3.0"
 
 }

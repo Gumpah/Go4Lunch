@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             showSnackBar(getString(R.string.connection_succeed));
+            startActivity(new Intent(this, MapViewActivity.class));
         } else {
             // Sign in failed
             if (response == null) {

@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1041220606418-4mi358cjji3h80nj0ajmjsgbdcjvambn.apps.googleusercontent.com",
+          "client_id": "1041220606418-hsl2eipgcv08djbcjvgqj2l6snkgq29v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "fr.barrow.go4lunch",
-            "certificate_hash": "b7190c65304aff020edc9f5eb19670076ffad84b"
+            "certificate_hash": "7f9fadcad17ca8bb096d44b9fa322d19efebf750"
           }
         },
         {
