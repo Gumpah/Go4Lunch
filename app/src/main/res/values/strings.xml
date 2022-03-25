@@ -1,13 +1,6 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
 
-    <!--Main activity / xml -->
-    <string name="contentDesc_loginBackground">Image d\'arrière plan de l\'écran de connexion</string>
-    <string name="contentDesc_loginLogo">Logo de l\'application</string>
-
-    <string name="button_facebookSignIn">Connexion avec Facebook</string>
-    <string name="button_googleSignIn">Connexion avec Google</string>
-
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">359538029220576</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb359538029220576</string>
@@ -15,11 +8,32 @@
     <!--MapBox Public Token -->
     <string name="mapbox_access_token">pk.eyJ1IjoiZ3VtcGFoIiwiYSI6ImNsMHpvZ3A2azF3bmUzY24xOTR2N3YzNjEifQ.VQRG6NQ9H5oJBH5eQKNh0g</string>
 
+    <!--Main activity / xml -->
+    <string name="contentDesc_loginBackground">Image d\'arrière plan de l\'écran de connexion</string>
+    <string name="contentDesc_loginLogo">Logo de l\'application</string>
+
+    <string name="button_facebookSignIn">Connexion avec Facebook</string>
+    <string name="button_googleSignIn">Connexion avec Google</string>
+
     <!--Main activity / java -->
     <string name="connection_succeed">Connexion réussie</string>
     <string name="sign_in_cancelled">Connexion annulée</string>
     <string name="no_internet_connection">Connexion réseau impossible</string>
     <string name="unknown_error">Connexion impossible</string>
 
+    <!--Navigation menu titles-->
+    <string name="title_mapView">Map View</string>
+    <string name="title_listView">List View</string>
+    <string name="title_workmates">Workmates</string>
+
+    <!--Header menu-->
+    <string name="contentDesc_headerBackground">Arrière plan du header</string>
+    <string name="contentDesc_userAvatar">Image de profil</string>
+    <string name="menuTitle_Lunch">Your lunch</string>
+    <string name="menuTitle_settings">Settings</string>
+    <string name="menuTitle_logout">Logout</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>

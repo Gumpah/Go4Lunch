@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_mapView"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="@string/title_mapView" />
+
+    <item
+        android:id="@+id/navigation_listView"
+        android:icon="@drawable/ic_baseline_view_list_24"
+        android:title="@string/title_listView" />
+
+    <item
+        android:id="@+id/navigation_workmates"
+        android:icon="@drawable/ic_baseline_people_24"
+        android:title="@string/title_workmates" />
+
+</menu>

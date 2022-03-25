@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_navigation"
+    app:startDestination="@+id/navigation_mapView">
+
+    <fragment
+        android:id="@+id/navigation_mapView"
+        android:name="fr.barrow.go4lunch.ui.MapViewFragment"
+        android:label="@string/title_mapView"
+        tools:layout="@layout/fragment_map_view" />
+
+    <fragment
+        android:id="@+id/navigation_listView"
+        android:name="fr.barrow.go4lunch.ui.ListViewFragment"
+        android:label="@string/title_listView"
+        tools:layout="@layout/fragment_list_view" />
+
+    <fragment
+        android:id="@+id/navigation_workmates"
+        android:name="fr.barrow.go4lunch.ui.WorkmatesFragment"
+        android:label="@string/title_workmates"
+        tools:layout="@layout/fragment_workmates" />
+
+</navigation>

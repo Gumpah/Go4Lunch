@@ -1,63 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity"
-    android:id="@+id/constraintLayout_mainActivity" >
+    android:fitsSystemWindows="true"
+    android:id="@+id/drawer_layout">
 
-    <ImageView
-        android:id="@+id/imageView_loginBackground"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/backgroundblurred"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/contentDesc_loginBackground" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView_loginLogo"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
-        android:src="@drawable/logo"
-        android:layout_marginTop="48dp"
-        app:layout_constraintTop_toTopOf="@id/constraintLayout_mainActivity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/contentDesc_loginLogo" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/activity_main_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:theme="@style/ToolBarStyle"/>
 
-    <Button
-        android:id="@+id/button_signInFacebook"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        app:layout_constraintTop_toBottomOf="@id/imageView_loginLogo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="100dp"
-        android:text="@string/button_facebookSignIn"
-        android:textColor="@color/textColor"
-        app:icon="@drawable/ic_facebook"
-        app:iconSize="28dp"
-        app:iconTint="@color/textColor"
-        android:backgroundTint="@color/facebook"/>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="?android:attr/windowBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
 
-    <Button
-        android:id="@+id/button_signInGoogle"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        app:layout_constraintTop_toBottomOf="@id/button_signInFacebook"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        android:text="@string/button_googleSignIn"
-        android:textColor="@color/textColor"
-        app:icon="@drawable/ic_google"
-        app:iconSize="24dp"
-        app:iconTint="@color/textColor"
-        android:backgroundTint="@color/google"
-        android:clickable="true"
-        android:focusable="true"
-        />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navigation_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/nav_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_main_toolbar"
+            app:navGraph="@navigation/my_navigation" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

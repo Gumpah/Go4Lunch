@@ -1,22 +1,19 @@
 package fr.barrow.go4lunch.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
-import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ErrorCodes;
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Collections;
-import java.util.List;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
@@ -25,77 +22,68 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            this::onSignInResult
-    );
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         initUI();
-        setupListeners();
+        initToolbar();
+        initDrawer();
+        initBottomNavigationView();
     }
 
-    public void createSignInIntent(AuthUI.IdpConfig provider) {
-        List<AuthUI.IdpConfig> providers =  Collections.singletonList(provider);
-
-        Intent signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setLogo(R.drawable.logo)
-                .build();
-        signInLauncher.launch(signInIntent);
-    }
-
-    public void signOut() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(task -> {
-                    // When completed
-                });
-    }
-
-    private void setupListeners(){
-        // Login Button
-        binding.buttonSignInFacebook.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.FacebookBuilder().build()));
-        binding.buttonSignInGoogle.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.GoogleBuilder().build()));
-    }
-
-    private void initUI(){
+    private void initUI() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
     }
 
-    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        IdpResponse response = result.getIdpResponse();
+    private void initDrawer() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.activityMainToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        binding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
 
-        if (result.getResultCode() == RESULT_OK) {
-            // Successfully signed in
-            showSnackBar(getString(R.string.connection_succeed));
-            startActivity(new Intent(this, MapViewActivity.class));
+    private void initToolbar() {
+        setSupportActionBar(binding.activityMainToolbar);
+    }
+
+    private void initBottomNavigationView() {
+        BottomNavigationView navView = binding.navView;
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_mapView, R.id.navigation_listView, R.id.navigation_workmates)
+                .build();
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            // Sign in failed
-            if (response == null) {
-                // User pressed back button
-                showSnackBar(getString(R.string.sign_in_cancelled));
-                return;
-            }
-
-            if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                showSnackBar(getString(R.string.no_internet_connection));
-                return;
-            }
-
-            showSnackBar(getString(R.string.unknown_error));
-            Log.e("MainActivity", "Sign-in error: ", response.getError());
+            super.onBackPressed();
         }
     }
 
-    // Show Snack Bar with a message
-    private void showSnackBar(String message){
-        Snackbar.make(binding.constraintLayoutMainActivity, message, Snackbar.LENGTH_SHORT).show();
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mainMenuDrawer_lunch:
+                break;
+            case R.id.mainMenuDrawer_settings:
+                break;
+            case R.id.mainMenuDrawer_logout:
+                break;
+            default:
+                break;
+        }
+
+        binding.drawerLayout.closeDrawer(GravityCompat.START);
+
+        return super.onOptionsItemSelected(item);
     }
 }
