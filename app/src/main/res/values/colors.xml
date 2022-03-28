@@ -12,4 +12,12 @@
     <color name="google">#D53325</color>
 
     <color name="textColor">#FFFFFFFF</color>
+
+    <color name="toolbar">#FC3F1B</color>
+    <color name="toolbarItems">#FFFFFF</color>
+    <color name="statusBar">#B50504</color>
+    <color name="bottomNavView">#FFFFFF</color>
+    <color name="bottomNavViewSelectedItem">#FC3F1B</color>
+    <color name="bottomNavViewItems">#000000</color>
+    <color name="navViewBackground">#FC7540</color>
 </resources>

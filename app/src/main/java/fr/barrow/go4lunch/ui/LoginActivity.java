@@ -21,10 +21,12 @@ import java.util.List;
 import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityLoginBinding;
+import fr.barrow.go4lunch.ui.manager.UserManager;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
+    private UserManager userManager = UserManager.getInstance();
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkIfUserConnected();
         initUI();
         setupListeners();
     }
@@ -50,12 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         signInLauncher.launch(signInIntent);
     }
 
-    public void signOut() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(task -> {
-                    // When completed
-                });
+    private void checkIfUserConnected() {
+        if (userManager.isCurrentUserLogged()) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 
     private void setupListeners(){
