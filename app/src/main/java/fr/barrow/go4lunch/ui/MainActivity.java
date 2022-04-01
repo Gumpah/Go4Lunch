@@ -1,13 +1,18 @@
 package fr.barrow.go4lunch.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -15,31 +20,72 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivityMainNavHeaderBinding;
-import fr.barrow.go4lunch.ui.manager.UserManager;
+import fr.barrow.go4lunch.data.manager.UserManager;
+import fr.barrow.go4lunch.model.NetworkStateManager;
+import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.utils.NetworkMonitoring;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     private ActivityMainBinding binding;
     private ActivityMainNavHeaderBinding navViewHeaderBinding;
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavController;
+
+    private MyViewModel mMyViewModel;
+
     private UserManager userManager = UserManager.getInstance();
+
+    private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
+        @Override
+        public void onChanged(Boolean isConnected) {
+            showConnectionToast(isConnected);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
+
         initAppBarConfiguration();
         initNavController();
         initToolbar();
         initDrawer();
         initBottomNavigationView();
         updateUIWithUserData();
+        configureViewModel();
+        initNetworkStatus();
+    }
+
+    private void configureViewModel() {
+        mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+    }
+
+    private void initNetworkStatus() {
+        mMyViewModel.getConnectionStatus().observe(this, activeNetworkStateObserver);
+    }
+
+    private void showConnectionToast(boolean isConnected) {
+        if (isConnected) {
+            Toast.makeText(
+                    this, R.string.internet_connected,
+                    Toast.LENGTH_SHORT
+            ).show();
+        } else {
+            Toast.makeText(
+                    this, R.string.internet_disconnected,
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
     }
 
     private void updateUIWithUserData(){
@@ -102,12 +148,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void initDrawer() {
         NavigationUI.setupWithNavController(binding.navigationViewSideMenu, mNavController);
+        binding.navigationViewSideMenu.setNavigationItemSelectedListener(this);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return NavigationUI.onNavDestinationSelected(item, mNavController)
-                || super.onOptionsItemSelected(item);
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        if (id==R.id.mainMenuDrawer_lunch) {
+
+        }
+        if (id==R.id.mainMenuDrawer_settings) {
+
+        }
+        if (id==R.id.mainMenuDrawer_logout) {
+            userManager.signOut(this).addOnSuccessListener(aVoid -> {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish(); });
+        }
+        //This is for maintaining the behavior of the Navigation view
+        NavigationUI.onNavDestinationSelected(item, mNavController);
+        //This is for closing the drawer after acting on it
+        binding.drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override

@@ -1,10 +1,12 @@
-package fr.barrow.go4lunch;
+package fr.barrow.go4lunch.ui;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
+import fr.barrow.go4lunch.data.Repository;
 import fr.barrow.go4lunch.model.Restaurant;
 
 public class MyViewModel extends ViewModel {
@@ -23,5 +25,9 @@ public class MyViewModel extends ViewModel {
     public void fetchRestaurants() {
         //ArrayList<Restaurant> restaurants = mRepository.getRestaurants;
         //mMutableLiveData.setValue(restaurants);
+    }
+
+    public LiveData<Boolean> getConnectionStatus() {
+        return mRepository.getConnectionStatus();
     }
 }

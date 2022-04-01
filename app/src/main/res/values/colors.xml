@@ -9,7 +9,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="facebook">#4066B2</color>
+    <color name="facebookNoNetwork">#2e4980</color>
     <color name="google">#D53325</color>
+    <color name="googleNoNetwork">#801f17</color>
 
     <color name="textColor">#FFFFFFFF</color>
 

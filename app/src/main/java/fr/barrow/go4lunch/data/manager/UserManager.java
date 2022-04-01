@@ -1,8 +1,11 @@
-package fr.barrow.go4lunch.ui.manager;
+package fr.barrow.go4lunch.data.manager;
 
+import android.content.Context;
+
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 
-import fr.barrow.go4lunch.ui.repository.UserRepository;
+import fr.barrow.go4lunch.data.UserRepository;
 
 public class UserManager {
 
@@ -32,6 +35,14 @@ public class UserManager {
 
     public Boolean isCurrentUserLogged(){
         return (this.getCurrentUser() != null);
+    }
+
+    public Task<Void> signOut(Context context){
+        return userRepository.signOut(context);
+    }
+
+    public Task<Void> deleteUser(Context context){
+        return userRepository.deleteUser(context);
     }
 
 }

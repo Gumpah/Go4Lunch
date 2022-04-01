@@ -8,12 +8,13 @@
     <!--MapBox Public Token -->
     <string name="mapbox_access_token">pk.eyJ1IjoiZ3VtcGFoIiwiYSI6ImNsMHpvZ3A2azF3bmUzY24xOTR2N3YzNjEifQ.VQRG6NQ9H5oJBH5eQKNh0g</string>
 
-    <!--Main activity / xml -->
+    <!--Login Activity / xml -->
     <string name="contentDesc_loginBackground">Image d\'arrière plan de l\'écran de connexion</string>
     <string name="contentDesc_loginLogo">Logo de l\'application</string>
 
     <string name="button_facebookSignIn">Connexion avec Facebook</string>
     <string name="button_googleSignIn">Connexion avec Google</string>
+    <string name="button_NoNetwork">Hors connexion</string>
 
     <!--Main activity / java -->
     <string name="connection_succeed">Connexion réussie</string>
@@ -39,5 +40,15 @@
 
     <string name="info_no_email_found">Aucun mail trouvé</string>
     <string name="info_no_username_found">Aucun nom d\'utilisateur trouvé</string>
+    <string name="location_permission_refused">You need to accept location permissions.</string>
+    <string name="internet_connected">Internet Connected</string>
+    <string name="internet_disconnected">Internet disconnected</string>
+
+
+    <string name="contentDesc_fabCamera">Retour caméra</string>
+    <string name="tracking_enabled">Tracking activé</string>
+    <string name="tracking_already_enabled">Tracking déjà activé</string>
+
+    <string name="current_location">Lat: %1$f Long: %2$f</string>
 
 </resources>

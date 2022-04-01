@@ -1,4 +1,4 @@
-package fr.barrow.go4lunch;
+package fr.barrow.go4lunch.utils;
 
 import android.content.Context;
 
@@ -8,12 +8,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 
+import fr.barrow.go4lunch.data.Repository;
+import fr.barrow.go4lunch.ui.MyViewModel;
+
 public class MyViewModelFactory implements ViewModelProvider.Factory {
 
     private static MyViewModelFactory factory;
-
-    private MyViewModelFactory(Context context) {
-    }
+    private final Repository mRepository;
 
     public static MyViewModelFactory getInstance(Context context) {
         if (factory == null) {
@@ -26,11 +27,15 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
         return factory;
     }
 
+    private MyViewModelFactory(Context context) {
+        mRepository = new Repository(context.getApplicationContext());
+    }
+
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull @NotNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MyViewModel.class)) {
-            //return (T) new MyViewModel(Repository, mExecutor);
+            return (T) new MyViewModel(mRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
