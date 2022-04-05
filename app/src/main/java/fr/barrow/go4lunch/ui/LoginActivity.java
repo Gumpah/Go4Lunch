@@ -132,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             showSnackBar(getString(R.string.connection_succeed));
+            userManager.createUser();
             finish();
             startActivity(new Intent(this, MainActivity.class));
         } else {

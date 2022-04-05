@@ -27,8 +27,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 
-import org.jetbrains.annotations.NotNull;
-
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentMapViewBinding;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -55,28 +53,20 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
 
     private void initLocation() {
         mMapboxMap.setStyle(Style.MAPBOX_STREETS,
-                new Style.OnStyleLoaded() {
-                    @Override
-                    public void onStyleLoaded(@NonNull Style style) {
-                        enableLocationComponent(style);
-                    }
-                });
+                this::enableLocationComponent);
     }
 
     private void initButtonListener() {
-        binding.fabBackToCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    Toast.makeText(getActivity(), R.string.location_permission_refused, Toast.LENGTH_SHORT).show();
-                } else {
-                    initLocation();
-                    setInTrackingMode();
-                }
+        binding.fabBackToCamera.setOnClickListener(view -> {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Toast.makeText(getActivity(), R.string.location_permission_refused, Toast.LENGTH_SHORT).show();
+            } else {
+                initLocation();
+                setInTrackingMode();
             }
         });
     }
@@ -94,11 +84,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
 
 
     private void requestPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             initLocation();
@@ -112,7 +98,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
     }
 
     @Override
-    public void onMapReady(@NonNull @NotNull MapboxMap mapboxMap) {
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
         mMapboxMap = mapboxMap;
         initLocation();
     }
@@ -136,17 +122,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
         if (!isInTrackingMode) {
             locationComponent = mMapboxMap.getLocationComponent();
             locationComponent.setCameraMode(CameraMode.TRACKING_GPS_NORTH, new OnLocationCameraTransitionListener() {
-                        @Override
-                        public void onLocationCameraTransitionFinished(int cameraMode) {
-                            isInTrackingMode = true;
-                            locationComponent.zoomWhileTracking(16f);
-                        }
-
-                        @Override
-                        public void onLocationCameraTransitionCanceled(int cameraMode) {
-                            isInTrackingMode = false;
-                        }
-                    });
+                @Override
+                public void onLocationCameraTransitionFinished(int cameraMode) {
+                    isInTrackingMode = true;
+                    locationComponent.zoomWhileTracking(16f);
+                }
+                @Override
+                public void onLocationCameraTransitionCanceled(int cameraMode) {
+                    isInTrackingMode = false;
+                }
+            });
             Toast.makeText(getActivity(), R.string.tracking_enabled, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getActivity(), R.string.tracking_already_enabled, Toast.LENGTH_SHORT).show();

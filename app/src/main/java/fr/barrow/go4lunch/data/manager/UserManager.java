@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 
 import fr.barrow.go4lunch.data.UserRepository;
+import fr.barrow.go4lunch.model.User;
 
 public class UserManager {
 
@@ -41,8 +42,24 @@ public class UserManager {
         return userRepository.signOut(context);
     }
 
-    public Task<Void> deleteUser(Context context){
-        return userRepository.deleteUser(context);
+    public void createUser(){
+        userRepository.createUser();
     }
 
+    public Task<User> getUserData(){
+        // Get the user from Firestore and cast it to a User model Object
+        return userRepository.getUserData().continueWith(task -> task.getResult().toObject(User.class)) ;
+    }
+
+    public Task<Void> updateUsername(String username){
+        return userRepository.updateUsername(username);
+    }
+
+    public Task<Void> deleteUser(Context context){
+        // Delete the user account from the Auth
+        return userRepository.deleteUser(context).addOnCompleteListener(task -> {
+            // Once done, delete the user datas from Firestore
+            userRepository.deleteUserFromFirestore();
+        });
+    }
 }
