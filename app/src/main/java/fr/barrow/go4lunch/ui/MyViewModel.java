@@ -30,4 +30,12 @@ public class MyViewModel extends ViewModel {
     public LiveData<Boolean> getConnectionStatus() {
         return mRepository.getConnectionStatus();
     }
+
+    public LiveData<Boolean> getLocationPermissionStatus() {
+        return mRepository.getLocationPermissionStatus();
+    }
+
+    public void setLocationPermissionStatus(boolean locationPermissionStatus) {
+        mRepository.setLocationPermissionStatus(locationPermissionStatus);
+    }
 }
