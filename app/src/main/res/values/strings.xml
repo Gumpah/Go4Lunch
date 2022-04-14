@@ -50,5 +50,11 @@
     <string name="tracking_already_enabled">Tracking déjà activé</string>
 
     <string name="current_location">Lat: %1$f Long: %2$f</string>
+    <string name="choose_restaurant">Choose restaurant</string>
+    <string name="restaurant_photo">Restaurant photo</string>
+    <string name="call_button">Call button</string>
+    <string name="call">Call</string>
+    <string name="like">Like</string>
+    <string name="website">Website</string>
 
 </resources>

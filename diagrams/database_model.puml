@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/class-diagram
+left to right direction
+
+class "Utilisateurs" as user
+class "Restaurants" as restaurant
+
+class user << collection >> {
+Utilisateur
+--
+String: uid PK
+String: username
+Reference: pickedRestaurantId FK
+Reference List: likedRestaurantsIds [] FK
+String: urlPicture
+}
+
+class restaurant << collection >> {
+Restaurant
+--
+String: id PK
+String: name
+String: foodType
+String: address
+int: note
+int: closingTimeHours
+int: closingTimeMinutes
+String: urlPicture
+}
+
+user "*" ---> "1" restaurant : picks
+user "*" ---> "*" restaurant : likes
+
+
+@enduml

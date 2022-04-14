@@ -22,4 +22,7 @@
     <color name="bottomNavViewSelectedItem">#FC3F1B</color>
     <color name="bottomNavViewItems">#000000</color>
     <color name="navViewBackground">#FC7540</color>
+
+    <color name="orange1">#FC3F1B</color>
+    <color name="star_yellow">#F6E518</color>
 </resources>
