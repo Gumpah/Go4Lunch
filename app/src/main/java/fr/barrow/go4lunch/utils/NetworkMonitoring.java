@@ -1,5 +1,6 @@
 package fr.barrow.go4lunch.utils;
 
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -9,8 +10,6 @@ import android.net.NetworkRequest;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import fr.barrow.go4lunch.model.NetworkStateManager;
 
 public class NetworkMonitoring extends ConnectivityManager.NetworkCallback {
 

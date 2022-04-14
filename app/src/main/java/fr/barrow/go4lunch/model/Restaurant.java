@@ -8,18 +8,24 @@ public class Restaurant {
     private String name;
     private String foodType;
     private String address;
-    private int note;
+    private int rating;
     private int closingTimeHours;
     private int closingTimeMinutes;
     @Nullable
     private String urlPicture;
+    @Nullable
+    private String phoneNumber;
+    @Nullable
+    private String website;
 
-    public Restaurant(String id, String name, String foodType, String address, @Nullable String urlPicture) {
+    public Restaurant(String id, String name, String foodType, String address, @Nullable String urlPicture, @Nullable String phoneNumber, @Nullable String website) {
         this.id = id;
         this.name = name;
         this.foodType = foodType;
         this.address = address;
         this.urlPicture = urlPicture;
+        this.phoneNumber = phoneNumber;
+        this.website = website;
     }
 
     public String getId() {
@@ -54,12 +60,12 @@ public class Restaurant {
         this.address = address;
     }
 
-    public int getNote() {
-        return note;
+    public int getRating() {
+        return rating;
     }
 
-    public void setNote(int note) {
-        this.note = note;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public int getClosingTimeHours() {
@@ -85,5 +91,23 @@ public class Restaurant {
 
     public void setUrlPicture(@Nullable String urlPicture) {
         this.urlPicture = urlPicture;
+    }
+
+    @Nullable
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(@Nullable String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Nullable
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(@Nullable String website) {
+        this.website = website;
     }
 }

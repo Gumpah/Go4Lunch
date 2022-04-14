@@ -1,4 +1,4 @@
-package fr.barrow.go4lunch.model;
+package fr.barrow.go4lunch.utils;
 
 import android.os.Looper;
 import android.util.Log;

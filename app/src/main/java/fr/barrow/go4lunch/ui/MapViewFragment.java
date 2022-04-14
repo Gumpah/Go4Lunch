@@ -2,6 +2,7 @@ package fr.barrow.go4lunch.ui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,14 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.maps.model.Circle;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
@@ -26,19 +31,30 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
+import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+
+import java.util.List;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentMapViewBinding;
+import fr.barrow.go4lunch.model.places.Place;
+import fr.barrow.go4lunch.utils.PlacesCalls;
 import pub.devrel.easypermissions.AppSettingsDialog;
 
 
-public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnLocationClickListener, OnCameraTrackingChangedListener {
+public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnLocationClickListener, OnCameraTrackingChangedListener, PlacesCalls.Callbacks {
 
     private FragmentMapViewBinding binding;
     private MapView mapView;
     private MapboxMap mMapboxMap;
     private LocationComponent locationComponent;
     private boolean isInTrackingMode;
+    private String apiKey;
+    private SymbolManager symbolManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +64,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
         View view = binding.getRoot();
         mapSetup(savedInstanceState);
         initButtonListener();
+        apiKey = getString(R.string.MAPS_API_KEY);
         return view;
+    }
+
+    private void executeHttpRequest() {
+        PlacesCalls.fetchNearbyPlaces(this, apiKey);
     }
 
     private void initLocation() {
@@ -82,7 +103,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
             }
             );
 
-
     private void requestPermissions() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -106,13 +126,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            executeHttpRequest();
             locationComponent = mMapboxMap.getLocationComponent();
-            locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(getActivity(), loadedMapStyle).build());
+            locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(requireActivity(), loadedMapStyle).build());
             locationComponent.setLocationComponentEnabled(true);
             setInTrackingMode();
             locationComponent.setRenderMode(RenderMode.COMPASS);
             locationComponent.addOnLocationClickListener(this);
             locationComponent.addOnCameraTrackingChangedListener(this);
+            loadedMapStyle.addImage("marker-icon",getResources().getDrawable(R.drawable.ic_baseline_location_on_24));
+            symbolManager = new SymbolManager(mapView, mMapboxMap, loadedMapStyle);
+            symbolManager.setIconAllowOverlap(true);
+            symbolManager.setTextAllowOverlap(true);
         } else {
             requestPermissions();
         }
@@ -199,5 +224,25 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, OnL
         super.onDestroyView();
         mapView.onDestroy();
         binding = null;
+    }
+
+    @Override
+    public void onResponse(@Nullable List<Place> placesList) {
+        if(placesList != null) {
+            for (int i = 0;i < placesList.size(); i++) {
+                System.out.println(placesList.get(i).getGeometry().getLocation().getLat());
+                symbolManager.create(new SymbolOptions()
+                        .withLatLng(new LatLng(placesList.get(i).getGeometry().getLocation().getLat(), placesList.get(i).getGeometry().getLocation().getLng()))
+                        .withIconImage("marker-icon")
+                        .withIconSize(2f)
+                        .withTextField(placesList.get(i).getName()));
+
+            }
+        }
+    }
+
+    @Override
+    public void onFailure() {
+
     }
 }

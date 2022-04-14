@@ -6,7 +6,7 @@ import android.os.Looper;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import fr.barrow.go4lunch.model.NetworkStateManager;
+import fr.barrow.go4lunch.utils.NetworkStateManager;
 import fr.barrow.go4lunch.utils.NetworkMonitoring;
 
 public class Repository {

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -27,9 +26,7 @@ import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivityMainNavHeaderBinding;
 import fr.barrow.go4lunch.data.manager.UserManager;
-import fr.barrow.go4lunch.model.NetworkStateManager;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
-import fr.barrow.go4lunch.utils.NetworkMonitoring;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
