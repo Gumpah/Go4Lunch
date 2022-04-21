@@ -1,17 +1,27 @@
 package fr.barrow.go4lunch.data;
 
-import com.google.android.gms.tasks.Task;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.places.Place;
+import fr.barrow.go4lunch.model.placedetails.PlaceDetails;
+import fr.barrow.go4lunch.model.placedetails.PlaceDetailsList;
+import fr.barrow.go4lunch.model.placesnearby.Place;
 
 public class RestaurantRepository {
 
     private static final String COLLECTION_NAME = "restaurants";
     private static final String USERNAME_FIELD = "username";
+
+    private MutableLiveData<ArrayList<Restaurant>> restaurantList;
 
     private static volatile RestaurantRepository instance;
 
@@ -36,7 +46,31 @@ public class RestaurantRepository {
     }
 
     // Create User in Firestore
-    public void createRestaurant(Place place) {
+    public void createRestaurant() {
+
+    }
+
+    public void placeDetailsToRestaurantObject(PlaceDetailsList placeDetails) {
+        PlaceDetails myPlaceDetails = placeDetails.getResult();
+        String id = myPlaceDetails.getPlaceId();
+        String name = myPlaceDetails.getName();
+        String address = myPlaceDetails.getFormattedAddress();
+        String urlPicture = null;
+        String phoneNumber = myPlaceDetails.getInternationalPhoneNumber();
+        String website = myPlaceDetails.getWebsite();
+        LatLng position = new LatLng(myPlaceDetails.getGeometry().getLocation().getLat(), myPlaceDetails.getGeometry().getLocation().getLng());
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        //int closingTimeHours = myPlaceDetails.getOpeningHours().getPeriods().get(day).getClose();
+        LocalTime closingTime;
+    }
+
+    public void setRestaurants(ArrayList<Restaurant> restaurants) {
+        restaurantList.setValue(restaurants);
+    }
+
+    public MutableLiveData<ArrayList<Restaurant>> getRestaurants() {
+        return restaurantList;
     }
 
     /*

@@ -4,8 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.265" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/activity_login.xml" value="0.18854166666666666" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/activity_main.xml" value="0.26403985507246375" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/activity_main_nav_header.xml" value="0.18854166666666666" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/activity_restaurant_details.xml" value="0.33" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/fragment_list_view.xml" value="0.26403985507246375" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/fragment_map_view.xml" value="0.22" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/fragment_maps_view.xml" value="0.36666666666666664" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/fragment_restaurant_details_workmates_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/fragment_workmates.xml" value="0.26403985507246375" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/markerview.xml" value="0.28442028985507245" />
       </map>
     </option>

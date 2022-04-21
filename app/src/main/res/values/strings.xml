@@ -57,4 +57,7 @@
     <string name="like">Like</string>
     <string name="website">Website</string>
 
+    <string name="user_avatar">User avatar</string>
+    <string name="contentDesc_locationButton">Zoom on location button</string>
+
 </resources>

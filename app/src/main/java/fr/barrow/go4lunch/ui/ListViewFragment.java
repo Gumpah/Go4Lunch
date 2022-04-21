@@ -8,20 +8,16 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.libraries.places.api.net.PlacesClient;
-
 import java.util.List;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentListViewBinding;
-import fr.barrow.go4lunch.model.places.Place;
+import fr.barrow.go4lunch.model.placesnearby.Place;
 import fr.barrow.go4lunch.utils.PlacesCalls;
 
-public class ListViewFragment extends Fragment implements PlacesCalls.Callbacks{
+public class ListViewFragment extends Fragment {
 
-    private static final String TAG = ListViewFragment.class.getSimpleName();
     private FragmentListViewBinding binding;
-    private PlacesClient placesClient;
     private String apiKey;
 
     @Override
@@ -32,16 +28,15 @@ public class ListViewFragment extends Fragment implements PlacesCalls.Callbacks{
         apiKey = getString(R.string.MAPS_API_KEY);
         //Places.initialize(requireContext(), apiKey);
         //placesClient = Places.createClient(requireActivity());
-        executeHttpRequest();
         return view;
     }
 
     private void executeHttpRequest() {
-        PlacesCalls.fetchNearbyPlaces(this, apiKey);
+        //PlacesCalls.fetchNearbyPlaces(this, apiKey);
     }
-
+/*
     @Override
-    public void onResponse(@Nullable List<Place> placesList) {
+    public void onSuccess(@Nullable List<Place> placesList) {
         if(placesList != null) {
             for (int i = 0;i < placesList.size(); i++) {
                 System.out.println(placesList.get(i).getName());
@@ -53,4 +48,6 @@ public class ListViewFragment extends Fragment implements PlacesCalls.Callbacks{
     public void onFailure() {
 
     }
+
+ */
 }

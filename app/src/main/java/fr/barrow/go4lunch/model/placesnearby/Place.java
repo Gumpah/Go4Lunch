@@ -1,4 +1,4 @@
-package fr.barrow.go4lunch.model.places;
+package fr.barrow.go4lunch.model.placesnearby;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

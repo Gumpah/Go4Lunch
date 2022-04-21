@@ -2,6 +2,10 @@ package fr.barrow.go4lunch.model;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.time.LocalTime;
+
 
 public class Restaurant {
     private String id;
@@ -9,23 +13,25 @@ public class Restaurant {
     private String foodType;
     private String address;
     private int rating;
-    private int closingTimeHours;
-    private int closingTimeMinutes;
     @Nullable
     private String urlPicture;
     @Nullable
     private String phoneNumber;
     @Nullable
     private String website;
+    private LatLng position;
+    private LocalTime closingTime;
 
-    public Restaurant(String id, String name, String foodType, String address, @Nullable String urlPicture, @Nullable String phoneNumber, @Nullable String website) {
+    public Restaurant(String id, String name, String address, @Nullable String urlPicture, @Nullable String phoneNumber, @Nullable String website, LatLng position, LocalTime closingTime, int rating) {
         this.id = id;
         this.name = name;
-        this.foodType = foodType;
         this.address = address;
         this.urlPicture = urlPicture;
         this.phoneNumber = phoneNumber;
         this.website = website;
+        this.position = position;
+        this.closingTime = closingTime;
+        this.rating = rating;
     }
 
     public String getId() {
@@ -68,20 +74,20 @@ public class Restaurant {
         this.rating = rating;
     }
 
-    public int getClosingTimeHours() {
-        return closingTimeHours;
+    public LatLng getPosition() {
+        return position;
     }
 
-    public void setClosingTimeHours(int closingTimeHours) {
-        this.closingTimeHours = closingTimeHours;
+    public void setPosition(LatLng position) {
+        this.position = position;
     }
 
-    public int getClosingTimeMinutes() {
-        return closingTimeMinutes;
+    public LocalTime getClosingTime() {
+        return closingTime;
     }
 
-    public void setClosingTimeMinutes(int closingTimeMinutes) {
-        this.closingTimeMinutes = closingTimeMinutes;
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
     }
 
     @Nullable

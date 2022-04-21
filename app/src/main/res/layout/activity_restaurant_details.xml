@@ -50,7 +50,7 @@
             android:layout_margin="8dp"
             app:layout_constraintStart_toEndOf="@id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
-            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"/>
+            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName" />
 
         <ImageView
             android:id="@+id/imageView_star2"
@@ -101,12 +101,13 @@
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
             android:scaleType="fitCenter"
+            android:layout_marginLeft="48dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/imageButton_likeRestaurant"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/textView_callRestaurant"
             android:contentDescription="@string/call_button"
-            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintVertical_chainStyle="spread"/>
 
         <ImageButton
@@ -132,6 +133,7 @@
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
             android:scaleType="fitCenter"
+            android:layout_marginRight="48dp"
             app:layout_constraintStart_toEndOf="@id/imageButton_likeRestaurant"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -184,6 +186,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/constraintLayout_container2"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/fragment_restaurant_details_workmates_item"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
