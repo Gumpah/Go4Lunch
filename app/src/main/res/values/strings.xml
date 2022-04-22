@@ -59,5 +59,8 @@
 
     <string name="user_avatar">User avatar</string>
     <string name="contentDesc_locationButton">Zoom on location button</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="contentDesc_photo_du_restaurant">Photo du restaurant</string>
 
 </resources>

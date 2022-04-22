@@ -1,9 +1,11 @@
 package fr.barrow.go4lunch.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import fr.barrow.go4lunch.model.placedetails.PlaceDetailsList;
+import fr.barrow.go4lunch.model.placesnearby.Place;
 import fr.barrow.go4lunch.model.placesnearby.PlacesList;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
@@ -38,17 +40,17 @@ public class PlacesStreams {
 
     public static Observable<PlaceDetailsList> streamFetchNearbyPlacesAndFetchFirstPlaceDetails(String mapApiKey){
         return streamFetchNearbyPlaces(mapApiKey)
-                .map(new Function<PlacesList, String>() {
+                .map(new Function<PlacesList, ArrayList<String>>() {
                     @Override
-                    public String apply(PlacesList placesList) throws Exception {
-                        return placesList.getResults().get(0).getPlaceId();
+                    public ArrayList<String> apply(PlacesList placesList) throws Exception {
+                        ArrayList<String> placeIdList = new ArrayList<>();
+                        for (Place place : placesList.getResults()) {
+                            placeIdList.add(place.getPlaceId());
+                        }
+                        return placeIdList;
                     }
                 })
-                .flatMap(new Function<String, Observable<PlaceDetailsList>>() {
-                    @Override
-                    public Observable<PlaceDetailsList> apply(String placeId) throws Exception {
-                        return streamFetchPlaceDetails(mapApiKey, placeId);
-                    }
-                });
+                .flatMap(Observable::fromIterable)
+                .flatMap(placeId -> streamFetchPlaceDetails(mapApiKey, placeId));
     }
 }

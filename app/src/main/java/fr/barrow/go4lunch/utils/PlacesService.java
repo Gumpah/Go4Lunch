@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 
 public interface PlacesService {
 
-    @GET("maps/api/place/nearbysearch/json?type=restaurant&location=48.8379049,2.2397836&radius=500&opennow=true")
+    @GET("maps/api/place/nearbysearch/json?type=restaurant&location=48.8379049,2.2397836&radius=500") //readd opennow=true
     Observable<PlacesList> getNearbyPlaces(@Query("key") String apiKey);
 
     @GET("maps/api/place/details/json?")

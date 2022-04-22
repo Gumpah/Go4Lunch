@@ -7,25 +7,21 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 import fr.barrow.go4lunch.data.Repository;
+import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.model.Restaurant;
+import fr.barrow.go4lunch.model.placedetails.PlaceDetailsList;
 
 public class MyViewModel extends ViewModel {
     Repository mRepository;
-    MutableLiveData<ArrayList<Restaurant>> mMutableLiveData;
+    RestaurantRepository mRestaurantRepository;
+    MutableLiveData<ArrayList<Restaurant>> mRestaurantList;
 
-    public MyViewModel(Repository repository) {
+    public MyViewModel(Repository repository, RestaurantRepository restaurantRepository) {
         mRepository = repository;
-        mMutableLiveData = new MutableLiveData<>();
+        mRestaurantRepository = restaurantRepository;
+        mRestaurantList = new MutableLiveData<>();
     }
 
-    public MutableLiveData<ArrayList<Restaurant>> getMutableLiveData() {
-        return mMutableLiveData;
-    }
-
-    public void fetchRestaurants() {
-        //ArrayList<Restaurant> restaurants = mRepository.getRestaurants;
-        //mMutableLiveData.setValue(restaurants);
-    }
 
     public LiveData<Boolean> getConnectionStatus() {
         return mRepository.getConnectionStatus();
@@ -37,5 +33,23 @@ public class MyViewModel extends ViewModel {
 
     public void setLocationPermissionStatus(boolean locationPermissionStatus) {
         mRepository.setLocationPermissionStatus(locationPermissionStatus);
+    }
+
+    public Restaurant placeDetailsToRestaurantObject(PlaceDetailsList placeDetails) {
+        return mRestaurantRepository.placeDetailsToRestaurantObject(placeDetails);
+    }
+
+    public void addRestaurant(Restaurant restaurant) {
+        mRestaurantRepository.addRestaurant(restaurant);
+        mRestaurantList.setValue(mRestaurantRepository.getRestaurants());
+    }
+
+    public void setRestaurants(ArrayList<Restaurant> restaurants) {
+        mRestaurantRepository.setRestaurants(restaurants);
+        mRestaurantList.setValue(mRestaurantRepository.getRestaurants());
+    }
+
+    public MutableLiveData<ArrayList<Restaurant>> getRestaurants() {
+        return mRestaurantList;
     }
 }

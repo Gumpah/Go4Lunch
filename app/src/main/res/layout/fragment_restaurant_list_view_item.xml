@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.RestaurantDetailsWorkmatesItem">
+
+    <TextView
+        android:id="@+id/textView_restaurantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Restaurant's name"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_margin="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/textView_restaurantAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Restaurant's address"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
+        app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
+        />
+
+    <ImageView
+        android:id="@+id/imageView_restaurantPhoto"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/contentDesc_photo_du_restaurant"
+        tools:src="@drawable/backgroundblurred"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

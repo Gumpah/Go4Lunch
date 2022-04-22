@@ -20,9 +20,12 @@ public class Restaurant {
     @Nullable
     private String website;
     private LatLng position;
-    private LocalTime closingTime;
+    @Nullable
+    private String closingTimeHours;
+    @Nullable
+    private String closingTimeMinutes;
 
-    public Restaurant(String id, String name, String address, @Nullable String urlPicture, @Nullable String phoneNumber, @Nullable String website, LatLng position, LocalTime closingTime, int rating) {
+    public Restaurant(String id, String name, String address, @Nullable String urlPicture, @Nullable String phoneNumber, @Nullable String website, LatLng position, int rating, @Nullable String closingTimeHours, @Nullable String closingTimeMinutes) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -30,8 +33,9 @@ public class Restaurant {
         this.phoneNumber = phoneNumber;
         this.website = website;
         this.position = position;
-        this.closingTime = closingTime;
         this.rating = rating;
+        this.closingTimeHours = closingTimeHours;
+        this.closingTimeMinutes = closingTimeMinutes;
     }
 
     public String getId() {
@@ -82,14 +86,6 @@ public class Restaurant {
         this.position = position;
     }
 
-    public LocalTime getClosingTime() {
-        return closingTime;
-    }
-
-    public void setClosingTime(LocalTime closingTime) {
-        this.closingTime = closingTime;
-    }
-
     @Nullable
     public String getUrlPicture() {
         return urlPicture;
@@ -115,5 +111,21 @@ public class Restaurant {
 
     public void setWebsite(@Nullable String website) {
         this.website = website;
+    }
+
+    public String getClosingTimeHours() {
+        return closingTimeHours;
+    }
+
+    public void setClosingTimeHours(String closingTimeHours) {
+        this.closingTimeHours = closingTimeHours;
+    }
+
+    public String getClosingTimeMinutes() {
+        return closingTimeMinutes;
+    }
+
+    public void setClosingTimeMinutes(String closingTimeMinutes) {
+        this.closingTimeMinutes = closingTimeMinutes;
     }
 }

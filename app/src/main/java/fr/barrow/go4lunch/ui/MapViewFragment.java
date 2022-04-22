@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -24,11 +27,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.ArrayList;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityLoginBinding;
 import fr.barrow.go4lunch.databinding.FragmentMapViewBinding;
+import fr.barrow.go4lunch.model.Restaurant;
+import fr.barrow.go4lunch.model.placedetails.PlaceDetailsList;
+import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.utils.PlacesStreams;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import pub.devrel.easypermissions.AppSettingsDialog;
 
 
@@ -38,6 +50,11 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     private boolean permissionDenied = false;
+    private String apiKey;
+    private Disposable disposable;
+
+    private MyViewModel mMyViewModel;
+    private MutableLiveData<ArrayList<Restaurant>> mRestaurantList;
 
     @Nullable
     @Override
@@ -56,6 +73,45 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+        apiKey = getString(R.string.MAPS_API_KEY);
+        configureViewModel();
+        initDataChangeObserve();
+        executeHttpRequestWithRetrofit();
+    }
+
+    public void initDataChangeObserve() {
+        mRestaurantList = mMyViewModel.getRestaurants();
+        mRestaurantList.observe(requireActivity(), list -> {
+            for (Restaurant r : list) {
+                map.addMarker(new MarkerOptions()
+                        .position(r.getPosition())
+                        .title(r.getName()));
+            }
+        });
+    }
+
+    public void configureViewModel() {
+        mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(requireActivity())).get(MyViewModel.class);
+    }
+
+    private void executeHttpRequestWithRetrofit(){
+        this.disposable = PlacesStreams.streamFetchNearbyPlacesAndFetchFirstPlaceDetails(apiKey).subscribeWith(new DisposableObserver<PlaceDetailsList>() {
+            @Override
+            public void onNext(PlaceDetailsList placeDetailsList) {
+                mMyViewModel.addRestaurant(mMyViewModel.placeDetailsToRestaurantObject(placeDetailsList));
+                Log.e("TAG","On Next");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("TAG","On Error"+Log.getStackTraceString(e));
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("TAG","On Complete !!");
+            }
+        });
     }
 
     private void enableMyLocation() {
@@ -140,5 +196,15 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     @Override
     public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(requireActivity(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
+    }
+
+    private void disposeWhenDestroy(){
+        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.disposeWhenDestroy();
     }
 }
