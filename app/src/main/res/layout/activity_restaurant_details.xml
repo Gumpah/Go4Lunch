@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.RestaurantDetailsActivity">
     
     <ImageView
@@ -26,7 +27,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_container"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         app:layout_constraintTop_toBottomOf="@id/imageView_restaurantPhoto"
         android:background="@color/orange1">
 
@@ -38,8 +39,11 @@
             app:layout_constraintTop_toTopOf="@id/constraintLayout_container"
             tools:text="Restaurant"
             android:layout_margin="8dp"
-            android:textSize="24sp"
-            android:textColor="@color/white"/>
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:maxLength="30"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <ImageView
             android:id="@+id/imageView_star1"
@@ -47,7 +51,9 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
             app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName" />
@@ -58,7 +64,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/imageView_star1"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
             app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"/>
@@ -69,19 +76,20 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/imageView_star2"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
             app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"/>
 
         <TextView
-            android:id="@+id/textView_restaurantType"
+            android:id="@+id/textView_restaurantTypeAndAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
             tools:text="Food type - address"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:layout_margin="8dp"
             android:textColor="@color/white"/>
 
@@ -95,8 +103,8 @@
 
         <ImageButton
             android:id="@+id/imageButton_callRestaurant"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_baseline_call_24"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
@@ -112,8 +120,8 @@
 
         <ImageButton
             android:id="@+id/imageButton_likeRestaurant"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_baseline_star_24"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
@@ -127,8 +135,8 @@
 
         <ImageButton
             android:id="@+id/imageButton_websiteRestaurant"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_baseline_public_24"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
@@ -147,7 +155,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/call"
-            android:textSize="16sp"
+            android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/imageButton_callRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_callRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_callRestaurant"
@@ -160,7 +168,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/like"
-            android:textSize="16sp"
+            android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/imageButton_likeRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_likeRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_likeRestaurant"
@@ -173,7 +181,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/website"
-            android:textSize="16sp"
+            android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/imageButton_websiteRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_websiteRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_websiteRestaurant"

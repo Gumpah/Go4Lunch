@@ -1,19 +1,5 @@
 package fr.barrow.go4lunch.utils;
 
-import androidx.annotation.NonNull;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import fr.barrow.go4lunch.model.placesnearby.PlacesList;
-import fr.barrow.go4lunch.model.placesnearby.Place;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class PlacesCalls {
 /*
     public interface Callbacks {

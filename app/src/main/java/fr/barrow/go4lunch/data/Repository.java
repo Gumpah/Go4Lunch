@@ -15,6 +15,8 @@ public class Repository {
 
     private final MutableLiveData<Boolean> locationPermissionStatus = new MutableLiveData<>();
 
+    private String location;
+
     public Repository(Context applicationContext) {
         mNetworkMonitoring = new NetworkMonitoring(applicationContext);
         mNetworkMonitoring.checkNetworkState();
@@ -37,5 +39,11 @@ public class Repository {
         }
     }
 
+    public String getLocation() {
+        return location;
+    }
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

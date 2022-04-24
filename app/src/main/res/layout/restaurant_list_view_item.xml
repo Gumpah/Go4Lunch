@@ -5,6 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackgroundBorderless"
+    android:id="@+id/constraintLayout_restaurantListItem"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".ui.RestaurantDetailsWorkmatesItem">
 
     <TextView

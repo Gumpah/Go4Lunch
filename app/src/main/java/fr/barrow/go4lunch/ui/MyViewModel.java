@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import fr.barrow.go4lunch.data.Repository;
 import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsList;
+import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 
 public class MyViewModel extends ViewModel {
     Repository mRepository;
@@ -35,8 +35,8 @@ public class MyViewModel extends ViewModel {
         mRepository.setLocationPermissionStatus(locationPermissionStatus);
     }
 
-    public Restaurant placeDetailsToRestaurantObject(PlaceDetailsList placeDetails) {
-        return mRestaurantRepository.placeDetailsToRestaurantObject(placeDetails);
+    public Restaurant placeDetailsToRestaurantObject(PlaceDetailsResult placeDetails, String photoUrl) {
+        return mRestaurantRepository.placeDetailsToRestaurantObject(placeDetails, photoUrl);
     }
 
     public void addRestaurant(Restaurant restaurant) {
@@ -51,5 +51,21 @@ public class MyViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<Restaurant>> getRestaurants() {
         return mRestaurantList;
+    }
+
+    public void clearRestaurants() {
+        mRestaurantRepository.clearRestaurants();
+    }
+
+    public Restaurant getRestaurantFromId(String id) {
+        return mRestaurantRepository.getRestaurantFromId(id);
+    }
+
+    public String getLocation() {
+        return mRepository.getLocation();
+    }
+
+    public void setLocation(String location) {
+        mRepository.setLocation(location);
     }
 }

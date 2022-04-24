@@ -2,11 +2,6 @@ package fr.barrow.go4lunch.data;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,26 +9,13 @@ import java.util.GregorianCalendar;
 
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.placedetails.PlaceDetails;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsList;
+import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 
 public class RestaurantRepository {
 
     /*
     private static final String COLLECTION_NAME = "restaurants";
     private static final String USERNAME_FIELD = "username";
-
-    public static RestaurantRepository getInstance() {
-        RestaurantRepository result = instance;
-        if (result != null) {
-            return result;
-        }
-        synchronized(RestaurantRepository.class) {
-            if (instance == null) {
-                instance = new RestaurantRepository();
-            }
-            return instance;
-        }
-    }
 
     // Get the Collection Reference
     private CollectionReference getRestaurantsCollection(){
@@ -52,33 +34,32 @@ public class RestaurantRepository {
         mRestaurantList = new ArrayList<>();
     }
 
-    public Restaurant placeDetailsToRestaurantObject(PlaceDetailsList placeDetails) {
+    public Restaurant placeDetailsToRestaurantObject(PlaceDetailsResult placeDetails, String photoUrl) {
         PlaceDetails place = placeDetails.getResult();
         String id = place.getPlaceId();
         String name = place.getName();
-        String address = place.getFormattedAddress();
-        String urlPicture = null;
+        String address = place.getFormattedAddress().split(",")[0];
+        String urlPicture = photoUrl;
         String phoneNumber = place.getInternationalPhoneNumber();
         String website = place.getWebsite();
         LatLng position = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
-        System.out.println(place.getName());
         int rating = ratingToIntOn3(place.getRating());
         int dayOfWeek = getDayOfWeekFromJavaCalendar();
         String closingTimeHours = null;
         String closingTimeMinutes = null;
-        if (place.getOpeningHours() != null) {
+        if (place.getOpeningHours() != null && place.getOpeningHours().getPeriods().size() >  dayOfWeek) {
             String closingTime = place.getOpeningHours().getPeriods().get(dayOfWeek).getClose().getTime();
             closingTimeHours = closingTime.substring(0,1);
             closingTimeMinutes = closingTime.substring(2,3);
         }
-        return new Restaurant(id, name, address, null, phoneNumber, website, position, rating, closingTimeHours, closingTimeMinutes);
+        return new Restaurant(id, name, address, urlPicture, phoneNumber, website, position, rating, closingTimeHours, closingTimeMinutes);
     }
 
     private int ratingToIntOn3(Double r) {
         if (r != null) {
             Double rating = r*3/5;
             int ratingNoDecimalInt = rating.intValue();
-            if (rating-7 > (double) ratingNoDecimalInt) {
+            if (rating-0.9 > (double) ratingNoDecimalInt) {
                 return ratingNoDecimalInt;
             } else {
                 return ratingNoDecimalInt+1;
@@ -123,22 +104,19 @@ public class RestaurantRepository {
         mRestaurantList = new ArrayList<>(restaurants);
     }
 
+    public void clearRestaurants() {
+        mRestaurantList = new ArrayList<>();
+    }
+
     public ArrayList<Restaurant> getRestaurants() {
         return mRestaurantList;
     }
 
-    /*
-    // Get User Data from Firestore
-    public Task<DocumentSnapshot> getRestaurantData(){
-    }
-
-    // Delete the User from Firestore
-    public void deleteRestaurantFromFirestore() {
-        String uid = this.getCurrentUser().getUid();
-        if(uid != null){
-            this.getRestaurantsCollection().document(uid).delete();
+    public Restaurant getRestaurantFromId(String id) {
+        for (Restaurant r : mRestaurantList) {
+            if (r.getId().equals(id)) return r;
         }
+        return null;
     }
-    */
 }
 
