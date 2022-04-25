@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
+import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.RestaurantListViewItemBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 
@@ -28,7 +31,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
     public ListViewAdapter.ListViewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         mContext = parent.getContext();
-        return new ListViewViewHolder(RestaurantListViewItemBinding.inflate(inflater));
+        return new ListViewViewHolder(RestaurantListViewItemBinding.inflate(inflater, parent, false));
     }
 
     @Override
@@ -54,6 +57,12 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
         void bind(Restaurant restaurant) {
             binding.textViewRestaurantName.setText(restaurant.getName());
             binding.textViewRestaurantAddress.setText(restaurant.getAddress());
+            Glide.with(binding.getRoot())
+                    .load(restaurant.getUrlPicture())
+                    .error(R.drawable.backgroundblurred)
+                    .centerCrop()
+                    .circleCrop()
+                    .into(binding.imageViewRestaurantPhoto);
         }
 
         void setClickListener(String restaurantId) {

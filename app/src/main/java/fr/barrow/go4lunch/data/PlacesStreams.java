@@ -33,6 +33,12 @@ public class PlacesStreams {
 
     public static Observable<CombinedPlaceAndString> streamFetchPhotoUrlAndAddToCombinedObject(String mapApiKey, String photoReference, CombinedPlaceAndString combinedPlaceAndString) {
         PlacesService placesService = PlacesService.retrofit2.create(PlacesService.class);
+        if (photoReference == null) {
+            return Observable.just(combinedPlaceAndString)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .timeout(10, TimeUnit.SECONDS);
+        }
         return placesService.getPhotoUrlTest(mapApiKey, photoReference)
                 .map(new Function<Response<String>, CombinedPlaceAndString>() {
                     @Override
@@ -55,7 +61,7 @@ public class PlacesStreams {
                         if (combinedPlaceAndString.getPlaceDetailsResult().getResult().getPhotos() != null) {
                             combinedPlaceAndString.setPhotoReference(combinedPlaceAndString.getPlaceDetailsResult().getResult().getPhotos().get(0).getPhotoReference());
                         } else {
-                            combinedPlaceAndString.setPhotoReference("Aap_uEASr-yaqUDiS8DYTWRRD0Roz776OqDXqiLbRXGbW-wCLB4bAx1tvr8BSiK5USnFyldWizWzUd4SbXnHfONC3JMCh9vVFvQaqqE-_XSDdX_aaZNqB8zxF9H0CWQFI8oE5bdbvOYXdlnyVdzZUKltc5r6bJwZjYiL34fUL0Xw4GkXymI2");
+                            combinedPlaceAndString.setPhotoReference(null);
                         }
                         return combinedPlaceAndString;
                     }

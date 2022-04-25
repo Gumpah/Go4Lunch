@@ -43,18 +43,18 @@ public class ListViewFragment extends Fragment {
         View view = binding.getRoot();
         apiKey = getString(R.string.MAPS_API_KEY);
         configureViewModel();
-        initRecyclerView();
+        initRecyclerView(view);
         initDataChangeObserve();
         setupDataRequest();
         return view;
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView(View view) {
         mRecyclerView = binding.recyclerview;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         ListViewAdapter mAdapter = new ListViewAdapter(mRestaurants);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(view.getContext(),
                 layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(mAdapter);

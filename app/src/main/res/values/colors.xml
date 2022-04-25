@@ -26,4 +26,5 @@
     <color name="orange1">#FC3F1B</color>
     <color name="star_yellow">#F6E518</color>
     <color name="grey">#4A4A4A</color>
+    <color name="onClickColor">#9c9c9c</color>
 </resources>

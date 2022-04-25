@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
@@ -48,6 +50,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void initRestaurantInfos() {
         binding.textViewRestaurantName.setText(mRestaurant.getName());
         binding.textViewRestaurantTypeAndAddress.setText(mRestaurant.getAddress());
+        Glide.with(binding.getRoot())
+                .load(mRestaurant.getUrlPicture())
+                .centerCrop()
+                .error(R.drawable.backgroundblurred)
+                .into(binding.imageViewRestaurantPhoto);
     }
 
     private void setupStarsRating () {
