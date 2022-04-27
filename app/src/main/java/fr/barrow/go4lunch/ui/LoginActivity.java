@@ -24,13 +24,11 @@ import java.util.List;
 import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityLoginBinding;
-import fr.barrow.go4lunch.data.manager.UserManager;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
-    private UserManager userManager = UserManager.getInstance();
 
     private MyViewModel mMyViewModel;
 
@@ -49,10 +47,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        configureViewModel();
         checkIfUserConnected();
         initUI();
         setupListeners();
-        configureViewModel();
         initNetworkStatus();
     }
 
@@ -108,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkIfUserConnected() {
-        if (userManager.isCurrentUserLogged()) {
+        if (mMyViewModel.isCurrentUserLogged()) {
             finish();
             startActivity(new Intent(this, MainActivity.class));
         }
@@ -132,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             showSnackBar(getString(R.string.connection_succeed));
-            userManager.createUser();
+            mMyViewModel.createUser();
             finish();
             startActivity(new Intent(this, MainActivity.class));
         } else {

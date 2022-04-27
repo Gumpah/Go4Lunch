@@ -13,21 +13,6 @@ import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 
 public class RestaurantRepository {
 
-    /*
-    private static final String COLLECTION_NAME = "restaurants";
-    private static final String USERNAME_FIELD = "username";
-
-    // Get the Collection Reference
-    private CollectionReference getRestaurantsCollection(){
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
-    }
-
-    // Create User in Firestore
-    public void createRestaurant() {
-
-    }
-     */
-
     private ArrayList<Restaurant> mRestaurantList;
 
     public RestaurantRepository() {

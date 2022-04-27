@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import fr.barrow.go4lunch.data.Repository;
 import fr.barrow.go4lunch.data.RestaurantRepository;
+import fr.barrow.go4lunch.data.UserRepository;
 import fr.barrow.go4lunch.ui.MyViewModel;
 
 public class MyViewModelFactory implements ViewModelProvider.Factory {
@@ -17,6 +18,7 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
     private static MyViewModelFactory factory;
     private final Repository mRepository;
     private final RestaurantRepository mRestaurantRepository;
+    private final UserRepository mUserRepository;
 
     public static MyViewModelFactory getInstance(Context context) {
         if (factory == null) {
@@ -32,13 +34,14 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
     private MyViewModelFactory(Context context) {
         mRepository = new Repository(context.getApplicationContext());
         mRestaurantRepository = new RestaurantRepository();
+        mUserRepository = new UserRepository();
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull @NotNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MyViewModel.class)) {
-            return (T) new MyViewModel(mRepository, mRestaurantRepository);
+            return (T) new MyViewModel(mRepository, mRestaurantRepository, mUserRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

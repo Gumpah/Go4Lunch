@@ -25,7 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivityMainNavHeaderBinding;
-import fr.barrow.go4lunch.data.manager.UserManager;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private MyViewModel mMyViewModel;
 
-    private UserManager userManager = UserManager.getInstance();
-
     private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
         @Override
         public void onChanged(Boolean isConnected) {
@@ -51,16 +48,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        configureViewModel();
         initUI();
-
         initAppBarConfiguration();
         initNavController();
         initToolbar();
         initDrawer();
         initBottomNavigationView();
         updateUIWithUserData();
-        configureViewModel();
         initNetworkStatus();
+        mMyViewModel.updateUserData();
     }
 
     private void configureViewModel() {
@@ -86,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateUIWithUserData(){
-        if(userManager.isCurrentUserLogged()){
-            FirebaseUser user = userManager.getCurrentUser();
+        if(mMyViewModel.isCurrentUserLogged()){
+            FirebaseUser user = mMyViewModel.getCurrentUser();
 
             if(user.getPhotoUrl() != null){
                 setProfilePicture(user.getPhotoUrl());
@@ -158,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
         if (id==R.id.mainMenuDrawer_logout) {
-            userManager.signOut(this).addOnSuccessListener(aVoid -> {
+            mMyViewModel.signOut(this).addOnSuccessListener(aVoid -> {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish(); });
         }

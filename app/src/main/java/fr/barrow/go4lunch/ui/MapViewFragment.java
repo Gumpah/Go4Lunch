@@ -110,11 +110,11 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
                 PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
                 String photoUrl = combinedPlaceAndString.getPhotoUrl();
                 mMyViewModel.addRestaurant(mMyViewModel.placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
-                Log.e("TAG","On Next");
             }
 
             @Override
             public void onError(Throwable e) {
+                Toast.makeText(requireActivity(), "Impossible de récupérer les restaurants", Toast.LENGTH_SHORT).show();
                 Log.e("TAG","On Error"+Log.getStackTraceString(e));
             }
 
