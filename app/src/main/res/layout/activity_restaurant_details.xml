@@ -130,7 +130,7 @@
             android:id="@+id/imageButton_likeRestaurant"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/fab_likerestaurant_states"
+            android:src="@drawable/imagebutton_likerestaurant_states"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
             android:scaleType="fitCenter"
