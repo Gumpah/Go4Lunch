@@ -5,18 +5,18 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.data.Repository;
 import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.data.UserRepository;
@@ -39,6 +39,21 @@ public class MyViewModel extends ViewModel {
         mUser = new MutableLiveData<>();
     }
 
+    private LiveData<List<UserStateItem>> mapDataToViewState(LiveData<List<User>> users) {
+        return Transformations.map(users, user -> {
+            List<UserStateItem> userViewStateItems = new ArrayList<>();
+            for (User u : user) {
+                userViewStateItems.add(
+                        new UserStateItem(u)
+                );
+            }
+            return userViewStateItems;
+        });
+    }
+
+    public LiveData<List<UserStateItem>> getAllUsersWhoPickedARestaurant(String restaurantId) {
+        return mapDataToViewState(mUserRepository.getAllUsersWhoPickedARestaurant(restaurantId));
+    }
 
     public LiveData<Boolean> getConnectionStatus() {
         return mRepository.getConnectionStatus();

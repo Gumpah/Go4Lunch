@@ -1,18 +1,23 @@
 package fr.barrow.go4lunch.ui;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 import fr.barrow.go4lunch.R;
-import fr.barrow.go4lunch.databinding.ActivityMainBinding;
+import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.User;
@@ -25,6 +30,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private Restaurant mRestaurant;
     private MutableLiveData<User> mUserMutableLiveData;
     private User mUser;
+    private ArrayList<UserStateItem> mUsers = new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private RestaurantDetailsWorkmatesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +41,24 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         configureViewModel();
-        mMyViewModel.updateUserData();
         getRestaurant();
+        initRecyclerView(view);
+        mMyViewModel.updateUserData();
         initDataChangeObserve();
         initUI();
     }
 
-    public void configureViewModel() {
+    private void configureViewModel() {
         mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+    }
+
+    private void initRecyclerView(View view) {
+        mRecyclerView = binding.recyclerview;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        adapter = new RestaurantDetailsWorkmatesAdapter(mUsers);
+        mRecyclerView.setAdapter(adapter);
+        initUsersList();
     }
 
     private void getRestaurant() {
@@ -50,12 +68,22 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     public void initDataChangeObserve() {
-        mUserMutableLiveData = mMyViewModel.getUser();
-        System.out.println("AAA" + mMyViewModel.getUser().getValue().getUid());
-        mUser = mUserMutableLiveData.getValue();
-        mUserMutableLiveData.observe(this, user -> {
-            System.out.println("AAA" + user.getUid());
+        mUser = mMyViewModel.getUser().getValue();
+        mMyViewModel.getUser().observe(this, user -> {
             mUser = user;
+        });
+    }
+
+    private void initUsersList() {
+        mMyViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId()).observe(this, users -> {
+            if (users.isEmpty()) {
+                System.out.println("BLABLA");
+            } else {
+                System.out.println("BLABLA" + users.get(0).getUsername());
+            }
+            mUsers.clear();
+            mUsers.addAll(users);
+            adapter.notifyDataSetChanged();
         });
     }
 
@@ -64,6 +92,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         setupStarsRating();
         initPickRestaurantButton();
         initLikeRestaurantButton();
+        initWebsiteButton();
+        initCallButton();
     }
 
     private void initPickRestaurantButton() {
@@ -77,6 +107,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                     mMyViewModel.setPickedRestaurant(mRestaurant.getId());
                 }
                 binding.fabChooseRestaurant.setSelected(mRestaurant.getId().equals(mUser.getPickedRestaurant()));
+                mMyViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId());
             }
         });
     }
@@ -93,6 +124,38 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                     mMyViewModel.addLikedRestaurant(mRestaurant.getId());
                 }
                 binding.imageButtonLikeRestaurant.setSelected(mUser.getLikedRestaurants().contains(mRestaurant.getId()));
+            }
+        });
+    }
+
+    private void initWebsiteButton() {
+        String website = mRestaurant.getWebsite();
+        binding.imageButtonWebsiteRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (website != null) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(website));
+                    startActivity(i);
+                } else {
+                    Toast.makeText(binding.getRoot().getContext(), R.string.toast_noWebsite, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void initCallButton() {
+        String phoneNumber = mRestaurant.getPhoneNumber();
+        binding.imageButtonCallRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (phoneNumber != null) {
+                    Intent i = new Intent(Intent.ACTION_DIAL);
+                    i.setData(Uri.parse("tel:" + phoneNumber));
+                    startActivity(i);
+                } else {
+                    Toast.makeText(binding.getRoot().getContext(), R.string.toast_noPhoneNumber, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

@@ -62,5 +62,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="contentDesc_photo_du_restaurant">Photo du restaurant</string>
+    <string name="toast_noWebsite">Aucun site disponible</string>
+    <string name="toast_noPhoneNumber">Aucun numéro disponible</string>
 
 </resources>

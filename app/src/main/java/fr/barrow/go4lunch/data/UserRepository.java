@@ -3,9 +3,12 @@ package fr.barrow.go4lunch.data;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,23 +17,32 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.barrow.go4lunch.model.User;
 
 public class UserRepository {
 
-    private static final String COLLECTION_NAME = "users";
-    private static final String USERNAME_FIELD = "username";
-    private static final String LIKED_RESTAURANTS_FIELD = "likedRestaurants";
-    private static final String PICKED_RESTAURANT_FIELD = "pickedRestaurant";
+    private final String COLLECTION_NAME = "users";
+    private final String USERNAME_FIELD = "username";
+    private final String LIKED_RESTAURANTS_FIELD = "likedRestaurants";
+    private final String PICKED_RESTAURANT_FIELD = "pickedRestaurant";
+    private final FirebaseHelper mFirebaseHelper;
 
-    private static volatile UserRepository instance;
 
     private User user;
+    private MutableLiveData<ArrayList<User>> usersWhoPickedRestaurant;
 
-    public UserRepository() { }
+    private final MutableLiveData<List<User>> listOfUsersPickedRestaurant = new MutableLiveData<>();
+
+    public UserRepository() {
+        mFirebaseHelper = new FirebaseHelper();
+        usersWhoPickedRestaurant = new MutableLiveData<>();
+    }
 
     // Get the Collection Reference
     public CollectionReference getUsersCollection(){
@@ -61,7 +73,11 @@ public class UserRepository {
         return user;
     }
 
-    // Get User Data from Firestore
+    public MutableLiveData<ArrayList<User>> getUsersWhoPickedRestaurant() {
+        if (usersWhoPickedRestaurant.getValue() == null) usersWhoPickedRestaurant.setValue(new ArrayList<>());
+        return usersWhoPickedRestaurant;
+    }
+
     public Task<DocumentSnapshot> getUserData() {
         String uid = this.getCurrentUser().getUid();
         if(uid != null) {
@@ -76,6 +92,7 @@ public class UserRepository {
         String uid = this.getCurrentUser().getUid();
         getUserData().addOnSuccessListener(documentSnapshot -> {
             this.getUsersCollection().document(uid).set(user);
+            System.out.println("Should be first");
         });
     }
 
@@ -101,7 +118,7 @@ public class UserRepository {
 
     public void removePickedRestaurant() {
         user.removePickedRestaurant();
-        if(getCurrentUserUid() != null){
+        if(getCurrentUserUid() != null) {
             sendUserDataToFirestore();
         }
     }
@@ -125,6 +142,28 @@ public class UserRepository {
         if(uid != null){
             this.getUsersCollection().document(uid).delete();
         }
+    }
+
+    public MutableLiveData<List<User>> getAllUsersWhoPickedARestaurant(String restaurantId) {
+        mFirebaseHelper.getAllUsersWhoPickedARestaurant(restaurantId).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<User> users = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    users.add(document.toObject(User.class));
+                }
+                listOfUsersPickedRestaurant.postValue(users);
+                System.out.println("Should be second");
+            } else {
+                Log.d("Error", "Error getting documents: ", task.getException());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //handle error
+                listOfUsersPickedRestaurant.postValue(null);
+            }
+        });
+        return listOfUsersPickedRestaurant;
     }
 
     @Nullable

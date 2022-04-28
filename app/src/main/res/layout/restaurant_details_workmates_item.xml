@@ -18,6 +18,7 @@
         tools:src="@drawable/backgroundblurred"/>
 
     <TextView
+        android:id="@+id/textView_userNameList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="User is joining!"
