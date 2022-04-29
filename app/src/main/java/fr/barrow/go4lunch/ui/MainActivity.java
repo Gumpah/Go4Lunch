@@ -58,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         updateUIWithUserData();
         initNetworkStatus();
         mMyViewModel.updateUserData();
+        initTest();
+    }
+
+    private void initTest() {
+        mMyViewModel.getUserNew().observe(this, user -> {
+            System.out.println("OOO" + user.getPickedRestaurant());
+        });
     }
 
     private void configureViewModel() {

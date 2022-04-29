@@ -21,6 +21,9 @@ public class UserStateItem {
         this.likedRestaurants = user.getLikedRestaurants();
     }
 
+    public UserStateItem() {
+
+    }
 
     public UserStateItem(String uid, String username, @Nullable String urlPicture) {
         this.uid = uid;

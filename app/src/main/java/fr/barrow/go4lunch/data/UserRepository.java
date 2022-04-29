@@ -38,6 +38,7 @@ public class UserRepository {
     private MutableLiveData<ArrayList<User>> usersWhoPickedRestaurant;
 
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurant = new MutableLiveData<>();
+    private final MutableLiveData<User> userNew = new MutableLiveData<>();
 
     public UserRepository() {
         mFirebaseHelper = new FirebaseHelper();
@@ -60,7 +61,7 @@ public class UserRepository {
             User userToCreate = new User(uid, username, urlPicture);
 
             Task<DocumentSnapshot> userData = getUserData();
-            // If the user already exist in Firestore, we get his data (isMentor)
+            // If the user already exist in Firestore, we get his data
             userData.addOnSuccessListener(documentSnapshot -> {
                 this.getUsersCollection().document(uid).set(userToCreate);
             });
@@ -73,10 +74,6 @@ public class UserRepository {
         return user;
     }
 
-    public MutableLiveData<ArrayList<User>> getUsersWhoPickedRestaurant() {
-        if (usersWhoPickedRestaurant.getValue() == null) usersWhoPickedRestaurant.setValue(new ArrayList<>());
-        return usersWhoPickedRestaurant;
-    }
 
     public Task<DocumentSnapshot> getUserData() {
         String uid = this.getCurrentUser().getUid();
@@ -164,6 +161,26 @@ public class UserRepository {
             }
         });
         return listOfUsersPickedRestaurant;
+    }
+
+    public MutableLiveData<User> getUserNew() {
+        mFirebaseHelper.getUser().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                User user;
+                user = task.getResult().toObject(User.class);
+                System.out.println("Test" + user.getUsername());
+                userNew.postValue(user);
+            } else {
+                Log.d("Error", "Error getting documents: ", task.getException());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //handle error
+                userNew.postValue(null);
+            }
+        });
+        return userNew;
     }
 
     @Nullable

@@ -17,34 +17,39 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import fr.barrow.go4lunch.R;
-import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.User;
+import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private ActivityRestaurantDetailsBinding binding;
+
     private MyViewModel mMyViewModel;
     private Restaurant mRestaurant;
-    private MutableLiveData<User> mUserMutableLiveData;
-    private User mUser;
     private ArrayList<UserStateItem> mUsers = new ArrayList<>();
+    private UserStateItem mUser = new UserStateItem();
     private RecyclerView mRecyclerView;
     private RestaurantDetailsWorkmatesAdapter adapter;
+
+    private boolean isUIInit;
+    private boolean restaurantPick;
+    private boolean restaurantLike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRestaurantDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+        isUIInit = false;
         setContentView(view);
         configureViewModel();
+        initUserData();
         getRestaurant();
         initRecyclerView(view);
         mMyViewModel.updateUserData();
-        initDataChangeObserve();
         initUI();
     }
 
@@ -67,10 +72,22 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);
     }
 
-    public void initDataChangeObserve() {
-        mUser = mMyViewModel.getUser().getValue();
-        mMyViewModel.getUser().observe(this, user -> {
+    private void initUserData() {
+        mUser = mMyViewModel.getUserNew().getValue();
+        mMyViewModel.getUserNew().observe(this, user -> {
             mUser = user;
+            mMyViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId());
+            binding.fabChooseRestaurant.setSelected(restaurantPick);
+            binding.imageButtonLikeRestaurant.setSelected(restaurantLike);
+            if (!isUIInit) {
+                restaurantPick =  mRestaurant.getId().equals(mUser.getPickedRestaurant());
+                restaurantLike =  mUser.getLikedRestaurants().contains(mRestaurant.getId());
+                binding.fabChooseRestaurant.setSelected(restaurantPick);
+                binding.imageButtonLikeRestaurant.setSelected(restaurantLike);
+                System.out.println("BBB" + restaurantPick + " " + restaurantLike);
+                initPickRestaurantButton();
+                initLikeRestaurantButton();
+            }
         });
     }
 
@@ -90,40 +107,40 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void initUI() {
         initRestaurantInfos();
         setupStarsRating();
-        initPickRestaurantButton();
-        initLikeRestaurantButton();
         initWebsiteButton();
         initCallButton();
     }
 
     private void initPickRestaurantButton() {
-        binding.fabChooseRestaurant.setSelected(mRestaurant.getId().equals(mUser.getPickedRestaurant()));
+        isUIInit = true;
         binding.fabChooseRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRestaurant.getId().equals(mUser.getPickedRestaurant())) {
+                if (restaurantPick) {
                     mMyViewModel.removePickedRestaurant();
+                    restaurantPick = false;
                 } else {
                     mMyViewModel.setPickedRestaurant(mRestaurant.getId());
+                    restaurantPick = true;
                 }
-                binding.fabChooseRestaurant.setSelected(mRestaurant.getId().equals(mUser.getPickedRestaurant()));
-                mMyViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId());
+                mMyViewModel.getUserNew();
             }
         });
     }
 
 
     private void initLikeRestaurantButton() {
-        binding.imageButtonLikeRestaurant.setSelected(mUser.getLikedRestaurants().contains(mRestaurant.getId()));
         binding.imageButtonLikeRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mUser.getLikedRestaurants().contains(mRestaurant.getId())) {
+                if (restaurantLike) {
                     mMyViewModel.removeLikedRestaurant(mRestaurant.getId());
+                    restaurantLike = false;
                 } else {
                     mMyViewModel.addLikedRestaurant(mRestaurant.getId());
+                    restaurantLike = true;
                 }
-                binding.imageButtonLikeRestaurant.setSelected(mUser.getLikedRestaurants().contains(mRestaurant.getId()));
+                mMyViewModel.getUserNew();
             }
         });
     }
@@ -190,5 +207,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 binding.imageViewStar3.setVisibility(View.INVISIBLE);
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isUIInit = false;
     }
 }

@@ -39,7 +39,7 @@ public class MyViewModel extends ViewModel {
         mUser = new MutableLiveData<>();
     }
 
-    private LiveData<List<UserStateItem>> mapDataToViewState(LiveData<List<User>> users) {
+    private LiveData<List<UserStateItem>> mapListDataToViewState(LiveData<List<User>> users) {
         return Transformations.map(users, user -> {
             List<UserStateItem> userViewStateItems = new ArrayList<>();
             for (User u : user) {
@@ -51,8 +51,16 @@ public class MyViewModel extends ViewModel {
         });
     }
 
+    private LiveData<UserStateItem> mapDataToViewState(LiveData<User> user) {
+        return Transformations.map(user, UserStateItem::new);
+    }
+
     public LiveData<List<UserStateItem>> getAllUsersWhoPickedARestaurant(String restaurantId) {
-        return mapDataToViewState(mUserRepository.getAllUsersWhoPickedARestaurant(restaurantId));
+        return mapListDataToViewState(mUserRepository.getAllUsersWhoPickedARestaurant(restaurantId));
+    }
+
+    public LiveData<UserStateItem> getUserNew() {
+        return mapDataToViewState(mUserRepository.getUserNew());
     }
 
     public LiveData<Boolean> getConnectionStatus() {
@@ -162,4 +170,6 @@ public class MyViewModel extends ViewModel {
     public Task<Void> deleteUser(Context context){
         return mUserRepository.deleteUser(context);
     }
+
+
 }
