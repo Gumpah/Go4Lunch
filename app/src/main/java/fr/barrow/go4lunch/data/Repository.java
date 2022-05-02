@@ -1,6 +1,7 @@
 package fr.barrow.go4lunch.data;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
@@ -15,7 +16,7 @@ public class Repository {
 
     private final MutableLiveData<Boolean> locationPermissionStatus = new MutableLiveData<>();
 
-    private String location;
+    private Location location;
 
     public Repository(Context applicationContext) {
         mNetworkMonitoring = new NetworkMonitoring(applicationContext);
@@ -39,11 +40,16 @@ public class Repository {
         }
     }
 
-    public String getLocation() {
+    public String getLocationString() {
+        String locationString = (location.getLatitude() + "," + location.getLongitude());
+        return locationString;
+    }
+
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 }

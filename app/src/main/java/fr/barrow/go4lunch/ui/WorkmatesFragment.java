@@ -21,8 +21,6 @@ import fr.barrow.go4lunch.utils.MyViewModelFactory;
 import fr.barrow.go4lunch.data.PlacesStreams;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class WorkmatesFragment extends Fragment {
 
@@ -51,8 +49,8 @@ public class WorkmatesFragment extends Fragment {
     }
 
     private void setupDataRequest() {
-        if (mMyViewModel.getLocation() != null) {
-            executeHttpRequestWithRetrofit(mMyViewModel.getLocation());
+        if (mMyViewModel.getLocationString() != null) {
+            executeHttpRequestWithRetrofit(mMyViewModel.getLocationString());
         }
     }
 

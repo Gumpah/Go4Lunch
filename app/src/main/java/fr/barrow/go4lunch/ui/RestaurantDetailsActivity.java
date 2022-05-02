@@ -46,9 +46,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         isUIInit = false;
         setContentView(view);
         configureViewModel();
-        initUserData();
         getRestaurant();
-        initRecyclerView(view);
+        initUserData();
         mMyViewModel.updateUserData();
         initUI();
     }
@@ -70,6 +69,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String restaurant_id = intent.getStringExtra("RESTAURANT_ID");
         mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);
+        initRecyclerView(binding.getRoot());
     }
 
     private void initUserData() {

@@ -28,4 +28,5 @@
     <color name="grey">#4A4A4A</color>
     <color name="onClickColor">#9c9c9c</color>
     <color name="green">#5fc44b</color>
+    <color name="greyDistance">#919192</color>
 </resources>

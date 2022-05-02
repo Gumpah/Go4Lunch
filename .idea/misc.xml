@@ -10,6 +10,8 @@
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3375" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.265" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_baseline_star_24.xml" value="0.307" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_location_lunch_green.xml" value="0.1965" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_location_lunch_red.xml" value="0.1965" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/activity_login.xml" value="0.18854166666666666" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/activity_main.xml" value="0.26403985507246375" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/activity_main_nav_header.xml" value="0.18854166666666666" />
@@ -23,7 +25,7 @@
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/imagebutton_states.xml" value="0.36666666666666664" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/markerview.xml" value="0.28442028985507245" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/restaurant_details_workmates_item.xml" value="0.3009833262077811" />
-        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/restaurant_list_view_item.xml" value="0.33" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/restaurant_list_view_item.xml" value="1.1" />
       </map>
     </option>
   </component>

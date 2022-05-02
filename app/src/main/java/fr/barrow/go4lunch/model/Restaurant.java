@@ -4,8 +4,6 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.time.LocalTime;
-
 
 public class Restaurant {
     private String id;

@@ -7,6 +7,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class FirebaseHelper {
 
     private final String COLLECTION_NAME = "users";
@@ -31,5 +34,9 @@ public class FirebaseHelper {
 
     public Task<QuerySnapshot> getAllUsersWhoPickedARestaurant(String restaurantId) {
         return usersRef.whereEqualTo(PICKED_RESTAURANT_FIELD, restaurantId).get();
+    }
+
+    public Task<QuerySnapshot> getUsersWhoPickedARestaurant() {
+        return usersRef.whereNotEqualTo(PICKED_RESTAURANT_FIELD, null).get();
     }
 }

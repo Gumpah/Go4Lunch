@@ -1,13 +1,11 @@
 package fr.barrow.go4lunch.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,12 +16,8 @@ import java.util.ArrayList;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentListViewBinding;
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.placedetails.CombinedPlaceAndString;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
-import fr.barrow.go4lunch.data.PlacesStreams;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 
 public class ListViewFragment extends Fragment {
 
@@ -33,8 +27,6 @@ public class ListViewFragment extends Fragment {
     private Disposable disposable;
     private RecyclerView mRecyclerView;
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
-
-    private MutableLiveData<ArrayList<Restaurant>> mRestaurantList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,38 +57,17 @@ public class ListViewFragment extends Fragment {
     }
 
     private void setupDataRequest() {
-        if (mMyViewModel.getLocation() != null) {
-            executeHttpRequestWithRetrofit(mMyViewModel.getLocation());
+        if (mMyViewModel.getLocationString() != null) {
+            mMyViewModel.fetchAndUpdateRestaurants(mMyViewModel.getLocationString(), disposable, apiKey);
         }
     }
 
     public void initDataChangeObserve() {
-        mRestaurantList = mMyViewModel.getRestaurants();
-        mRestaurantList.observe(requireActivity(), list -> {
-            mRestaurants.clear();
-            mRestaurants.addAll(list);
-            mRecyclerView.getAdapter().notifyDataSetChanged();
-        });
-    }
-
-    private void executeHttpRequestWithRetrofit(String location) {
-        mMyViewModel.clearRestaurants();
-        this.disposable = PlacesStreams.streamFetchNearbyPlacesAndFetchTheirDetails(apiKey, location).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
-            @Override
-            public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
-                PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
-                String photoUrl = combinedPlaceAndString.getPhotoUrl();
-                mMyViewModel.addRestaurant(mMyViewModel.placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
-                Log.e("TAG","On Next");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("TAG","On Error"+Log.getStackTraceString(e));
-            }
-
-            @Override
-            public void onComplete() {
+        mMyViewModel.getRestaurantsMutableLiveData().observe(requireActivity(), list -> {
+            if (list != null && !list.isEmpty() && mRecyclerView.getAdapter() != null) {
+                mRestaurants.clear();
+                mRestaurants.addAll(list);
+                mRecyclerView.getAdapter().notifyDataSetChanged();
             }
         });
     }

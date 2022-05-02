@@ -38,6 +38,7 @@ public class UserRepository {
     private MutableLiveData<ArrayList<User>> usersWhoPickedRestaurant;
 
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurant = new MutableLiveData<>();
+    private final MutableLiveData<List<User>> listOfUsersPickedRestaurantFromArray = new MutableLiveData<>();
     private final MutableLiveData<User> userNew = new MutableLiveData<>();
 
     public UserRepository() {
@@ -153,14 +154,30 @@ public class UserRepository {
             } else {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //handle error
-                listOfUsersPickedRestaurant.postValue(null);
-            }
+        }).addOnFailureListener(e -> {
+            //handle error
+            listOfUsersPickedRestaurant.postValue(null);
         });
         return listOfUsersPickedRestaurant;
+    }
+
+    public MutableLiveData<List<User>> getUsersWhoPickedARestaurant() {
+        mFirebaseHelper.getUsersWhoPickedARestaurant().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<User> users = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    users.add(document.toObject(User.class));
+                }
+                listOfUsersPickedRestaurantFromArray.postValue(users);
+                System.out.println("Should be second");
+            } else {
+                Log.d("Error", "Error getting documents: ", task.getException());
+            }
+        }).addOnFailureListener(e -> {
+            //handle error
+            listOfUsersPickedRestaurantFromArray.postValue(null);
+        });
+        return listOfUsersPickedRestaurantFromArray;
     }
 
     public MutableLiveData<User> getUserNew() {
@@ -173,12 +190,9 @@ public class UserRepository {
             } else {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //handle error
-                userNew.postValue(null);
-            }
+        }).addOnFailureListener(e -> {
+            //handle error
+            userNew.postValue(null);
         });
         return userNew;
     }

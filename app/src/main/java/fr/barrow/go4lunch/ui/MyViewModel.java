@@ -1,6 +1,7 @@
 package fr.barrow.go4lunch.ui;
 
 import android.content.Context;
+import android.location.Location;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -23,6 +24,7 @@ import fr.barrow.go4lunch.data.UserRepository;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.User;
 import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
+import io.reactivex.disposables.Disposable;
 
 public class MyViewModel extends ViewModel {
     Repository mRepository;
@@ -37,6 +39,14 @@ public class MyViewModel extends ViewModel {
         mUserRepository = userRepository;
         mRestaurantList = new MutableLiveData<>();
         mUser = new MutableLiveData<>();
+    }
+
+    public void fetchAndUpdateRestaurants(String location, Disposable disposable, String apiKey) {
+       mRestaurantRepository.fetchAndUpdateRestaurants(location, disposable, apiKey);
+    }
+
+    public MutableLiveData<List<Restaurant>> getRestaurantsMutableLiveData() {
+        return mRestaurantRepository.getRestaurantsMutableLiveData();
     }
 
     private LiveData<List<UserStateItem>> mapListDataToViewState(LiveData<List<User>> users) {
@@ -57,6 +67,10 @@ public class MyViewModel extends ViewModel {
 
     public LiveData<List<UserStateItem>> getAllUsersWhoPickedARestaurant(String restaurantId) {
         return mapListDataToViewState(mUserRepository.getAllUsersWhoPickedARestaurant(restaurantId));
+    }
+
+    public LiveData<List<UserStateItem>> getUsersWhoPickedARestaurant() {
+        return mapListDataToViewState(mUserRepository.getUsersWhoPickedARestaurant());
     }
 
     public LiveData<UserStateItem> getUserNew() {
@@ -101,11 +115,15 @@ public class MyViewModel extends ViewModel {
         return mRestaurantRepository.getRestaurantFromId(id);
     }
 
-    public String getLocation() {
+    public String getLocationString() {
+        return mRepository.getLocationString();
+    }
+
+    public Location getLocation() {
         return mRepository.getLocation();
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         mRepository.setLocation(location);
     }
 
