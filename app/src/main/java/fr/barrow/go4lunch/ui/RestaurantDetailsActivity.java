@@ -61,6 +61,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         adapter = new RestaurantDetailsWorkmatesAdapter(mUsers);
+        initLineVisibility();
         mRecyclerView.setAdapter(adapter);
         initUsersList();
     }
@@ -101,7 +102,16 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             mUsers.clear();
             mUsers.addAll(users);
             adapter.notifyDataSetChanged();
+            initLineVisibility();
         });
+    }
+
+    private void initLineVisibility() {
+        if (mUsers.isEmpty()) {
+            binding.viewLineSeparator.setVisibility(View.INVISIBLE);
+        } else {
+            binding.viewLineSeparator.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initUI() {

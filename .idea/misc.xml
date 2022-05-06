@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable-v24/fab_pickrestaurant_states.xml" value="0.3375" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable-v24/imagebutton_states.xml" value="0.1965" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/divider_decoration.xml" value="0.1965" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/fab_likerestaurant_states.xml" value="0.3375" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.3375" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3375" />
@@ -25,7 +26,10 @@
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/imagebutton_states.xml" value="0.36666666666666664" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/markerview.xml" value="0.28442028985507245" />
         <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/restaurant_details_workmates_item.xml" value="0.3009833262077811" />
-        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/restaurant_list_view_item.xml" value="1.1" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/layout/restaurant_list_view_item.xml" value="0.5" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/menu/bottom_nav_menu.xml" value="0.15177426250534418" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/menu/main_menu_drawer.xml" value="0.22" />
+        <entry key="..\:/Documents/Formation_OC/P7_KINZIGER_Victor/Go4Lunch/app/src/main/res/menu/search_menu.xml" value="0.3009833262077811" />
       </map>
     </option>
   </component>

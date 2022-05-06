@@ -4,6 +4,9 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class Restaurant {
     private String id;
@@ -19,11 +22,13 @@ public class Restaurant {
     private String website;
     private LatLng position;
     @Nullable
-    private String closingTimeHours;
+    private String closingTime;
     @Nullable
-    private String closingTimeMinutes;
+    private Date closingTimeDate;
+    @Nullable
+    private Date openingTimeDate;
 
-    public Restaurant(String id, String name, String address, @Nullable String urlPicture, @Nullable String phoneNumber, @Nullable String website, LatLng position, int rating, @Nullable String closingTimeHours, @Nullable String closingTimeMinutes) {
+    public Restaurant(String id, String name, String address, @Nullable String urlPicture, @Nullable String phoneNumber, @Nullable String website, LatLng position, int rating, @Nullable String closingTime, @Nullable Date openingTimeDate, @Nullable Date closingTimeDate) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -32,8 +37,9 @@ public class Restaurant {
         this.website = website;
         this.position = position;
         this.rating = rating;
-        this.closingTimeHours = closingTimeHours;
-        this.closingTimeMinutes = closingTimeMinutes;
+        this.closingTime = closingTime;
+        this.openingTimeDate = openingTimeDate;
+        this.closingTimeDate = closingTimeDate;
     }
 
     public String getId() {
@@ -111,19 +117,30 @@ public class Restaurant {
         this.website = website;
     }
 
-    public String getClosingTimeHours() {
-        return closingTimeHours;
+    @Nullable
+    public String getClosingTime() {
+        return closingTime;
     }
 
-    public void setClosingTimeHours(String closingTimeHours) {
-        this.closingTimeHours = closingTimeHours;
+    public void setClosingTime(@Nullable String closingTime) {
+        this.closingTime = closingTime;
     }
 
-    public String getClosingTimeMinutes() {
-        return closingTimeMinutes;
+    @Nullable
+    public Date getClosingTimeDate() {
+        return closingTimeDate;
     }
 
-    public void setClosingTimeMinutes(String closingTimeMinutes) {
-        this.closingTimeMinutes = closingTimeMinutes;
+    public void setClosingTimeDate(@Nullable Date closingTimeDate) {
+        this.closingTimeDate = closingTimeDate;
+    }
+
+    @Nullable
+    public Date getOpeningTimeDate() {
+        return openingTimeDate;
+    }
+
+    public void setOpeningTimeDate(@Nullable Date openingTimeDate) {
+        this.openingTimeDate = openingTimeDate;
     }
 }

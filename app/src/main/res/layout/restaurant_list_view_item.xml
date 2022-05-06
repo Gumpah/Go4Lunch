@@ -12,26 +12,42 @@
 
     <TextView
         android:id="@+id/textView_restaurantName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Restaurant's name"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:layout_margin="12dp"
+        app:layout_constraintEnd_toEndOf="@id/textView_restaurantClosingTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
         android:id="@+id/textView_restaurantAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Restaurant's address"
         android:textColor="@color/grey"
         android:textSize="12sp"
         android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@id/textView_restaurantClosingTime"
         app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
+        />
+
+    <TextView
+        android:id="@+id/textView_restaurantClosingTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Restaurant's closing time"
+        android:textColor="@color/grey"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@id/imageView_star1"
+        app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
+        app:layout_constraintTop_toBottomOf="@id/textView_restaurantAddress"
         />
 
     <TextView
@@ -45,8 +61,7 @@
         app:layout_constraintTop_toTopOf="@id/imageView_restaurantPhoto"
         app:layout_constraintEnd_toStartOf="@id/imageView_restaurantPhoto"
         app:layout_constraintBottom_toTopOf="@id/imageView_workmatesIcon"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        />
+        app:layout_constraintVertical_chainStyle="spread_inside"/>
 
     <ImageView
         android:id="@+id/imageView_restaurantPhoto"
@@ -76,12 +91,13 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         app:tint="@color/black"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/textView_workmatesNumber"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantDistance"
         app:layout_constraintBottom_toTopOf="@id/imageView_star3"
         android:contentDescription="@string/contentDesc_icon_interested"
         android:src="@drawable/ic_baseline_person_outline_24"
-        app:layout_constraintHorizontal_chainStyle="spread"/>
+        app:layout_constraintVertical_chainStyle="spread_inside"/>
 
     <ImageView
         android:id="@+id/imageView_star1"
@@ -115,7 +131,7 @@
         app:layout_constraintEnd_toEndOf="@id/textView_restaurantDistance"
         app:layout_constraintTop_toBottomOf="@id/imageView_workmatesIcon"
         app:layout_constraintBottom_toBottomOf="@id/imageView_restaurantPhoto"
-        app:layout_constraintHorizontal_chainStyle="spread"/>
+        app:layout_constraintVertical_chainStyle="spread_inside"/>
 
 
 

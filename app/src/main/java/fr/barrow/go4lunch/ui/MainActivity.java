@@ -1,14 +1,19 @@
 package fr.barrow.go4lunch.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,7 +34,7 @@ import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+
 
     private ActivityMainBinding binding;
     private ActivityMainNavHeaderBinding navViewHeaderBinding;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavController mNavController;
 
     private MyViewModel mMyViewModel;
+    private String restaurantId;
 
     private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
         @Override
@@ -59,11 +65,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initNetworkStatus();
         mMyViewModel.updateUserData();
         initTest();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search your data somehow
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void initTest() {
         mMyViewModel.getUserNew().observe(this, user -> {
-            System.out.println("OOO" + user.getPickedRestaurant());
+            if (user != null) {
+                restaurantId = user.getPickedRestaurant();
+            }
         });
     }
 
@@ -144,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initToolbar() {
         NavigationUI.setupWithNavController(binding.activityMainToolbar, mNavController, mAppBarConfiguration);
-
     }
 
     private void initDrawer() {
@@ -156,7 +193,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         int id=item.getItemId();
         if (id==R.id.mainMenuDrawer_lunch) {
-
+            if (restaurantId != null) {
+                Intent intent = new Intent(this, RestaurantDetailsActivity.class);
+                intent.putExtra("RESTAURANT_ID", restaurantId);
+                startActivity(intent);
+            }
         }
         if (id==R.id.mainMenuDrawer_settings) {
 

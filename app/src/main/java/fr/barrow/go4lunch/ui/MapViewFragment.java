@@ -126,7 +126,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     }
 
     private void setupDataRequest() {
-        if (mMyViewModel.getLocationString() != null) {
+        if (mMyViewModel.getLocation() != null) {
             mMyViewModel.fetchAndUpdateRestaurants(mMyViewModel.getLocationString(), disposable, apiKey);
         }
     }

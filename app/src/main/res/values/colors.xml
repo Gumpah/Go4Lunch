@@ -29,4 +29,6 @@
     <color name="onClickColor">#9c9c9c</color>
     <color name="green">#5fc44b</color>
     <color name="greyDistance">#919192</color>
+    <color name="redClosingTime">#C30016</color>
+    <color name="lightGrey">#f5f5f5</color>
 </resources>

@@ -90,7 +90,6 @@ public class UserRepository {
         String uid = this.getCurrentUser().getUid();
         getUserData().addOnSuccessListener(documentSnapshot -> {
             this.getUsersCollection().document(uid).set(user);
-            System.out.println("Should be first");
         });
     }
 
@@ -150,7 +149,6 @@ public class UserRepository {
                     users.add(document.toObject(User.class));
                 }
                 listOfUsersPickedRestaurant.postValue(users);
-                System.out.println("Should be second");
             } else {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
@@ -169,7 +167,6 @@ public class UserRepository {
                     users.add(document.toObject(User.class));
                 }
                 listOfUsersPickedRestaurantFromArray.postValue(users);
-                System.out.println("Should be second");
             } else {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
@@ -185,7 +182,6 @@ public class UserRepository {
             if (task.isSuccessful()) {
                 User user;
                 user = task.getResult().toObject(User.class);
-                System.out.println("Test" + user.getUsername());
                 userNew.postValue(user);
             } else {
                 Log.d("Error", "Error getting documents: ", task.getException());

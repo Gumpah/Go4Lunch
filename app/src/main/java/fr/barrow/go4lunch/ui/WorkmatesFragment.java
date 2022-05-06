@@ -38,52 +38,11 @@ public class WorkmatesFragment extends Fragment {
         View view = binding.getRoot();
         apiKey = getString(R.string.MAPS_API_KEY);
         configureViewModel();
-        initDataChangeObserve();
-        setupDataRequest();
-        //testAPICall();
         return view;
     }
 
     public void configureViewModel() {
         mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(requireActivity())).get(MyViewModel.class);
-    }
-
-    private void setupDataRequest() {
-        if (mMyViewModel.getLocationString() != null) {
-            executeHttpRequestWithRetrofit(mMyViewModel.getLocationString());
-        }
-    }
-
-    public void initDataChangeObserve() {
-        mRestaurantList = mMyViewModel.getRestaurants();
-        mRestaurantList.observe(requireActivity(), list -> {
-            for (Restaurant r : list) {
-                System.out.println("Ma photo" + r.getUrlPicture());
-            }
-        });
-    }
-
-    private void executeHttpRequestWithRetrofit(String location){
-        mMyViewModel.clearRestaurants();
-        this.disposable = PlacesStreams.streamFetchNearbyPlacesAndFetchTheirDetails(apiKey, location).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
-            @Override
-            public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
-                PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
-                String photoUrl = combinedPlaceAndString.getPhotoUrl();
-                mMyViewModel.addRestaurant(mMyViewModel.placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
-                Log.e("TAG","On Next");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("TAG","On Error"+Log.getStackTraceString(e));
-            }
-
-            @Override
-            public void onComplete() {
-                Log.e("TAG","On Complete !!");
-            }
-        });
     }
 
     private void disposeWhenDestroy(){

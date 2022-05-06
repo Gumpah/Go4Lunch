@@ -5,9 +5,6 @@
     <string name="facebook_application_id" translatable="false">359538029220576</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb359538029220576</string>
 
-    <!--MapBox Public Token -->
-    <string name="mapbox_access_token">pk.eyJ1IjoiZ3VtcGFoIiwiYSI6ImNsMHpvZ3A2azF3bmUzY24xOTR2N3YzNjEifQ.VQRG6NQ9H5oJBH5eQKNh0g</string>
-
     <!--Login Activity / xml -->
     <string name="contentDesc_loginBackground">Image d\'arrière plan de l\'écran de connexion</string>
     <string name="contentDesc_loginLogo">Logo de l\'application</string>
@@ -65,5 +62,8 @@
     <string name="toast_noWebsite">Aucun site disponible</string>
     <string name="toast_noPhoneNumber">Aucun numéro disponible</string>
     <string name="contentDesc_icon_interested">Icone personnes intéressées</string>
+    <string name="restaurant_Closed">Fermé</string>
+    <string name="closing_Soon">Ferme bientôt</string>
+    <string name="open_Until">Ouvert jusqu\'à :&#160;</string>
 
 </resources>
