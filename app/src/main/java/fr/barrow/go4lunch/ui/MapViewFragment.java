@@ -100,13 +100,15 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
                         if (!mMyViewModel.getCurrentUser().getUid().equals(u.getUid())) pickedRestaurantIdsList.add(u.getPickedRestaurant());
                     }
                 }
-                map.clear();
-                for (Restaurant r : restaurants) {
-                    boolean picked = pickedRestaurantIdsList.contains(r.getId());
-                    map.addMarker(new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromBitmap(getBitmapIcon(picked)))
-                            .position(r.getPosition())
-                            .title(r.getName())).setTag(r.getId());
+                if (map != null) {
+                    map.clear();
+                    for (Restaurant r : restaurants) {
+                        boolean picked = pickedRestaurantIdsList.contains(r.getId());
+                        map.addMarker(new MarkerOptions()
+                                .icon(BitmapDescriptorFactory.fromBitmap(getBitmapIcon(picked)))
+                                .position(r.getPosition())
+                                .title(r.getName())).setTag(r.getId());
+                    }
                 }
             });
         }
@@ -126,7 +128,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     }
 
     private void setupDataRequest() {
-        if (mMyViewModel.getLocation() != null) {
+        if (mMyViewModel.getLocation() != null && mRestaurants.isEmpty()) {
             mMyViewModel.fetchAndUpdateRestaurants(mMyViewModel.getLocationString(), disposable, apiKey);
         }
     }

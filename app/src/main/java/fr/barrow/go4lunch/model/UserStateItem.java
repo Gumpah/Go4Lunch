@@ -9,6 +9,7 @@ public class UserStateItem {
     private String uid;
     private String username;
     private String pickedRestaurant;
+    private String pickedRestaurantName;
     private ArrayList<String> likedRestaurants;
     @Nullable
     private String urlPicture;
@@ -18,6 +19,7 @@ public class UserStateItem {
         this.username = user.getUsername();
         this.urlPicture = user.getUrlPicture();
         this.pickedRestaurant = user.getPickedRestaurant();
+        this.pickedRestaurantName = user.getPickedRestaurantName();
         this.likedRestaurants = user.getLikedRestaurants();
     }
 
@@ -55,6 +57,10 @@ public class UserStateItem {
     @Nullable
     public String getUrlPicture() {
         return urlPicture;
+    }
+
+    public String getPickedRestaurantName() {
+        return pickedRestaurantName;
     }
 
     @Override

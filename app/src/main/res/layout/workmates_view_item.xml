@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/constraintLayout_container">
+
+    <ImageView
+        android:id="@+id/imageView_workmateIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/view_lineSeparator"
+        android:contentDescription="@string/user_avatar"
+        tools:src="@drawable/backgroundblurred"/>
+
+    <TextView
+        android:id="@+id/textView_workmateChoice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="User is joining!"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView_workmateIcon"
+        app:layout_constraintBottom_toBottomOf="@id/imageView_workmateIcon"
+        app:layout_constraintStart_toEndOf="@id/imageView_workmateIcon"/>
+
+    <View
+        android:id="@+id/view_lineSeparator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/textView_workmateChoice"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@color/lightGrey"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

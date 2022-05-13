@@ -52,7 +52,8 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
         }
 
         void bind(UserStateItem user) {
-            binding.textViewUserNameList.setText(user.getUsername());
+            String textViewUser = (user.getUsername() + binding.getRoot().getResources().getString(R.string.workmate_is_joining));
+            binding.textViewUserNameList.setText(textViewUser);
             Glide.with(binding.getRoot())
                     .load(user.getUrlPicture())
                     .error(R.drawable.backgroundblurred)

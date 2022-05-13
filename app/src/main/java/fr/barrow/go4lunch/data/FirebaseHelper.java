@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -38,5 +39,9 @@ public class FirebaseHelper {
 
     public Task<QuerySnapshot> getUsersWhoPickedARestaurant() {
         return usersRef.whereNotEqualTo(PICKED_RESTAURANT_FIELD, null).get();
+    }
+
+    public Task<QuerySnapshot> getAllUsers() {
+        return usersRef.orderBy(PICKED_RESTAURANT_FIELD, Query.Direction.DESCENDING).get();
     }
 }

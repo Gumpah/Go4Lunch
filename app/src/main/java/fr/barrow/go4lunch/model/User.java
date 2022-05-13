@@ -9,6 +9,7 @@ public class User {
     private String uid;
     private String username;
     private String pickedRestaurant;
+    private String pickedRestaurantName;
     private ArrayList<String> likedRestaurants;
     @Nullable
     private String urlPicture;
@@ -43,12 +44,14 @@ public class User {
         return pickedRestaurant;
     }
 
-    public void setPickedRestaurant(String pickedRestaurant) {
+    public void setPickedRestaurant(String pickedRestaurant, String pickedRestaurantName) {
         this.pickedRestaurant = pickedRestaurant;
+        this.pickedRestaurantName = pickedRestaurantName;
     }
 
     public void removePickedRestaurant() {
         this.pickedRestaurant = null;
+        this.pickedRestaurantName = null;
     }
 
     public ArrayList<String> getLikedRestaurants() {
@@ -83,5 +86,9 @@ public class User {
 
     public void setUrlPicture(@Nullable String urlPicture) {
         this.urlPicture = urlPicture;
+    }
+
+    public String getPickedRestaurantName() {
+        return pickedRestaurantName;
     }
 }

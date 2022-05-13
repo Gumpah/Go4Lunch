@@ -1,8 +1,10 @@
 package fr.barrow.go4lunch.ui;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,9 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -24,6 +30,11 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -43,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private MyViewModel mMyViewModel;
     private String restaurantId;
+
+    private Fragment fragment;
 
     private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
         @Override
@@ -65,37 +78,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initNetworkStatus();
         mMyViewModel.updateUserData();
         initTest();
-        handleIntent(getIntent());
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
+    private void getLocation() {
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+                if (location != null) {
+                    mMyViewModel.setLocation(location);
+                }
+            });
+        } else {
+            locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu, menu);
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
-        return super.onCreateOptionsMenu(menu);
-    }
+    private ActivityResultLauncher<String> locationPermissionRequest =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                        if (isGranted) {
+                            getLocation();
+                        }
+                    }
+            );
 
     private void initTest() {
         mMyViewModel.getUserNew().observe(this, user -> {
@@ -181,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initToolbar() {
+        setSupportActionBar(binding.activityMainToolbar);
         NavigationUI.setupWithNavController(binding.activityMainToolbar, mNavController, mAppBarConfiguration);
     }
 
@@ -200,16 +205,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         if (id==R.id.mainMenuDrawer_settings) {
-
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
         if (id==R.id.mainMenuDrawer_logout) {
             mMyViewModel.signOut(this).addOnSuccessListener(aVoid -> {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish(); });
         }
-        //This is for maintaining the behavior of the Navigation view
         NavigationUI.onNavDestinationSelected(item, mNavController);
-        //This is for closing the drawer after acting on it
         binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

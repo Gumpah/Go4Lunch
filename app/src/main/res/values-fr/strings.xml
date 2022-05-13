@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+
+    <!--Login Activity / xml -->
+    <string name="contentDesc_loginBackground">Image d\'arrière plan de l\'écran de connexion</string>
+    <string name="contentDesc_loginLogo">Logo de l\'application</string>
+
+    <string name="button_facebookSignIn">Connexion avec Facebook</string>
+    <string name="button_googleSignIn">Connexion avec Google</string>
+    <string name="button_NoNetwork">Hors connexion</string>
+
+    <!--Main activity / java -->
+    <string name="connection_succeed">Connexion réussie</string>
+    <string name="sign_in_cancelled">Connexion annulée</string>
+    <string name="no_internet_connection">Connexion réseau impossible</string>
+    <string name="unknown_error">Connexion impossible</string>
+
+    <!--Navigation menu titles-->
+    <string name="title_mapView">Map View</string>
+    <string name="title_listView">List View</string>
+    <string name="title_workmates">Workmates</string>
+
+    <!--Header menu-->
+    <string name="contentDesc_headerBackground">Arrière plan du header</string>
+    <string name="contentDesc_userAvatar">Image de profil</string>
+    <string name="menuTitle_Lunch">Votre repas</string>
+    <string name="menuTitle_settings">Paramètres</string>
+    <string name="menuTitle_logout">Déconnexion</string>
+
+    <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
+    <string name="navigation_drawer_close">Fermer le menu de navigation</string>
+
+
+    <string name="info_no_email_found">Aucun mail trouvé</string>
+    <string name="info_no_username_found">Aucun nom d\'utilisateur trouvé</string>
+    <string name="location_permission_refused">Vous devez autoriser les permissions de localisation</string>
+    <string name="internet_connected">Réseau connecté</string>
+    <string name="internet_disconnected">Réseau déconnecté</string>
+
+
+    <string name="contentDesc_fabCamera">Retour caméra</string>
+    <string name="tracking_enabled">Tracking activé</string>
+    <string name="tracking_already_enabled">Tracking déjà activé</string>
+
+    <string name="current_location">Lat: %1$f Long: %2$f</string>
+    <string name="choose_restaurant">Choisir un restaurant</string>
+    <string name="restaurant_photo">Photo du restaurant</string>
+    <string name="call_button">Bouton d\'appel</string>
+    <string name="like_button">Bouton de like</string>
+    <string name="website_button">Bouton du site web</string>
+    <string name="call">Appel</string>
+    <string name="like">Like</string>
+    <string name="website">Site web</string>
+
+    <string name="user_avatar">Avatar de l\'utilisateur</string>
+    <string name="contentDesc_locationButton">Bouton de zoom (localisation)</string>
+
+    <string name="contentDesc_photo_du_restaurant">Photo du restaurant</string>
+    <string name="toast_noWebsite">Aucun site disponible</string>
+    <string name="toast_noPhoneNumber">Aucun numéro disponible</string>
+    <string name="contentDesc_icon_interested">Icône personnes intéressées</string>
+    <string name="restaurant_Closed">Fermé</string>
+    <string name="closing_Soon">Ferme bientôt</string>
+    <string name="open_Until">Ouvert jusqu\'à :&#160;</string>
+    <string name="workmate_is_joining">&#160;sera présent</string>
+    <string name="workmate_noPickedRestaurant">&#160;n\'a pas encore choisi</string>
+    <string name="workmate_hasRestaurantPick">&#160;mange à&#160;</string>
+    <string name="star">Etoile</string>
+
+</resources>

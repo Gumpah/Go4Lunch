@@ -108,13 +108,17 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
         }
 
         String getDistance(LatLng position1, Location position2) {
-            Location startPoint= new Location("locationA");
-            startPoint.setLatitude(position1.latitude);
-            startPoint.setLongitude(position1.longitude);
+            if (position2 != null) {
+                Location startPoint= new Location("locationA");
+                startPoint.setLatitude(position1.latitude);
+                startPoint.setLongitude(position1.longitude);
 
-            double distance = startPoint.distanceTo(position2);
-            long distanceLong = Math.round(distance/10.0) * 10;
-            return (String.valueOf(distanceLong) + 'm');
+                double distance = startPoint.distanceTo(position2);
+                long distanceLong = Math.round(distance/10.0) * 10;
+                return (String.valueOf(distanceLong) + 'm');
+            } else {
+                return ("Erreur");
+            }
         }
 
 

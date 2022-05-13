@@ -64,7 +64,8 @@
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
-            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName" />
+            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
+            android:contentDescription="@string/star" />
 
         <ImageView
             android:id="@+id/imageView_star2"
@@ -76,7 +77,8 @@
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/imageView_star1"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
-            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"/>
+            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
+            android:contentDescription="@string/star" />
 
         <ImageView
             android:id="@+id/imageView_star3"
@@ -88,7 +90,8 @@
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/imageView_star2"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
-            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"/>
+            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
+            android:contentDescription="@string/star" />
 
         <TextView
             android:id="@+id/textView_restaurantTypeAndAddress"
@@ -117,7 +120,7 @@
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
             android:scaleType="fitCenter"
-            android:layout_marginLeft="48dp"
+            android:layout_marginStart="48dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/imageButton_likeRestaurant"
             app:layout_constraintTop_toTopOf="parent"
@@ -140,7 +143,7 @@
             app:layout_constraintEnd_toStartOf="@id/imageButton_websiteRestaurant"
             app:layout_constraintBottom_toTopOf="@id/textView_likeRestaurant"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/call_button"
+            android:contentDescription="@string/like_button"
             app:layout_constraintVertical_chainStyle="spread" />
 
         <ImageButton
@@ -151,12 +154,12 @@
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
             android:scaleType="fitCenter"
-            android:layout_marginRight="48dp"
+            android:layout_marginEnd="48dp"
             app:layout_constraintStart_toEndOf="@id/imageButton_likeRestaurant"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/textView_websiteRestaurant"
-            android:contentDescription="@string/call_button"
+            android:contentDescription="@string/website_button"
             app:layout_constraintVertical_chainStyle="spread" />
 
         <TextView

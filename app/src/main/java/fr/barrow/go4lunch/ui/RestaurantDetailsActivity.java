@@ -33,6 +33,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private UserStateItem mUser = new UserStateItem();
     private RecyclerView mRecyclerView;
     private RestaurantDetailsWorkmatesAdapter adapter;
+    private String apiKey;
 
     private boolean isUIInit;
     private boolean restaurantPick;
@@ -43,13 +44,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityRestaurantDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+        apiKey = getString(R.string.MAPS_API_KEY);
         isUIInit = false;
         setContentView(view);
         configureViewModel();
         getRestaurant();
-        initUserData();
-        mMyViewModel.updateUserData();
-        initUI();
     }
 
     private void configureViewModel() {
@@ -69,8 +68,24 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void getRestaurant() {
         Intent intent = getIntent();
         String restaurant_id = intent.getStringExtra("RESTAURANT_ID");
-        mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);
-        initRecyclerView(binding.getRoot());
+        if (mMyViewModel.getRestaurantFromId(restaurant_id) == null) {
+            mMyViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurant_id);
+            mMyViewModel.getRestaurantsMutableLiveData().observe(this, list -> {
+                if (mMyViewModel.getRestaurantFromId(restaurant_id) != null) {
+                    mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);
+                    initUserData();
+                    mMyViewModel.updateUserData();
+                    initUI();
+                    initRecyclerView(binding.getRoot());
+                }
+            });
+        } else {
+            mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);
+            initUserData();
+            mMyViewModel.updateUserData();
+            initUI();
+            initRecyclerView(binding.getRoot());
+        }
     }
 
     private void initUserData() {
@@ -130,7 +145,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                     mMyViewModel.removePickedRestaurant();
                     restaurantPick = false;
                 } else {
-                    mMyViewModel.setPickedRestaurant(mRestaurant.getId());
+                    mMyViewModel.setPickedRestaurant(mRestaurant.getId(), mRestaurant.getName());
                     restaurantPick = true;
                 }
                 mMyViewModel.getUserNew();

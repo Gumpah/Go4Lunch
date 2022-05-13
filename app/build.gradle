@@ -14,6 +14,7 @@ android {
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
+        resConfigs "en", "fr"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,6 +51,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-analytics:20.1.2'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-messaging'
 
     //FIREBASE UI
     implementation 'com.firebaseui:firebase-ui-auth:8.0.0'

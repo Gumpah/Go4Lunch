@@ -45,6 +45,10 @@ public class MyViewModel extends ViewModel {
        mRestaurantRepository.fetchAndUpdateRestaurants(location, disposable, apiKey);
     }
 
+    public void fetchRestaurantDetailsAndAddRestaurant(String apiKey, String placeId) {
+        mRestaurantRepository.fetchRestaurantDetailsAndAddRestaurant(apiKey, placeId);
+    }
+
     public MutableLiveData<List<Restaurant>> getRestaurantsMutableLiveData() {
         return mRestaurantRepository.getRestaurantsMutableLiveData();
     }
@@ -71,6 +75,10 @@ public class MyViewModel extends ViewModel {
 
     public LiveData<List<UserStateItem>> getUsersWhoPickedARestaurant() {
         return mapListDataToViewState(mUserRepository.getUsersWhoPickedARestaurant());
+    }
+
+    public LiveData<List<UserStateItem>> getAllUsers() {
+        return mapListDataToViewState(mUserRepository.getAllUsers());
     }
 
     public LiveData<UserStateItem> getUserNew() {
@@ -156,8 +164,8 @@ public class MyViewModel extends ViewModel {
         return (mUserRepository.getCurrentUser() != null);
     }
 
-    public void setPickedRestaurant(String restaurantId) {
-        mUserRepository.setPickedRestaurant(restaurantId);
+    public void setPickedRestaurant(String restaurantId, String restaurantName) {
+        mUserRepository.setPickedRestaurant(restaurantId, restaurantName);
         mUser.setValue(mUserRepository.getUser());
     }
 

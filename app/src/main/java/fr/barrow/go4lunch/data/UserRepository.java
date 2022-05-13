@@ -39,6 +39,7 @@ public class UserRepository {
 
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurant = new MutableLiveData<>();
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurantFromArray = new MutableLiveData<>();
+    private final MutableLiveData<List<User>> listOfAllUsers = new MutableLiveData<>();
     private final MutableLiveData<User> userNew = new MutableLiveData<>();
 
     public UserRepository() {
@@ -90,6 +91,7 @@ public class UserRepository {
         String uid = this.getCurrentUser().getUid();
         getUserData().addOnSuccessListener(documentSnapshot -> {
             this.getUsersCollection().document(uid).set(user);
+            getUserNew();
         });
     }
 
@@ -106,8 +108,8 @@ public class UserRepository {
         return this.getCurrentUser().getUid();
     }
 
-    public void setPickedRestaurant(String restaurantId) {
-        user.setPickedRestaurant(restaurantId);
+    public void setPickedRestaurant(String restaurantId, String restaurantName) {
+        user.setPickedRestaurant(restaurantId, restaurantName);
         if(getCurrentUserUid() != null){
             sendUserDataToFirestore();
         }
@@ -175,6 +177,24 @@ public class UserRepository {
             listOfUsersPickedRestaurantFromArray.postValue(null);
         });
         return listOfUsersPickedRestaurantFromArray;
+    }
+
+    public MutableLiveData<List<User>> getAllUsers() {
+        mFirebaseHelper.getAllUsers().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<User> users = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    users.add(document.toObject(User.class));
+                }
+                listOfAllUsers.postValue(users);
+            } else {
+                Log.d("Error", "Error getting documents: ", task.getException());
+            }
+        }).addOnFailureListener(e -> {
+            //handle error
+            listOfAllUsers.postValue(null);
+        });
+        return listOfAllUsers;
     }
 
     public MutableLiveData<User> getUserNew() {

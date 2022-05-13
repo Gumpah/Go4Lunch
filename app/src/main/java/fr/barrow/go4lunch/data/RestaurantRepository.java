@@ -67,6 +67,38 @@ public class RestaurantRepository {
         });
     }
 
+    public void fetchRestaurantDetailsAndAddRestaurant(String apiKey, String placeId) {
+        myRestaurantList.postValue(null);
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+        if (myRestaurantList.getValue() != null && !myRestaurantList.getValue().isEmpty()) {
+            restaurants.addAll(myRestaurantList.getValue());
+        }
+        this.disposable = PlacesStreams.streamCombinePlaceDetailsAndPhotoUrl(apiKey, placeId).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
+            @Override
+            public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
+                PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
+                String photoUrl = combinedPlaceAndString.getPhotoUrl();
+                restaurants.add(placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                //Toast.makeText(requireActivity(), "Impossible de récupérer les restaurants", Toast.LENGTH_SHORT).show();
+                Log.e("TAG","On Error"+Log.getStackTraceString(e));
+            }
+
+            @Override
+            public void onComplete() {
+                Collections.sort(restaurants, new Comparator<Restaurant>() {
+                    public int compare(Restaurant v1, Restaurant v2) {
+                        return v1.getName().compareTo(v2.getName());
+                    }
+                });
+                myRestaurantList.postValue(restaurants);
+            }
+        });
+    }
+
     public MutableLiveData<List<Restaurant>> getRestaurantsMutableLiveData() {
         return myRestaurantList;
     }
@@ -200,8 +232,10 @@ public class RestaurantRepository {
     }
 
     public Restaurant getRestaurantFromId(String id) {
-        for (Restaurant r : myRestaurantList.getValue()) {
-            if (r.getId().equals(id)) return r;
+        if (myRestaurantList.getValue() != null) {
+            for (Restaurant r : myRestaurantList.getValue()) {
+                if (r.getId().equals(id)) return r;
+            }
         }
         return null;
     }

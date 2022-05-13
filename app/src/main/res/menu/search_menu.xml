@@ -7,6 +7,7 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_search_24"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView" />
+        android:hint="Rechercher"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
 </menu>

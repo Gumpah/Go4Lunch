@@ -2,6 +2,7 @@ package fr.barrow.go4lunch.ui;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +31,7 @@ import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 import io.reactivex.disposables.Disposable;
 
-public class ListViewFragment extends Fragment {
+public class ListViewFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private FragmentListViewBinding binding;
     private String apiKey;
@@ -46,16 +47,30 @@ public class ListViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentListViewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        apiKey = getString(R.string.MAPS_API_KEY);
         configureViewModel();
         initRecyclerView(view);
         initRestaurantsData();
-        setupDataRequest();
+        //setupDataRequest();
+        setHasOptionsMenu(true);
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        SearchManager searchManager =
+                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setOnQueryTextListener(this);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
     public void filter(String text) {
-        if (mRestaurants != null && !mRestaurants.isEmpty() && mRecyclerView.getAdapter() != null) {
+        if (mRestaurants != null && mRecyclerView.getAdapter() != null) {
             mRestaurants.clear();
             if(text.isEmpty()){
                 mRestaurants.addAll(mRestaurantsCopy);
@@ -113,5 +128,17 @@ public class ListViewFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         this.disposeWhenDestroy();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        filter(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filter(newText);
+        return true;
     }
 }
