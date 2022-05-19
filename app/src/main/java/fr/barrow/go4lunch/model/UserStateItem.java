@@ -15,12 +15,14 @@ public class UserStateItem {
     private String urlPicture;
 
     public UserStateItem(User user) {
-        this.uid = user.getUid();
-        this.username = user.getUsername();
-        this.urlPicture = user.getUrlPicture();
-        this.pickedRestaurant = user.getPickedRestaurant();
-        this.pickedRestaurantName = user.getPickedRestaurantName();
-        this.likedRestaurants = user.getLikedRestaurants();
+        if (user != null) {
+            this.uid = user.getUid();
+            this.username = user.getUsername();
+            this.urlPicture = user.getUrlPicture();
+            this.pickedRestaurant = user.getPickedRestaurant();
+            this.pickedRestaurantName = user.getPickedRestaurantName();
+            this.likedRestaurants = user.getLikedRestaurants();
+        }
     }
 
     public UserStateItem() {

@@ -1,15 +1,11 @@
 package fr.barrow.go4lunch.ui;
 
 import android.Manifest;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -17,7 +13,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -32,9 +27,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -44,8 +36,6 @@ import fr.barrow.go4lunch.databinding.ActivityMainNavHeaderBinding;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-
 
     private ActivityMainBinding binding;
     private ActivityMainNavHeaderBinding navViewHeaderBinding;
@@ -137,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if(user.getPhotoUrl() != null){
                 setProfilePicture(user.getPhotoUrl());
+            } else {
+                setDefaultProfilePicture();
             }
             setTextUserData(user);
         }
@@ -145,6 +137,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setProfilePicture(Uri profilePictureUrl){
         Glide.with(this)
                 .load(profilePictureUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .into(navViewHeaderBinding.imageViewUserAvatar);
+    }
+
+    private void setDefaultProfilePicture() {
+        Glide.with(this)
+                .load(R.drawable.ic_person)
                 .apply(RequestOptions.circleCropTransform())
                 .into(navViewHeaderBinding.imageViewUserAvatar);
     }
@@ -202,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(this, RestaurantDetailsActivity.class);
                 intent.putExtra("RESTAURANT_ID", restaurantId);
                 startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.no_restaurant_chosen, Toast.LENGTH_SHORT).show();
             }
         }
         if (id==R.id.mainMenuDrawer_settings) {

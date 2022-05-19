@@ -3,7 +3,6 @@ package fr.barrow.go4lunch.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,12 +11,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.WorkmatesViewItemBinding;
-import fr.barrow.go4lunch.model.User;
 import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
@@ -27,7 +26,6 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
     private Context mContext;
     private MyViewModel mMyViewModel;
     private WorkmatesFragment workmatesFragment;
-    private String apiKey;
 
     public WorkmatesAdapter(ArrayList<UserStateItem> usersList, WorkmatesFragment workmatesFragment) {
         this.workmatesFragment = workmatesFragment;
@@ -40,7 +38,6 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
     public WorkmatesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         mContext = parent.getContext();
-        apiKey = mContext.getString(R.string.MAPS_API_KEY);
         return new WorkmatesAdapter.ViewHolder(WorkmatesViewItemBinding.inflate(inflater, parent, false));
     }
 
@@ -50,8 +47,7 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
         String pickedRestaurantId = user.getPickedRestaurant();
         String restaurantName = null;
         if (pickedRestaurantId != null && mUsersList.get(position).getPickedRestaurantName() != null) restaurantName = mUsersList.get(position).getPickedRestaurantName();
-        boolean isRestaurantInList = mMyViewModel.getRestaurantFromId(pickedRestaurantId) != null;
-        holder.bind(mUsersList.get(position), restaurantName, pickedRestaurantId, isRestaurantInList, mMyViewModel, apiKey);
+        holder.bind(mUsersList.get(position), restaurantName, pickedRestaurantId);
     }
 
     @Override
@@ -68,17 +64,25 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
             binding = b;
         }
 
-        void bind(UserStateItem user, String restaurantName, String restaurantId, boolean isRestaurantInList, MyViewModel viewModel, String apiKey) {
-            setTextViewAndClickListener(user.getUsername(), restaurantName, restaurantId, isRestaurantInList, viewModel, apiKey);
-            Glide.with(binding.getRoot())
-                    .load(user.getUrlPicture())
-                    .error(R.drawable.backgroundblurred)
-                    .centerCrop()
-                    .circleCrop()
-                    .into(binding.imageViewWorkmateIcon);
+        void bind(UserStateItem user, String restaurantName, String restaurantId) {
+            setTextViewAndClickListener(user.getUsername(), restaurantName, restaurantId);
+            if (user.getUrlPicture() != null) {
+                Glide.with(binding.getRoot())
+                        .load(user.getUrlPicture())
+                        .error(R.drawable.backgroundblurred)
+                        .centerCrop()
+                        .circleCrop()
+                        .into(binding.imageViewWorkmateIcon);
+            } else {
+                Glide.with(binding.getRoot())
+                        .load(R.drawable.ic_person)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(binding.imageViewWorkmateIcon);
+            }
+
         }
 
-        void setTextViewAndClickListener(String username, String restaurantName, String restaurantId, boolean isRestaurantInList, MyViewModel viewModel, String apiKey) {
+        void setTextViewAndClickListener(String username, String restaurantName, String restaurantId) {
             String textView = (username + binding.getRoot().getResources().getString(R.string.workmate_noPickedRestaurant));
             binding.textViewWorkmateChoice.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.greyText, null));
             if (restaurantName != null && restaurantId != null) {

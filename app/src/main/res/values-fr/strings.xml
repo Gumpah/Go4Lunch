@@ -8,6 +8,8 @@
 
     <string name="button_facebookSignIn">Connexion avec Facebook</string>
     <string name="button_googleSignIn">Connexion avec Google</string>
+    <string name="button_twitterSignIn">Connexion avec Twitter</string>
+    <string name="button_EmailSignIn">Connexion avec e-mail</string>
     <string name="button_NoNetwork">Hors connexion</string>
 
     <!--Main activity / java -->
@@ -67,5 +69,8 @@
     <string name="workmate_noPickedRestaurant">&#160;n\'a pas encore choisi</string>
     <string name="workmate_hasRestaurantPick">&#160;mange à&#160;</string>
     <string name="star">Etoile</string>
+    <string name="notifications">Notifications</string>
+
+    <string name="no_restaurant_chosen">Vous n\'avez choisi aucun restaurant</string>
 
 </resources>

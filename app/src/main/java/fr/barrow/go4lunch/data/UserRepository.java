@@ -55,7 +55,7 @@ public class UserRepository {
     // Create User in Firestore
     public void createUser() {
         FirebaseUser user = getCurrentUser();
-        if(user == null){
+        if(user != null) {
             String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
             String username = user.getDisplayName();
             String uid = user.getUid();
@@ -68,7 +68,7 @@ public class UserRepository {
                 this.getUsersCollection().document(uid).set(userToCreate);
             });
         } else {
-            updateUserData();
+            //updateUserData();
         }
     }
 
@@ -184,7 +184,8 @@ public class UserRepository {
             if (task.isSuccessful()) {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    users.add(document.toObject(User.class));
+                    User user = document.toObject(User.class);
+                    if (!user.getUid().equals(getCurrentUserUid())) users.add(user);
                 }
                 listOfAllUsers.postValue(users);
             } else {

@@ -3,7 +3,6 @@ package fr.barrow.go4lunch.ui;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,11 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,15 +20,9 @@ import java.util.ArrayList;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentWorkmatesBinding;
-import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.User;
 import fr.barrow.go4lunch.model.UserStateItem;
-import fr.barrow.go4lunch.model.placedetails.CombinedPlaceAndString;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
-import fr.barrow.go4lunch.data.PlacesStreams;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 
 public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTextListener {
 

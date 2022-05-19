@@ -1,37 +1,35 @@
 package fr.barrow.go4lunch.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
-import android.content.res.Configuration;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.Locale;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import fr.barrow.go4lunch.R;
-import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivitySettingsBinding;
-import fr.barrow.go4lunch.utils.LocaleHelper;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private ActivitySettingsBinding binding;
     private MyViewModel mMyViewModel;
-    private LocaleHelper mLocaleHelper;
     private Context mContext;
     private Resources mResources;
+    private final String preferencesName = "MyPref";
+    private final String preferenceNotifications = "receiving_notifications";
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
         configureViewModel();
-        setLocaleHelper();
-        setClickListeners();
+        initSharedPreferences();
+        initNotificationsSwitch();
     }
 
     private void initUI() {
@@ -44,37 +42,23 @@ public class SettingsActivity extends AppCompatActivity {
         mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
     }
 
-    private void setLocaleHelper() {
-        mLocaleHelper = new LocaleHelper();
+    private void initSharedPreferences() {
+        pref = getApplicationContext().getSharedPreferences(preferencesName, 0);
+        editor = pref.edit();
     }
 
-    private void setClickListeners() {
-        binding.buttonSetEnglish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Configuration config = getBaseContext().getResources().getConfiguration();
-                Locale locale = new Locale("en");
-                Locale.setDefault(locale);
-                config.locale = locale;
-                getBaseContext().getResources().updateConfiguration(config,
-                        getBaseContext().getResources().getDisplayMetrics());
-                binding.buttonSetEnglish.setText(R.string.star);
-
-            }
-        });
-
-        binding.buttonSetFrench.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Configuration config = getBaseContext().getResources().getConfiguration();
-                Locale locale = new Locale("fr");
-                Locale.setDefault(locale);
-                config.locale = locale;
-                getBaseContext().getResources().updateConfiguration(config,
-                        getBaseContext().getResources().getDisplayMetrics());
-
-                binding.buttonSetEnglish.setText(R.string.star);
-            }
-        });
+    private void initNotificationsSwitch() {
+        binding.switchNotifications.setChecked(getNotificationStatus());
+        binding.switchNotifications.setOnCheckedChangeListener(((buttonView, isChecked) -> setNotificationStatus(isChecked)));
     }
+
+    private boolean getNotificationStatus() {
+        return pref.getBoolean(preferenceNotifications, true);
+    }
+
+    private void setNotificationStatus(boolean status) {
+        editor.putBoolean(preferenceNotifications, status);
+        editor.apply();
+    }
+
 }

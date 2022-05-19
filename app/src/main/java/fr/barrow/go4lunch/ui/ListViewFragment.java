@@ -2,12 +2,12 @@ package fr.barrow.go4lunch.ui;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,13 +20,22 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.load.engine.Resource;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.ArrayList;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentListViewBinding;
 import fr.barrow.go4lunch.model.Restaurant;
+import fr.barrow.go4lunch.model.RestaurantAutocomplete;
 import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 import io.reactivex.disposables.Disposable;
@@ -39,18 +48,26 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
     private Disposable disposable;
     private RecyclerView mRecyclerView;
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
-    private ArrayList<Restaurant> mRestaurantsCopy = new ArrayList<>();
     private ArrayList<UserStateItem> mUsers = new ArrayList<>();
+    private ArrayList<RestaurantAutocomplete> mRestaurantAutocomplete = new ArrayList<>();
+    private AutocompleteSessionToken mToken;
+    private PlacesClient placesClient;
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentListViewBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        view = binding.getRoot();
+        apiKey = getString(R.string.MAPS_API_KEY);
         configureViewModel();
-        initRecyclerView(view);
+        initRecyclerView(false);
         initRestaurantsData();
-        //setupDataRequest();
+        if (!Places.isInitialized()) {
+            Places.initialize(requireActivity(), apiKey);
+        }
+        placesClient = Places.createClient(requireActivity());
+        mToken = AutocompleteSessionToken.newInstance();
         setHasOptionsMenu(true);
         return view;
     }
@@ -68,25 +85,45 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-
     public void filter(String text) {
-        if (mRestaurants != null && mRecyclerView.getAdapter() != null) {
-            mRestaurants.clear();
-            if(text.isEmpty()){
-                mRestaurants.addAll(mRestaurantsCopy);
-            } else {
-                text = text.toLowerCase();
-                for(Restaurant item: mRestaurantsCopy){
-                    if(item.getName().toLowerCase().contains(text)){
-                        mRestaurants.add(item);
+        changeRecyclerView(!text.isEmpty());
+        if (mMyViewModel.getLocation() != null) {
+
+            Location myLocation = mMyViewModel.getLocation();
+            RectangularBounds bounds = RectangularBounds.newInstance(
+                    new LatLng(myLocation.getLatitude() - 0.1, myLocation.getLongitude() - 0.1),
+                    new LatLng(myLocation.getLatitude() + 0.1, myLocation.getLongitude() + 0.1));
+
+            FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                    .setLocationBias(bounds)
+                    .setOrigin(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
+                    .setCountries("FR")
+                    .setTypeFilter(TypeFilter.ESTABLISHMENT)
+                    .setSessionToken(mToken)
+                    .setQuery(text)
+                    .build();
+
+            placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
+                mRestaurantAutocomplete.clear();
+                for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+                    if (prediction.getPlaceTypes().toString().toLowerCase().contains("restaurant") && prediction.getPrimaryText(null).toString().toLowerCase().contains(text.toLowerCase())) {
+                        mRestaurantAutocomplete.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(), prediction.getDistanceMeters().toString()));
                     }
+                    System.out.println(prediction.getPlaceTypes().toString().toLowerCase().contains("restaurant") + " " + prediction.getPrimaryText(null).toString().toLowerCase().contains(text.toLowerCase()));
+                    System.out.println(prediction.getFullText(null) + " // " + prediction.getPrimaryText(null) + " // " + prediction.getSecondaryText(null));
                 }
-            }
-            mRecyclerView.getAdapter().notifyDataSetChanged();
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            }).addOnFailureListener((exception) -> {
+                if (exception instanceof ApiException) {
+                    ApiException apiException = (ApiException) exception;
+                    Log.e("Test", "Place not found: " + apiException.getStatusCode());
+                }
+            });
+
         }
     }
 
-    private void initRecyclerView(View view) {
+    private void initRecyclerView(boolean isInSearchMode) {
         mRecyclerView = binding.recyclerview;
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(view.getContext(),
                 DividerItemDecoration.VERTICAL);
@@ -94,18 +131,30 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(layoutManager);
-        ListViewAdapter mAdapter = new ListViewAdapter(mRestaurants, this, mUsers);
-        mRecyclerView.setAdapter(mAdapter);
+        if (isInSearchMode) {
+            AutocompleteSearchAdapter mAdapter = new AutocompleteSearchAdapter(mRestaurantAutocomplete, this);
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            ListViewAdapter mAdapter = new ListViewAdapter(mRestaurants, this, mUsers);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+    }
+
+    private void changeRecyclerView(boolean isInSearchMode) {
+        mRecyclerView = binding.recyclerview;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        if (isInSearchMode) {
+            AutocompleteSearchAdapter mAdapter = new AutocompleteSearchAdapter(mRestaurantAutocomplete, this);
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            ListViewAdapter mAdapter = new ListViewAdapter(mRestaurants, this, mUsers);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     public void configureViewModel() {
         mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(requireActivity())).get(MyViewModel.class);
-    }
-
-    private void setupDataRequest() {
-        if (mMyViewModel.getLocation() != null) {
-            mMyViewModel.fetchAndUpdateRestaurants(mMyViewModel.getLocationString(), disposable, apiKey);
-        }
     }
 
     public void initRestaurantsData() {
@@ -113,8 +162,6 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
             if (list != null && !list.isEmpty() && mRecyclerView.getAdapter() != null) {
                 mRestaurants.clear();
                 mRestaurants.addAll(list);
-                mRestaurantsCopy.clear();
-                mRestaurantsCopy.addAll(list);
                 mRecyclerView.getAdapter().notifyDataSetChanged();
             }
         });

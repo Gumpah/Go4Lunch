@@ -6,6 +6,9 @@
     <string name="facebook_application_id" translatable="false">359538029220576</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb359538029220576</string>
 
+    <string name="twitter_consumer_key" translatable="false">2Itg4DYVCIWdJTutvqgcfYEHh</string>
+    <string name="twitter_consumer_secret" translatable="false">BSS1DO09OiN1M971DuRxVXX7wFnmddXEWsLzEMUDpkq8romTrd</string>
+
     <!-- NOTIFICATION SERVICE -->
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
@@ -15,6 +18,8 @@
 
     <string name="button_facebookSignIn">Login with Facebook</string>
     <string name="button_googleSignIn">Login with Google</string>
+    <string name="button_twitterSignIn">Login with Twitter</string>
+    <string name="button_EmailSignIn">Login with Mail</string>
     <string name="button_NoNetwork">No network</string>
 
     <!--Main activity / java -->
@@ -74,5 +79,8 @@
     <string name="workmate_noPickedRestaurant">&#160;hasn\'t decided yet</string>
     <string name="workmate_hasRestaurantPick">&#160;is eating at&#160;</string>
     <string name="star">star</string>
+    <string name="notifications">Notifications</string>
+
+    <string name="no_restaurant_chosen">You haven\'t chosen any restaurant</string>
 
 </resources>

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -54,12 +55,19 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
         void bind(UserStateItem user) {
             String textViewUser = (user.getUsername() + binding.getRoot().getResources().getString(R.string.workmate_is_joining));
             binding.textViewUserNameList.setText(textViewUser);
-            Glide.with(binding.getRoot())
-                    .load(user.getUrlPicture())
-                    .error(R.drawable.backgroundblurred)
-                    .centerCrop()
-                    .circleCrop()
-                    .into(binding.imageViewUserAvatarList);
+            if (user.getUrlPicture() != null) {
+                Glide.with(binding.getRoot())
+                        .load(user.getUrlPicture())
+                        .error(R.drawable.backgroundblurred)
+                        .centerCrop()
+                        .circleCrop()
+                        .into(binding.imageViewUserAvatarList);
+            } else {
+                Glide.with(binding.getRoot())
+                        .load(R.drawable.ic_person)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(binding.imageViewUserAvatarList);
+            }
         }
     }
 }

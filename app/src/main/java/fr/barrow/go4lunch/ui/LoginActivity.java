@@ -74,6 +74,12 @@ public class LoginActivity extends AppCompatActivity {
             binding.buttonSignInGoogle.setClickable(true);
             binding.buttonSignInGoogle.setText(R.string.button_googleSignIn);
             binding.buttonSignInGoogle.setBackgroundColor(getResources().getColor(R.color.google));
+            binding.buttonSignInTwitter.setClickable(true);
+            binding.buttonSignInTwitter.setText(R.string.button_twitterSignIn);
+            binding.buttonSignInTwitter.setBackgroundColor(getResources().getColor(R.color.twitter));
+            binding.buttonSignInEmail.setClickable(true);
+            binding.buttonSignInEmail.setText(R.string.button_EmailSignIn);
+            binding.buttonSignInEmail.setBackgroundColor(getResources().getColor(R.color.mail));
         } else {
             Toast.makeText(
                     this, R.string.internet_disconnected,
@@ -85,6 +91,12 @@ public class LoginActivity extends AppCompatActivity {
             binding.buttonSignInGoogle.setClickable(false);
             binding.buttonSignInGoogle.setText(R.string.button_NoNetwork);
             binding.buttonSignInGoogle.setBackgroundColor(getResources().getColor(R.color.googleNoNetwork));
+            binding.buttonSignInTwitter.setClickable(false);
+            binding.buttonSignInTwitter.setText(R.string.button_NoNetwork);
+            binding.buttonSignInTwitter.setBackgroundColor(getResources().getColor(R.color.twitterNoNetwork));
+            binding.buttonSignInEmail.setClickable(false);
+            binding.buttonSignInEmail.setText(R.string.button_NoNetwork);
+            binding.buttonSignInEmail.setBackgroundColor(getResources().getColor(R.color.mailNoNetwork));
         }
     }
 
@@ -92,7 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         //List<AuthUI.IdpConfig> providers =  Collections.singletonList(provider);
         List<AuthUI.IdpConfig> providers =  Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build());
+                new AuthUI.IdpConfig.FacebookBuilder().build(),
+                new AuthUI.IdpConfig.TwitterBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build());
 
 
         Intent signInIntent = AuthUI.getInstance()
@@ -107,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkIfUserConnected() {
         if (mMyViewModel.isCurrentUserLogged()) {
-            finish();
+            //finish();
             startActivity(new Intent(this, MainActivity.class));
         }
     }
@@ -116,6 +130,8 @@ public class LoginActivity extends AppCompatActivity {
         // Login Button
         binding.buttonSignInFacebook.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.FacebookBuilder().build()));
         binding.buttonSignInGoogle.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.GoogleBuilder().build()));
+        binding.buttonSignInTwitter.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.TwitterBuilder().build()));
+        binding.buttonSignInEmail.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.EmailBuilder().build()));
     }
 
     private void initUI(){
@@ -131,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
             // Successfully signed in
             showSnackBar(getString(R.string.connection_succeed));
             mMyViewModel.createUser();
-            finish();
+            //finish();
             startActivity(new Intent(this, MainActivity.class));
         } else {
             // Sign in failed

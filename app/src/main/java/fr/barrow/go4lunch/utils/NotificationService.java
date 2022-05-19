@@ -34,22 +34,23 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
 
-    private void sendVisualNotification(RemoteMessage.Notification notification) {
-
-        int flag;
+    private int getFlag() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            flag = PendingIntent.FLAG_IMMUTABLE;
+            return PendingIntent.FLAG_IMMUTABLE;
         }
         else {
-            flag = PendingIntent.FLAG_MUTABLE;
+            return PendingIntent.FLAG_MUTABLE;
         }
+    }
+
+    private void sendVisualNotification(RemoteMessage.Notification notification) {
 
         // Create an Intent that will be shown when user will click on the Notification
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0,
                 intent,
-                flag | PendingIntent.FLAG_ONE_SHOT);
+                getFlag() | PendingIntent.FLAG_ONE_SHOT);
 
         // Create a Channel (Android 8)
         String channelId = getString(R.string.default_notification_channel_id);

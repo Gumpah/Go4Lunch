@@ -12,6 +12,10 @@
     <color name="facebookNoNetwork">#2e4980</color>
     <color name="google">#D53325</color>
     <color name="googleNoNetwork">#801f17</color>
+    <color name="twitter">#1C99E7</color>
+    <color name="twitterNoNetwork">#0f5480</color>
+    <color name="mail">#FFFFFF</color>
+    <color name="mailNoNetwork">#808080</color>
 
     <color name="textColor">#FFFFFFFF</color>
 
