@@ -41,6 +41,13 @@ public class MyViewModel extends ViewModel {
         mUser = new MutableLiveData<>();
     }
 
+    public MyViewModel(RestaurantRepository restaurantRepository, UserRepository userRepository) {
+        mRestaurantRepository = restaurantRepository;
+        mUserRepository = userRepository;
+        mRestaurantList = new MutableLiveData<>();
+        mUser = new MutableLiveData<>();
+    }
+
     public void fetchAndUpdateRestaurants(String location, Disposable disposable, String apiKey) {
        mRestaurantRepository.fetchAndUpdateRestaurants(location, disposable, apiKey);
     }

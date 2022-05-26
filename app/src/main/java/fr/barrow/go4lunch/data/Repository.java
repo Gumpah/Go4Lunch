@@ -15,6 +15,7 @@ public class Repository {
     public NetworkMonitoring mNetworkMonitoring;
 
     private final MutableLiveData<Boolean> locationPermissionStatus = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> locationPermissionStatusNew = new MutableLiveData<>();
 
     private Location location;
 
@@ -43,6 +44,14 @@ public class Repository {
     public String getLocationString() {
         String locationString = (location.getLatitude() + "," + location.getLongitude());
         return locationString;
+    }
+
+    public MutableLiveData<Boolean> getLocationPermissionStatusNew() {
+        return locationPermissionStatusNew;
+    }
+
+    public void setLocationPermissionStatusNew(boolean status) {
+        locationPermissionStatusNew.postValue(status);
     }
 
     public Location getLocation() {
