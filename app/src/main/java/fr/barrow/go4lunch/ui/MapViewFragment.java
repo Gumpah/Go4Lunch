@@ -51,7 +51,6 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     private FusedLocationProviderClient fusedLocationClient;
     private boolean permissionDenied = false;
     private String apiKey;
-    private Disposable disposable;
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
 
     private MyViewModel mMyViewModel;
@@ -81,6 +80,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 
     private void initRestaurantsData() {
         mMyViewModel.getRestaurantsMutableLiveData().observe(requireActivity(), restaurants -> {
+            System.out.println("BBB / 1");
             if (restaurants != null) {
                 mRestaurants.clear();
                 mRestaurants.addAll(restaurants);
@@ -129,7 +129,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 
     private void setupDataRequest() {
         if (mMyViewModel.getLocation() != null && mRestaurants.isEmpty()) {
-            mMyViewModel.fetchAndUpdateRestaurants(mMyViewModel.getLocationString(), disposable, apiKey);
+            mMyViewModel.fetchAndUpdateRestaurants(mMyViewModel.getLocationString(), apiKey, requireContext());
         }
     }
 
@@ -228,16 +228,6 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     @Override
     public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(requireActivity(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
-    }
-
-    private void disposeWhenDestroy(){
-        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        this.disposeWhenDestroy();
     }
 
     @Override

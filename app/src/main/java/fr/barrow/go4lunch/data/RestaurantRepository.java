@@ -1,106 +1,30 @@
 package fr.barrow.go4lunch.data;
 
-import android.util.Log;
-import android.widget.Toast;
-
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.User;
-import fr.barrow.go4lunch.model.UserStateItem;
-import fr.barrow.go4lunch.model.placedetails.CombinedPlaceAndString;
+import fr.barrow.go4lunch.model.RestaurantAutocomplete;
 import fr.barrow.go4lunch.model.placedetails.OpeningHoursDetails;
 import fr.barrow.go4lunch.model.placedetails.Period;
 import fr.barrow.go4lunch.model.placedetails.PlaceDetails;
 import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 
 public class RestaurantRepository {
 
     private ArrayList<Restaurant> mRestaurantList;
     private final MutableLiveData<List<Restaurant>> myRestaurantList = new MutableLiveData<>();
-    private Disposable disposable;
+    private final MutableLiveData<List<RestaurantAutocomplete>> myRestaurantAutocompleteList = new MutableLiveData<>();
 
     public RestaurantRepository() {
         mRestaurantList = new ArrayList<>();
-    }
-
-    public void fetchAndUpdateRestaurants(String location, Disposable disposable, String apiKey) {
-        this.disposable = disposable;
-        myRestaurantList.postValue(null);
-        ArrayList<Restaurant> restaurants = new ArrayList<>();
-        this.disposable = PlacesStreams.streamFetchNearbyPlacesAndFetchTheirDetails(apiKey, location).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
-            @Override
-            public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
-                PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
-                String photoUrl = combinedPlaceAndString.getPhotoUrl();
-                restaurants.add(placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                //Toast.makeText(requireActivity(), "Impossible de récupérer les restaurants", Toast.LENGTH_SHORT).show();
-                Log.e("TAG","On Error"+Log.getStackTraceString(e));
-            }
-
-            @Override
-            public void onComplete() {
-                Collections.sort(restaurants, new Comparator<Restaurant>() {
-                    public int compare(Restaurant v1, Restaurant v2) {
-                        return v1.getName().compareTo(v2.getName());
-                    }
-                });
-                myRestaurantList.postValue(restaurants);
-            }
-        });
-    }
-
-    public void fetchRestaurantDetailsAndAddRestaurant(String apiKey, String placeId) {
-        myRestaurantList.postValue(null);
-        ArrayList<Restaurant> restaurants = new ArrayList<>();
-        if (myRestaurantList.getValue() != null && !myRestaurantList.getValue().isEmpty()) {
-            restaurants.addAll(myRestaurantList.getValue());
-        }
-        this.disposable = PlacesStreams.streamCombinePlaceDetailsAndPhotoUrl(apiKey, placeId).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
-            @Override
-            public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
-                PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
-                String photoUrl = combinedPlaceAndString.getPhotoUrl();
-                restaurants.add(placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                //Toast.makeText(requireActivity(), "Impossible de récupérer les restaurants", Toast.LENGTH_SHORT).show();
-                Log.e("TAG","On Error"+Log.getStackTraceString(e));
-            }
-
-            @Override
-            public void onComplete() {
-                Collections.sort(restaurants, new Comparator<Restaurant>() {
-                    public int compare(Restaurant v1, Restaurant v2) {
-                        return v1.getName().compareTo(v2.getName());
-                    }
-                });
-                myRestaurantList.postValue(restaurants);
-            }
-        });
-    }
-
-    public MutableLiveData<List<Restaurant>> getRestaurantsMutableLiveData() {
-        return myRestaurantList;
     }
 
     public Restaurant placeDetailsToRestaurantObject(PlaceDetailsResult placeDetails, String photoUrl) {
@@ -238,6 +162,14 @@ public class RestaurantRepository {
             }
         }
         return null;
+    }
+
+    public MutableLiveData<List<Restaurant>> getRestaurantsMutableLiveData() {
+        return myRestaurantList;
+    }
+
+    public MutableLiveData<List<RestaurantAutocomplete>> getRestaurantsAutocompleteMutableLiveData() {
+        return myRestaurantAutocompleteList;
     }
 }
 

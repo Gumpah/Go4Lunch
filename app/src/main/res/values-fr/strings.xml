@@ -78,5 +78,6 @@
     <string name="notification_notAlone_firstPart">Vous mangez chez&#160;</string>
     <string name="notification_notAlone_with">&#160;avec&#160;</string>
     <string name="notification_notAlone_and">et&#160;</string>
+    <string name="restaurant_fetch_error">Impossible de récupérer les restaurants</string>
 
 </resources>

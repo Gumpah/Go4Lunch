@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.User;
 import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
@@ -69,7 +67,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String restaurant_id = intent.getStringExtra("RESTAURANT_ID");
         if (mMyViewModel.getRestaurantFromId(restaurant_id) == null) {
-            mMyViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurant_id);
+            mMyViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurant_id, this);
             mMyViewModel.getRestaurantsMutableLiveData().observe(this, list -> {
                 if (mMyViewModel.getRestaurantFromId(restaurant_id) != null) {
                     mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);

@@ -42,9 +42,8 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
     public ListViewFragment listViewFragment;
     public Date now;
 
-    public ListViewAdapter(ArrayList<Restaurant> restaurants, ListViewFragment listViewFragment, ArrayList<UserStateItem> users) {
+    public ListViewAdapter(ArrayList<Restaurant> restaurants, ListViewFragment listViewFragment) {
         mRestaurantList = restaurants;
-        mUsers = users;
         this.listViewFragment = listViewFragment;
         mMyViewModel = new ViewModelProvider(listViewFragment, MyViewModelFactory.getInstance(listViewFragment.getContext())).get(MyViewModel.class);
         Calendar n = Calendar.getInstance();
@@ -52,7 +51,6 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
         n.set(Calendar.MINUTE, 0);
         now = n.getTime();
     }
-
 
     @NonNull
     @Override
