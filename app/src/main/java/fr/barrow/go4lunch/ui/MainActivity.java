@@ -15,7 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -45,14 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MyViewModel mMyViewModel;
     private String restaurantId;
 
-    private Fragment fragment;
 
-    private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
-        @Override
-        public void onChanged(Boolean isConnected) {
-            showConnectionToast(isConnected);
-        }
-    };
+    private final Observer<Boolean> activeNetworkStateObserver = this::showConnectionToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private ActivityResultLauncher<String> locationPermissionRequest =
+    private final ActivityResultLauncher<String> locationPermissionRequest =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                         if (isGranted) {
                             getLocation();
@@ -124,13 +117,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void updateUIWithUserData(){
         if(mMyViewModel.isCurrentUserLogged()){
             FirebaseUser user = mMyViewModel.getCurrentUser();
-
-            if(user.getPhotoUrl() != null){
-                setProfilePicture(user.getPhotoUrl());
-            } else {
-                setDefaultProfilePicture();
+            if (user != null) {
+                if(user.getPhotoUrl() != null){
+                    setProfilePicture(user.getPhotoUrl());
+                } else {
+                    setDefaultProfilePicture();
+                }
+                setTextUserData(user);
             }
-            setTextUserData(user);
         }
     }
 
@@ -175,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initNavController() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_host_fragment);
-        mNavController = navHostFragment.getNavController();
+        if (navHostFragment != null) mNavController = navHostFragment.getNavController();
     }
 
     private void initBottomNavigationView() {

@@ -40,7 +40,6 @@ import fr.barrow.go4lunch.databinding.FragmentMapViewBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
-import io.reactivex.disposables.Disposable;
 import pub.devrel.easypermissions.AppSettingsDialog;
 
 
@@ -97,17 +96,23 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
                 ArrayList<String> pickedRestaurantIdsList = new ArrayList<>();
                 if (users != null && !users.isEmpty()) {
                     for (UserStateItem u : users) {
-                        if (!mMyViewModel.getCurrentUser().getUid().equals(u.getUid())) pickedRestaurantIdsList.add(u.getPickedRestaurant());
+                        if (mMyViewModel.getCurrentUser() != null) {
+                            if (!mMyViewModel.getCurrentUser().getUid().equals(u.getUid())) pickedRestaurantIdsList.add(u.getPickedRestaurant());
+                        }
                     }
                 }
                 if (map != null) {
                     map.clear();
                     for (Restaurant r : restaurants) {
                         boolean picked = pickedRestaurantIdsList.contains(r.getId());
-                        map.addMarker(new MarkerOptions()
-                                .icon(BitmapDescriptorFactory.fromBitmap(getBitmapIcon(picked)))
+                        MarkerOptions marker = new MarkerOptions()
                                 .position(r.getPosition())
-                                .title(r.getName())).setTag(r.getId());
+                                .title(r.getName());
+
+                        Bitmap bitmap = getBitmapIcon(picked);
+                        if (bitmap != null) marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+
+                        map.addMarker(marker).setTag(r.getId());
                     }
                 }
             });
@@ -123,8 +128,12 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
         } else {
             bitmapDrawable = (BitmapDrawable) ResourcesCompat.getDrawable(getResources(), R.drawable.location_lunch_icon, null);
         }
-        Bitmap b = bitmapDrawable.getBitmap();
-        return Bitmap.createScaledBitmap(b, width, height, false);
+        if (bitmapDrawable != null) {
+            Bitmap b = bitmapDrawable.getBitmap();
+            return Bitmap.createScaledBitmap(b, width, height, false);
+        } else {
+            return null;
+        }
     }
 
     private void setupDataRequest() {
@@ -232,10 +241,12 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
-        String restaurantId = marker.getTag().toString();
-        Intent intent = new Intent(requireContext(), RestaurantDetailsActivity.class);
-        intent.putExtra("RESTAURANT_ID", restaurantId);
-        requireContext().startActivity(intent);
+        if (marker.getTag() != null) {
+            String restaurantId = marker.getTag().toString();
+            Intent intent = new Intent(requireContext(), RestaurantDetailsActivity.class);
+            intent.putExtra("RESTAURANT_ID", restaurantId);
+            requireContext().startActivity(intent);
+        }
     }
 
 

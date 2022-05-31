@@ -200,7 +200,11 @@ public class MyViewModel extends ViewModel {
                 restaurantsAutocomplete.clear();
                 for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
                     if (prediction.getPlaceTypes().toString().toLowerCase().contains("restaurant") && prediction.getPrimaryText(null).toString().toLowerCase().contains(text.toLowerCase())) {
-                        restaurantsAutocomplete.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(), prediction.getDistanceMeters().toString()));
+                        String distance = "";
+                        if (prediction.getDistanceMeters() != null) {
+                            distance = prediction.getDistanceMeters().toString();
+                        }
+                        restaurantsAutocomplete.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(), distance));
                     }
                 }
                 mRestaurantRepository.getRestaurantsAutocompleteMutableLiveData().postValue(restaurantsAutocomplete);
@@ -255,8 +259,7 @@ public class MyViewModel extends ViewModel {
 
             @Override
             public void onError(Throwable e) {
-                //Toast.makeText(requireActivity(), "Impossible de récupérer les restaurants", Toast.LENGTH_SHORT).show();
-                Log.e("TAG","On Error"+Log.getStackTraceString(e));
+                Toast.makeText(context, R.string.restaurant_fetch_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override

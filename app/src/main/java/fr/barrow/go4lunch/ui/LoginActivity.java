@@ -37,12 +37,7 @@ public class LoginActivity extends AppCompatActivity {
             this::onSignInResult
     );
 
-    private final Observer<Boolean> activeNetworkStateObserver = new Observer<Boolean>() {
-        @Override
-        public void onChanged(Boolean isConnected) {
-            onNetworkStatusChange(isConnected);
-        }
-    };
+    private final Observer<Boolean> activeNetworkStateObserver = this::onNetworkStatusChange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupListeners(){
-        // Login Button
         binding.buttonSignInFacebook.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.FacebookBuilder().build()));
         binding.buttonSignInGoogle.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.GoogleBuilder().build()));
         binding.buttonSignInTwitter.setOnClickListener(view -> createSignInIntent(new AuthUI.IdpConfig.TwitterBuilder().build()));
@@ -150,9 +144,7 @@ public class LoginActivity extends AppCompatActivity {
             //finish();
             startActivity(new Intent(this, MainActivity.class));
         } else {
-            // Sign in failed
             if (response == null) {
-                // User pressed back button
                 showSnackBar(getString(R.string.sign_in_cancelled));
                 return;
             }
@@ -167,7 +159,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Show Snack Bar with a message
     private void showSnackBar(String message){
         Snackbar.make(binding.constraintLayoutMainActivity, message, Snackbar.LENGTH_SHORT).show();
     }

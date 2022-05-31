@@ -32,7 +32,6 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
 
     private FragmentListViewBinding binding;
     private MyViewModel mMyViewModel;
-    private Disposable disposable;
     private RecyclerView mRecyclerView;
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
     private ArrayList<RestaurantAutocomplete> mRestaurantAutocomplete = new ArrayList<>();
@@ -131,16 +130,6 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
                 binding.recyclerview.getAdapter().notifyDataSetChanged(); //TODO déplacer dans adapteur
             }
         });
-    }
-
-    private void disposeWhenDestroy() {
-        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        this.disposeWhenDestroy();
     }
 
     @Override

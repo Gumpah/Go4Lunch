@@ -23,21 +23,15 @@ import fr.barrow.go4lunch.utils.MyViewModelFactory;
 public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.ViewHolder> {
 
     private ArrayList<UserStateItem> mUsersList;
-    private Context mContext;
-    private MyViewModel mMyViewModel;
-    private WorkmatesFragment workmatesFragment;
 
-    public WorkmatesAdapter(ArrayList<UserStateItem> usersList, WorkmatesFragment workmatesFragment) {
-        this.workmatesFragment = workmatesFragment;
+    public WorkmatesAdapter(ArrayList<UserStateItem> usersList) {
         mUsersList = usersList;
-        mMyViewModel = new ViewModelProvider(workmatesFragment, MyViewModelFactory.getInstance(workmatesFragment.getContext())).get(MyViewModel.class);
     }
 
     @NonNull
     @Override
     public WorkmatesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        mContext = parent.getContext();
         return new WorkmatesAdapter.ViewHolder(WorkmatesViewItemBinding.inflate(inflater, parent, false));
     }
 

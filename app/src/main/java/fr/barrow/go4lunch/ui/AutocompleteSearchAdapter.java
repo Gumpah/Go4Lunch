@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.RestaurantListViewItemBinding;
 import fr.barrow.go4lunch.databinding.RestaurantSearchItemBinding;
 import fr.barrow.go4lunch.model.RestaurantAutocomplete;
@@ -20,10 +21,9 @@ import fr.barrow.go4lunch.utils.MyViewModelFactory;
 public class AutocompleteSearchAdapter extends RecyclerView.Adapter<AutocompleteSearchAdapter.AutocompleteSearchViewHolder> {
 
     private ArrayList<RestaurantAutocomplete> mRestaurantList;
-    private Context mContext;
     public MyViewModel mMyViewModel;
     public ListViewFragment listViewFragment;
-    public Date now;
+    private Context mContext;
 
     public AutocompleteSearchAdapter(ArrayList<RestaurantAutocomplete> restaurants, ListViewFragment listViewFragment) {
         mRestaurantList = restaurants;
@@ -43,7 +43,7 @@ public class AutocompleteSearchAdapter extends RecyclerView.Adapter<Autocomplete
     @Override
     public void onBindViewHolder(@NonNull AutocompleteSearchAdapter.AutocompleteSearchViewHolder holder, int position) {
         RestaurantAutocomplete restaurant = mRestaurantList.get(position);
-        holder.bind(restaurant);
+        holder.bind(restaurant, mContext);
         holder.setClickListener(restaurant.getPlaceId());
     }
 
@@ -61,9 +61,12 @@ public class AutocompleteSearchAdapter extends RecyclerView.Adapter<Autocomplete
             binding = b;
         }
 
-        void bind(RestaurantAutocomplete restaurant) {
+        void bind(RestaurantAutocomplete restaurant, Context context) {
             binding.textViewRestaurantName.setText(restaurant.getName());
-            binding.textViewRestaurantDistance.setText(restaurant.getDistance() + "m");
+            if (restaurant.getDistance() != null && !restaurant.getDistance().equals("")) {
+                String distanceText = restaurant.getDistance() + context.getString(R.string.distance_meters_unit);
+                binding.textViewRestaurantDistance.setText(distanceText);
+            }
         }
 
         void setClickListener(String restaurantId) {

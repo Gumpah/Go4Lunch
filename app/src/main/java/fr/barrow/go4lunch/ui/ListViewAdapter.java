@@ -1,8 +1,6 @@
 package fr.barrow.go4lunch.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.type.DateTime;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,15 +23,12 @@ import java.util.concurrent.TimeUnit;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.RestaurantListViewItemBinding;
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.User;
 import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListViewViewHolder> {
 
     private ArrayList<Restaurant> mRestaurantList;
-    private ArrayList<UserStateItem> mUsers;
-    private Context mContext;
     public MyViewModel mMyViewModel;
     public ListViewFragment listViewFragment;
     public Date now;
@@ -56,7 +47,6 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
     @Override
     public ListViewAdapter.ListViewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        mContext = parent.getContext();
         return new ListViewViewHolder(RestaurantListViewItemBinding.inflate(inflater, parent, false));
     }
 

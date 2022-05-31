@@ -22,19 +22,17 @@ import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentWorkmatesBinding;
 import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
-import io.reactivex.disposables.Disposable;
 
 public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private FragmentWorkmatesBinding binding;
-    private Disposable disposable;
     private MyViewModel mMyViewModel;
     private RecyclerView mRecyclerView;
     private ArrayList<UserStateItem> mUsers = new ArrayList<>();
     private ArrayList<UserStateItem> mUsersCopy = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentWorkmatesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
@@ -49,7 +47,7 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
         mRecyclerView = binding.recyclerview;
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(layoutManager);
-        WorkmatesAdapter mAdapter = new WorkmatesAdapter(mUsers, this);
+        WorkmatesAdapter mAdapter = new WorkmatesAdapter(mUsers);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -86,27 +84,17 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
         mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(requireActivity())).get(MyViewModel.class);
     }
 
-    private void disposeWhenDestroy(){
-        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
         SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+                (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
+                searchManager.getSearchableInfo(requireActivity().getComponentName()));
         searchView.setOnQueryTextListener(this);
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        this.disposeWhenDestroy();
     }
 
     @Override

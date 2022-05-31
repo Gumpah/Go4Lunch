@@ -1,6 +1,5 @@
 package fr.barrow.go4lunch.ui;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -13,13 +12,12 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
 import fr.barrow.go4lunch.R;
-import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.databinding.RestaurantDetailsWorkmatesItemBinding;
+import fr.barrow.go4lunch.model.UserStateItem;
 
 public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<RestaurantDetailsWorkmatesAdapter.ViewHolder> {
 
     private ArrayList<UserStateItem> mUsersList;
-    private Context mContext;
 
     public RestaurantDetailsWorkmatesAdapter (ArrayList<UserStateItem> users) {
         mUsersList = users;
@@ -29,7 +27,6 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
     @Override
     public RestaurantDetailsWorkmatesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        mContext = parent.getContext();
         return new ViewHolder(RestaurantDetailsWorkmatesItemBinding.inflate(inflater, parent, false));
     }
 

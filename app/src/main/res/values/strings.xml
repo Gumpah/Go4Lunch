@@ -85,6 +85,7 @@
     <string name="notification_notAlone_firstPart">You\'re eating at&#160;</string>
     <string name="notification_notAlone_with">&#160;with&#160;</string>
     <string name="notification_notAlone_and">and&#160;</string>
-    <string name="restaurant_fetch_error">Unable to retrieve the restaurants</string>
+    <string name="restaurant_fetch_error">Unable to retrieve the restaurant(s)</string>
+    <string name="distance_meters_unit">m</string>
 
 </resources>

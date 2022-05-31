@@ -1,23 +1,16 @@
 package fr.barrow.go4lunch.ui;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import fr.barrow.go4lunch.databinding.ActivitySettingsBinding;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private ActivitySettingsBinding binding;
-    private MyViewModel mMyViewModel;
-    private Context mContext;
-    private Resources mResources;
     private final String preferencesName = "MyPref";
     private final String preferenceNotifications = "receiving_notifications";
     private SharedPreferences pref;
@@ -27,7 +20,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
-        configureViewModel();
         initSharedPreferences();
         initNotificationsSwitch();
     }
@@ -36,10 +28,6 @@ public class SettingsActivity extends AppCompatActivity {
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-    }
-
-    private void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
     }
 
     private void initSharedPreferences() {
