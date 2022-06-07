@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import fr.barrow.go4lunch.data.Repository;
 import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.data.UserRepository;
-import fr.barrow.go4lunch.ui.MyViewModel;
+import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
 
 public class MyViewModelFactory implements ViewModelProvider.Factory {
 
@@ -19,12 +19,13 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
     private final Repository mRepository;
     private final RestaurantRepository mRestaurantRepository;
     private final UserRepository mUserRepository;
+    private final NetworkMonitoring mNetworkMonitoring;
 
     public static MyViewModelFactory getInstance(Context context) {
         if (factory == null) {
             synchronized (MyViewModelFactory.class) {
                 if (factory == null) {
-                    factory = new MyViewModelFactory(context);
+                    factory = new MyViewModelFactory(context.getApplicationContext());
                 }
             }
         }
@@ -32,16 +33,18 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
     }
 
     private MyViewModelFactory(Context context) {
-        mRepository = new Repository(context.getApplicationContext());
+        mRepository = new Repository();
         mRestaurantRepository = new RestaurantRepository();
-        mUserRepository = new UserRepository();
+        mUserRepository = new UserRepository(context);
+        mNetworkMonitoring = new NetworkMonitoring(context);
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull @NotNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MyViewModel.class)) {
-            return (T) new MyViewModel(mRepository, mRestaurantRepository, mUserRepository);
+            return (T) new MyViewModel(mRepository, mRestaurantRepository, mUserRepository, mNetworkMonitoring);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

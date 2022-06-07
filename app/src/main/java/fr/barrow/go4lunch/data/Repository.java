@@ -2,13 +2,12 @@ package fr.barrow.go4lunch.data;
 
 import android.content.Context;
 import android.location.Location;
-import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import fr.barrow.go4lunch.utils.NetworkStateManager;
 import fr.barrow.go4lunch.utils.NetworkMonitoring;
+import fr.barrow.go4lunch.utils.NetworkStateManager;
 
 public class Repository {
 
@@ -19,16 +18,10 @@ public class Repository {
 
     private Location location;
 
-    public Repository(Context applicationContext) {
-        mNetworkMonitoring = new NetworkMonitoring(applicationContext);
-        mNetworkMonitoring.checkNetworkState();
-        mNetworkMonitoring.registerNetworkCallbackEvents();
+    public Repository() {
     }
 
-    public LiveData<Boolean> getConnectionStatus() {
-        return NetworkStateManager.getInstance().getNetworkConnectivityStatus();
-    }
-
+    /*
     public LiveData<Boolean> getLocationPermissionStatus() {
         return locationPermissionStatus;
     }
@@ -41,17 +34,17 @@ public class Repository {
         }
     }
 
-    public String getLocationString() {
-        String locationString = (location.getLatitude() + "," + location.getLongitude());
-        return locationString;
-    }
-
     public MutableLiveData<Boolean> getLocationPermissionStatusNew() {
         return locationPermissionStatusNew;
     }
 
     public void setLocationPermissionStatusNew(boolean status) {
         locationPermissionStatusNew.postValue(status);
+    }
+     */
+
+    public String getLocationString() {
+        return (location.getLatitude() + "," + location.getLongitude());
     }
 
     public Location getLocation() {

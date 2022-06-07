@@ -13,6 +13,7 @@ import fr.barrow.go4lunch.ui.MapViewFragment;
 
 public class LocationHelper {
 
+    /*
     private MapViewFragment mActivity;
     private Context mContext;
     private Repository mRepository;
@@ -37,4 +38,6 @@ public class LocationHelper {
             return false;
         }
     }
+
+ */
 }

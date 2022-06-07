@@ -1,6 +1,7 @@
 package fr.barrow.go4lunch.ui;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,28 +24,35 @@ import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.RestaurantListViewItemBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.utils.ClickCallback;
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListViewViewHolder> {
 
     private ArrayList<Restaurant> mRestaurantList;
-    public MyViewModel mMyViewModel;
-    public ListViewFragment listViewFragment;
+    private ArrayList<UserStateItem> mUsersList;
+    public ListViewFragment mListViewFragment;
     public Date now;
+    public Context mContext;
+    public ClickCallback mCallback;
+    public Location mLocation;
 
-    public ListViewAdapter(ArrayList<Restaurant> restaurants, ListViewFragment listViewFragment) {
+    public ListViewAdapter(ArrayList<Restaurant> restaurants, ListViewFragment listViewFragment, ClickCallback callback, Location location) {
         mRestaurantList = restaurants;
-        this.listViewFragment = listViewFragment;
-        mMyViewModel = new ViewModelProvider(listViewFragment, MyViewModelFactory.getInstance(listViewFragment.getContext())).get(MyViewModel.class);
+        mListViewFragment = listViewFragment;
         Calendar n = Calendar.getInstance();
         n.set(Calendar.HOUR_OF_DAY, 20);
         n.set(Calendar.MINUTE, 0);
+        n.set(Calendar.MINUTE, 0);
         now = n.getTime();
+        mCallback = callback;
+        mLocation = location;
+        mUsersList = new ArrayList<>();
     }
 
     @NonNull
     @Override
     public ListViewAdapter.ListViewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new ListViewViewHolder(RestaurantListViewItemBinding.inflate(inflater, parent, false));
     }
@@ -53,17 +60,27 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
     @Override
     public void onBindViewHolder(@NonNull ListViewAdapter.ListViewViewHolder holder, int position) {
         Restaurant restaurant = mRestaurantList.get(position);
-        holder.bind(restaurant, mMyViewModel.getLocation());
-        holder.setClickListener(restaurant.getId());
-        mMyViewModel.getUsersWhoPickedARestaurant().observe(listViewFragment.requireActivity(), users -> {
-            holder.initUserCount(users, restaurant, mMyViewModel.getCurrentUser().getUid());
-        });
+        holder.bind(restaurant, mLocation);
+        holder.setClickListener(restaurant.getId(), mCallback);
+        holder.initUserCount(mUsersList, restaurant);
         holder.setupClosingTime(restaurant, now);
     }
 
     @Override
     public int getItemCount() {
         return mRestaurantList.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setData(List<Restaurant> list) {
+        mRestaurantList = (ArrayList<Restaurant>) list;
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setDataUsers(List<UserStateItem> users) {
+        mUsersList = (ArrayList<UserStateItem>) users;
+        notifyDataSetChanged();
     }
 
     public static class ListViewViewHolder extends RecyclerView.ViewHolder {
@@ -78,25 +95,30 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
         void bind(Restaurant restaurant, Location location) {
             binding.textViewRestaurantName.setText(restaurant.getName());
             binding.textViewRestaurantAddress.setText(restaurant.getAddress());
-            Glide.with(binding.getRoot())
-                    .load(restaurant.getUrlPicture())
-                    .centerCrop()
-                    .placeholder(R.drawable.backgroundblurred)
-                    .into(binding.imageViewRestaurantPhoto);
+            if (restaurant.getUrlPicture() != null) {
+                Glide.with(binding.getRoot())
+                        .load(restaurant.getUrlPicture())
+                        .centerCrop()
+                        .placeholder(R.drawable.backgroundblurred)
+                        .into(binding.imageViewRestaurantPhoto);
+            } else {
+                Glide.with(binding.getRoot())
+                        .load(R.drawable.backgroundblurred)
+                        .centerCrop()
+                        .into(binding.imageViewRestaurantPhoto);
+            }
             binding.textViewRestaurantDistance.setText(getDistance(restaurant.getPosition(), location));
             setupStarsRating(restaurant);
         }
 
-        void setClickListener(String restaurantId) {
+        void setClickListener(String restaurantId, ClickCallback callback) {
             binding.constraintLayoutRestaurantListItem.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), RestaurantDetailsActivity.class);
-                intent.putExtra("RESTAURANT_ID", restaurantId);
-                v.getContext().startActivity(intent);
+                callback.myClickCallback(restaurantId);
             });
         }
 
         String getDistance(LatLng position1, Location position2) {
-            if (position2 != null) {
+            if (position1 != null && position2 != null) {
                 Location startPoint= new Location("locationA");
                 startPoint.setLatitude(position1.latitude);
                 startPoint.setLongitude(position1.longitude);
@@ -109,11 +131,10 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
             }
         }
 
-
-        private void initUserCount(List<UserStateItem> users, Restaurant restaurant, String currentUserUid) {
+        private void initUserCount(ArrayList<UserStateItem> users, Restaurant restaurant) {
             ArrayList<UserStateItem> list = new ArrayList<>();
             for (UserStateItem u : users) {
-                if (u.getPickedRestaurant().equals(restaurant.getId()) && !u.getUid().equals(currentUserUid)) list.add(u);
+                if (u.getPickedRestaurant().equals(restaurant.getId())) list.add(u);
             }
             if (list.size() > 0) {
                 binding.imageViewWorkmatesIcon.setVisibility(View.VISIBLE);
@@ -165,7 +186,6 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
 
                 long diffOpening  = now.getTime() - opening.getTime();
                 long diffInMinutesOpening = TimeUnit.MILLISECONDS.toMinutes(diffOpening);
-                System.out.println("TEMPS - " + restaurant.getName() + " : " + "now > " + "2000" + " / " + "closing > " + restaurant.getClosingTime() + " // " + diffInMinutesClosing + " // " + diffInMinutesOpening);
                 if (diffInMinutesClosing <= 0 || diffInMinutesOpening < 0) {
                     binding.textViewRestaurantClosingTime.setText(R.string.restaurant_Closed);
                     binding.textViewRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.redClosingTime, null));

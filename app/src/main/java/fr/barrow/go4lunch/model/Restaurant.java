@@ -1,5 +1,8 @@
 package fr.barrow.go4lunch.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -8,10 +11,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class Restaurant {
+public class Restaurant implements Parcelable {
     private String id;
     private String name;
-    private String foodType;
     private String address;
     private int rating;
     @Nullable
@@ -42,6 +44,30 @@ public class Restaurant {
         this.closingTimeDate = closingTimeDate;
     }
 
+    protected Restaurant(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        address = in.readString();
+        rating = in.readInt();
+        urlPicture = in.readString();
+        phoneNumber = in.readString();
+        website = in.readString();
+        position = in.readParcelable(LatLng.class.getClassLoader());
+        closingTime = in.readString();
+    }
+
+    public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
+        @Override
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
+
+        @Override
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
+    };
+
     public String getId() {
         return id;
     }
@@ -56,14 +82,6 @@ public class Restaurant {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getFoodType() {
-        return foodType;
-    }
-
-    public void setFoodType(String foodType) {
-        this.foodType = foodType;
     }
 
     public String getAddress() {
@@ -142,5 +160,24 @@ public class Restaurant {
 
     public void setOpeningTimeDate(@Nullable Date openingTimeDate) {
         this.openingTimeDate = openingTimeDate;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(address);
+        dest.writeInt(rating);
+        dest.writeString(urlPicture);
+        dest.writeString(phoneNumber);
+        dest.writeString(website);
+        dest.writeParcelable(position, flags);
+        dest.writeString(closingTime);
     }
 }

@@ -2,6 +2,7 @@ package fr.barrow.go4lunch.utils;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LifecycleService;
@@ -18,8 +19,8 @@ public class NotificationMaker extends LifecycleService {
     private final int NOTIFICATION_ID = 007;
     private final UserRepository mUserRepository;
 
-    public NotificationMaker() {
-        mUserRepository = new UserRepository();
+    public NotificationMaker(Context context) {
+        mUserRepository = new UserRepository(context);
     }
 
     public void fetchingAndReturningString(NotificationManager notificationManager, PendingIntent pendingIntent, NotificationCompat.Builder notification) {

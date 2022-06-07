@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
+import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class RestaurantDetailsActivity extends AppCompatActivity {
@@ -26,10 +28,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private MyViewModel mMyViewModel;
     private Restaurant mRestaurant;
-    private ArrayList<UserStateItem> mUsers = new ArrayList<>();
     private UserStateItem mUser = new UserStateItem();
     private RestaurantDetailsWorkmatesAdapter adapter;
-    private String apiKey;
 
     private boolean isUIInit;
     private boolean restaurantPick;
@@ -40,7 +40,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityRestaurantDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        apiKey = getString(R.string.MAPS_API_KEY);
         isUIInit = false;
         setContentView(view);
         configureViewModel();
@@ -54,32 +53,22 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void initRecyclerView(View view) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         binding.recyclerview.setLayoutManager(layoutManager);
-        adapter = new RestaurantDetailsWorkmatesAdapter(mUsers);
-        initLineVisibility();
+        adapter = new RestaurantDetailsWorkmatesAdapter(new ArrayList<>());
         binding.recyclerview.setAdapter(adapter);
         initUsersList();
     }
 
     private void getRestaurant() {
         Intent intent = getIntent();
-        String restaurant_id = intent.getStringExtra("RESTAURANT_ID");
-        if (mMyViewModel.getRestaurantFromId(restaurant_id) == null) {
-            mMyViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurant_id, this);
-            mMyViewModel.getRestaurantsMutableLiveData().observe(this, list -> {
-                if (mMyViewModel.getRestaurantFromId(restaurant_id) != null) {
-                    mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);
-                    initUserData();
-                    mMyViewModel.updateUserData();
-                    initUI();
-                    initRecyclerView(binding.getRoot());
-                }
-            });
-        } else {
-            mRestaurant = mMyViewModel.getRestaurantFromId(restaurant_id);
-            initUserData();
-            mMyViewModel.updateUserData();
-            initUI();
-            initRecyclerView(binding.getRoot());
+        if (intent != null){
+            Restaurant restaurant = intent.getParcelableExtra("RESTAURANT");
+            if (restaurant != null){
+                mRestaurant = restaurant;
+                initUserData();
+                mMyViewModel.updateUserData();
+                initUI();
+                initRecyclerView(binding.getRoot());
+            }
         }
     }
 
@@ -95,7 +84,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 restaurantLike =  mUser.getLikedRestaurants().contains(mRestaurant.getId());
                 binding.fabChooseRestaurant.setSelected(restaurantPick);
                 binding.imageButtonLikeRestaurant.setSelected(restaurantLike);
-                System.out.println("BBB" + restaurantPick + " " + restaurantLike);
                 initPickRestaurantButton();
                 initLikeRestaurantButton();
             }
@@ -104,20 +92,13 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private void initUsersList() {
         mMyViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId()).observe(this, users -> {
-            if (users.isEmpty()) {
-                System.out.println("BLABLA");
-            } else {
-                System.out.println("BLABLA" + users.get(0).getUsername());
-            }
-            mUsers.clear();
-            mUsers.addAll(users);
-            adapter.notifyDataSetChanged();
-            initLineVisibility();
+            adapter.setData(users);
+            initLineVisibility(users);
         });
     }
 
-    private void initLineVisibility() {
-        if (mUsers.isEmpty()) {
+    private void initLineVisibility(List<UserStateItem> users) {
+        if (users.isEmpty()) {
             binding.viewLineSeparator.setVisibility(View.INVISIBLE);
         } else {
             binding.viewLineSeparator.setVisibility(View.VISIBLE);
@@ -125,7 +106,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        initRestaurantInfos();
+        initRestaurantInfo();
         setupStarsRating();
         initWebsiteButton();
         initCallButton();
@@ -185,7 +166,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void initRestaurantInfos() {
+    private void initRestaurantInfo() {
         binding.textViewRestaurantName.setText(mRestaurant.getName());
         binding.textViewRestaurantTypeAndAddress.setText(mRestaurant.getAddress());
         Glide.with(binding.getRoot())

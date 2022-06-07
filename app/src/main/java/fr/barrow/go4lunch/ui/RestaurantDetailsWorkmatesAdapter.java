@@ -1,5 +1,6 @@
 package fr.barrow.go4lunch.ui;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.RestaurantDetailsWorkmatesItemBinding;
@@ -38,6 +40,12 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
     @Override
     public int getItemCount() {
         return mUsersList.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setData(List<UserStateItem> users) {
+        mUsersList = (ArrayList<UserStateItem>) users;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

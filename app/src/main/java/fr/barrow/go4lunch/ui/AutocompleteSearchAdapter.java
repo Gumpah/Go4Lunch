@@ -1,36 +1,33 @@
 package fr.barrow.go4lunch.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 import fr.barrow.go4lunch.R;
-import fr.barrow.go4lunch.databinding.RestaurantListViewItemBinding;
 import fr.barrow.go4lunch.databinding.RestaurantSearchItemBinding;
 import fr.barrow.go4lunch.model.RestaurantAutocomplete;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.utils.ClickCallback;
 
 public class AutocompleteSearchAdapter extends RecyclerView.Adapter<AutocompleteSearchAdapter.AutocompleteSearchViewHolder> {
 
     private ArrayList<RestaurantAutocomplete> mRestaurantList;
-    public MyViewModel mMyViewModel;
-    public ListViewFragment listViewFragment;
+    public ListViewFragment mListViewFragment;
     private Context mContext;
+    public ClickCallback mCallback;
 
-    public AutocompleteSearchAdapter(ArrayList<RestaurantAutocomplete> restaurants, ListViewFragment listViewFragment) {
+    public AutocompleteSearchAdapter(ArrayList<RestaurantAutocomplete> restaurants, ListViewFragment listViewFragment, ClickCallback callback) {
         mRestaurantList = restaurants;
-        this.listViewFragment = listViewFragment;
-        mMyViewModel = new ViewModelProvider(listViewFragment, MyViewModelFactory.getInstance(listViewFragment.getContext())).get(MyViewModel.class);
+        mListViewFragment = listViewFragment;
+        mCallback = callback;
     }
-
 
     @NonNull
     @Override
@@ -44,12 +41,18 @@ public class AutocompleteSearchAdapter extends RecyclerView.Adapter<Autocomplete
     public void onBindViewHolder(@NonNull AutocompleteSearchAdapter.AutocompleteSearchViewHolder holder, int position) {
         RestaurantAutocomplete restaurant = mRestaurantList.get(position);
         holder.bind(restaurant, mContext);
-        holder.setClickListener(restaurant.getPlaceId());
+        holder.setClickListener(restaurant.getPlaceId(), mCallback);
     }
 
     @Override
     public int getItemCount() {
         return mRestaurantList.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setData(List<RestaurantAutocomplete> list) {
+        mRestaurantList = (ArrayList<RestaurantAutocomplete>) list;
+        notifyDataSetChanged();
     }
 
     public static class AutocompleteSearchViewHolder extends RecyclerView.ViewHolder {
@@ -69,11 +72,9 @@ public class AutocompleteSearchAdapter extends RecyclerView.Adapter<Autocomplete
             }
         }
 
-        void setClickListener(String restaurantId) {
+        void setClickListener(String restaurantId, ClickCallback callback) {
             binding.constraintLayoutRestaurantListItem.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), RestaurantDetailsActivity.class);
-                intent.putExtra("RESTAURANT_ID", restaurantId);
-                v.getContext().startActivity(intent);
+                callback.myClickCallback(restaurantId);
             });
         }
     }

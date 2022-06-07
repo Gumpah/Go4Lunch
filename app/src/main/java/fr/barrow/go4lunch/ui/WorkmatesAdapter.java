@@ -1,31 +1,32 @@
 package fr.barrow.go4lunch.ui;
 
-import android.content.Context;
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.WorkmatesViewItemBinding;
 import fr.barrow.go4lunch.model.UserStateItem;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.utils.ClickCallback;
 
 public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.ViewHolder> {
 
     private ArrayList<UserStateItem> mUsersList;
+    public ClickCallback mCallback;
 
-    public WorkmatesAdapter(ArrayList<UserStateItem> usersList) {
+    public WorkmatesAdapter(ArrayList<UserStateItem> usersList, ClickCallback callback) {
         mUsersList = usersList;
+        mCallback = callback;
     }
 
     @NonNull
@@ -41,12 +42,18 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
         String pickedRestaurantId = user.getPickedRestaurant();
         String restaurantName = null;
         if (pickedRestaurantId != null && mUsersList.get(position).getPickedRestaurantName() != null) restaurantName = mUsersList.get(position).getPickedRestaurantName();
-        holder.bind(mUsersList.get(position), restaurantName, pickedRestaurantId);
+        holder.bind(mUsersList.get(position), restaurantName, pickedRestaurantId, mCallback);
     }
 
     @Override
     public int getItemCount() {
         return mUsersList.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setData(List<UserStateItem> users) {
+        mUsersList = (ArrayList<UserStateItem>) users;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,8 +65,8 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
             binding = b;
         }
 
-        void bind(UserStateItem user, String restaurantName, String restaurantId) {
-            setTextViewAndClickListener(user.getUsername(), restaurantName, restaurantId);
+        void bind(UserStateItem user, String restaurantName, String restaurantId, ClickCallback callback) {
+            setTextViewAndClickListener(user.getUsername(), restaurantName, restaurantId, callback);
             if (user.getUrlPicture() != null) {
                 Glide.with(binding.getRoot())
                         .load(user.getUrlPicture())
@@ -76,16 +83,14 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
 
         }
 
-        void setTextViewAndClickListener(String username, String restaurantName, String restaurantId) {
+        void setTextViewAndClickListener(String username, String restaurantName, String restaurantId, ClickCallback callback) {
             String textView = (username + binding.getRoot().getResources().getString(R.string.workmate_noPickedRestaurant));
             binding.textViewWorkmateChoice.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.greyText, null));
             if (restaurantName != null && restaurantId != null) {
                 textView = (username + binding.getRoot().getResources().getString(R.string.workmate_hasRestaurantPick) + restaurantName);
                 binding.textViewWorkmateChoice.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.black, null));
                 binding.constraintLayoutContainer.setOnClickListener(v -> {
-                    Intent intent = new Intent(v.getContext(), RestaurantDetailsActivity.class);
-                    intent.putExtra("RESTAURANT_ID", restaurantId);
-                    v.getContext().startActivity(intent);
+                    callback.myClickCallback(restaurantId);
                 });
             }
             binding.textViewWorkmateChoice.setText(textView);

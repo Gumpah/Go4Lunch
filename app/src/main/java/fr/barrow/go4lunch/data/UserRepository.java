@@ -41,8 +41,10 @@ public class UserRepository {
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurantFromArray = new MutableLiveData<>();
     private final MutableLiveData<List<User>> listOfAllUsers = new MutableLiveData<>();
     private final MutableLiveData<User> userNew = new MutableLiveData<>();
+    private Context mContext;
 
-    public UserRepository() {
+    public UserRepository(Context context) {
+        mContext = context;
         mFirebaseHelper = new FirebaseHelper();
         usersWhoPickedRestaurant = new MutableLiveData<>();
     }
@@ -76,7 +78,6 @@ public class UserRepository {
         return user;
     }
 
-
     public Task<DocumentSnapshot> getUserData() {
         String uid = this.getCurrentUser().getUid();
         if(uid != null) {
@@ -88,20 +89,15 @@ public class UserRepository {
     }
 
     public void sendUserDataToFirestore() {
-        String uid = this.getCurrentUser().getUid();
+        String uid = getCurrentUser().getUid();
         getUserData().addOnSuccessListener(documentSnapshot -> {
-            this.getUsersCollection().document(uid).set(user);
+            getUsersCollection().document(uid).set(user);
             getUserNew();
         });
     }
 
     public void updateUserData() {
-        getUserData().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                user = documentSnapshot.toObject(User.class);
-            }
-        });
+        getUserData().addOnSuccessListener(documentSnapshot -> user = documentSnapshot.toObject(User.class));
     }
 
     public String getCurrentUserUid() {
@@ -137,10 +133,13 @@ public class UserRepository {
     }
 
     public void deleteUserFromFirestore() {
-        String uid = this.getCurrentUser().getUid();
-        if(uid != null){
-            this.getUsersCollection().document(uid).delete();
+        if (getCurrentUser() != null) {
+            String uid = getCurrentUser().getUid();
+            if(uid != null){
+                getUsersCollection().document(uid).delete();
+            }
         }
+
     }
 
     public MutableLiveData<List<User>> getAllUsersWhoPickedARestaurant(String restaurantId) {
@@ -166,7 +165,12 @@ public class UserRepository {
             if (task.isSuccessful()) {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    users.add(document.toObject(User.class));
+                    User user = document.toObject(User.class);
+                    if (getCurrentUser() != null) {
+                        if (!getCurrentUser().getUid().equals(user.getUid())) users.add(user);
+                    } else {
+                        users.add(user);
+                    }
                 }
                 listOfUsersPickedRestaurantFromArray.postValue(users);
             } else {
@@ -215,12 +219,12 @@ public class UserRepository {
     }
 
     @Nullable
-    public FirebaseUser getCurrentUser(){
+    public FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
     public Task<Void> signOut(Context context){
-        return AuthUI.getInstance().signOut(context);
+        return AuthUI.getInstance().signOut(mContext);
     }
 
     public Task<Void> deleteUser(Context context){

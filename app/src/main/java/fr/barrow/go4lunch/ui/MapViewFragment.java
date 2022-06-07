@@ -35,10 +35,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentMapViewBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
+import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 import pub.devrel.easypermissions.AppSettingsDialog;
 
@@ -71,15 +73,14 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-        apiKey = getString(R.string.MAPS_API_KEY);
+        apiKey = BuildConfig.MAPS_API_KEY;
         configureViewModel();
         initRestaurantsData();
         setLocation();
     }
 
     private void initRestaurantsData() {
-        mMyViewModel.getRestaurantsMutableLiveData().observe(requireActivity(), restaurants -> {
-            System.out.println("BBB / 1");
+        mMyViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
             if (restaurants != null) {
                 mRestaurants.clear();
                 mRestaurants.addAll(restaurants);
@@ -96,9 +97,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
                 ArrayList<String> pickedRestaurantIdsList = new ArrayList<>();
                 if (users != null && !users.isEmpty()) {
                     for (UserStateItem u : users) {
-                        if (mMyViewModel.getCurrentUser() != null) {
-                            if (!mMyViewModel.getCurrentUser().getUid().equals(u.getUid())) pickedRestaurantIdsList.add(u.getPickedRestaurant());
-                        }
+                        pickedRestaurantIdsList.add(u.getPickedRestaurant());
                     }
                 }
                 if (map != null) {
@@ -143,7 +142,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     }
 
     public void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(requireActivity())).get(MyViewModel.class);
+        mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireActivity())).get(MyViewModel.class);
     }
 
     private void enableMyLocation() {

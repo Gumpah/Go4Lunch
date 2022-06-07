@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,12 +18,10 @@ import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 
 public class RestaurantRepository {
 
-    private ArrayList<Restaurant> mRestaurantList;
     private final MutableLiveData<List<Restaurant>> myRestaurantList = new MutableLiveData<>();
     private final MutableLiveData<List<RestaurantAutocomplete>> myRestaurantAutocompleteList = new MutableLiveData<>();
 
     public RestaurantRepository() {
-        mRestaurantList = new ArrayList<>();
     }
 
     public Restaurant placeDetailsToRestaurantObject(PlaceDetailsResult placeDetails, String photoUrl) {
@@ -40,7 +37,7 @@ public class RestaurantRepository {
         Date closingTimeDate = null;
         Date openingTimeDate = null;
 
-        String indexString = getPeriodOfToday(place.getOpeningHours());
+        String indexString = getPeriodOfTodayIndex(place.getOpeningHours());
         if (indexString != null) {
             int index = Integer.parseInt(indexString);
             closingTime = place.getOpeningHours().getPeriods().get(index).getClose().getTime();
@@ -49,7 +46,7 @@ public class RestaurantRepository {
             int closingMinute = Integer.parseInt(closingTime.substring(2,4));
             c.set(Calendar.HOUR_OF_DAY, closingHour);
             c.set(Calendar.MINUTE, closingMinute);
-            if (!place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(place.getOpeningHours().getPeriods().get(index).getOpen().getDay()) && !place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(getDayOfWeekFromJavaCalendar(false))) c.add(Calendar.DATE, 1);
+            if (!place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(place.getOpeningHours().getPeriods().get(index).getOpen().getDay()) && !place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(getPlaceAPIDayOfWeek(false))) c.add(Calendar.DATE, 1);
             closingTimeDate = c.getTime();
 
             String openingTime = place.getOpeningHours().getPeriods().get(index).getOpen().getTime();
@@ -58,20 +55,17 @@ public class RestaurantRepository {
             int openingMinute = Integer.parseInt(openingTime.substring(2,4));
             o.set(Calendar.HOUR_OF_DAY, openingHour);
             o.set(Calendar.MINUTE, openingMinute);
-            if (!place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(place.getOpeningHours().getPeriods().get(index).getOpen().getDay()) && place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(getDayOfWeekFromJavaCalendar(false))) o.add(Calendar.DATE, -1);
+            if (!place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(place.getOpeningHours().getPeriods().get(index).getOpen().getDay()) && place.getOpeningHours().getPeriods().get(index).getClose().getDay().equals(getPlaceAPIDayOfWeek(false))) o.add(Calendar.DATE, -1);
             openingTimeDate = o.getTime();
         }
         return new Restaurant(id, name, address, photoUrl, phoneNumber, website, position, rating, closingTime, openingTimeDate, closingTimeDate);
     }
 
-    private String getPeriodOfToday(OpeningHoursDetails openingHoursDetails) {
+    public String getPeriodOfTodayIndex(OpeningHoursDetails openingHoursDetails) {
         if (openingHoursDetails != null) {
-            Calendar n = Calendar.getInstance();
-            n.set(Calendar.HOUR_OF_DAY, 20);
-            n.set(Calendar.MINUTE, 0);
-            Date now = n.getTime();
-            int dayOfWeek = getDayOfWeekFromJavaCalendar(false);
-            int dayOfWeekBefore = getDayOfWeekFromJavaCalendar(true);
+            Date now = new Date();
+            int dayOfWeek = getPlaceAPIDayOfWeek(false);
+            int dayOfWeekBefore = getPlaceAPIDayOfWeek(true);
             int index = 0;
             String periodIndex = null;
             for (Period p : openingHoursDetails.getPeriods()) {
@@ -88,7 +82,7 @@ public class RestaurantRepository {
         return null;
     }
 
-    private Date stringToDate(String dateString) {
+    public Date stringToDate(String dateString) {
         Calendar c = Calendar.getInstance();
         int closingHour = Integer.parseInt(dateString.substring(0,2));
         int closingMinute = Integer.parseInt(dateString.substring(2,4));
@@ -97,62 +91,26 @@ public class RestaurantRepository {
         return c.getTime();
     }
 
-    private int ratingToIntOn3(Double r) {
+    public int ratingToIntOn3(Double r) {
         if (r != null) {
             Double rating = r*3/5;
             int ratingNoDecimalInt = rating.intValue();
-            if (rating-0.9 > (double) ratingNoDecimalInt) {
-                return ratingNoDecimalInt;
-            } else {
+            if (rating-0.8 >= (double) ratingNoDecimalInt) {
                 return ratingNoDecimalInt+1;
+            } else {
+                return ratingNoDecimalInt;
             }
         }
         return 0;
     }
 
-    private int getDayOfWeekFromJavaCalendar(boolean bool) {
+    public int getPlaceAPIDayOfWeek(boolean bool) {
         Calendar cal = new GregorianCalendar();
         Date date = new Date();
         cal.setTime(date);
         if (bool) cal.add(Calendar.DATE, -1);
         int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-        switch (dayOfWeek) {
-            case 1:
-                return 6;
-            case 2:
-                return 0;
-            case 3:
-                return 1;
-            case 4:
-                return 2;
-            case 5:
-                return 3;
-            case 6:
-                return 4;
-            case 7:
-                return 5;
-            default:
-                return 0;
-        }
-    }
-
-    public void addRestaurant(Restaurant restaurant) {
-        if (mRestaurantList == null) {
-            mRestaurantList = new ArrayList<>();
-        }
-        mRestaurantList.add(restaurant);
-    }
-
-    public void setRestaurants(ArrayList<Restaurant> restaurants) {
-        mRestaurantList = new ArrayList<>(restaurants);
-    }
-
-    public void clearRestaurants() {
-        mRestaurantList = new ArrayList<>();
-    }
-
-    public ArrayList<Restaurant> getRestaurants() {
-        return mRestaurantList;
+        return dayOfWeek-1;
     }
 
     public Restaurant getRestaurantFromId(String id) {

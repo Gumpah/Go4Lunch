@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivityMainNavHeaderBinding;
+import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

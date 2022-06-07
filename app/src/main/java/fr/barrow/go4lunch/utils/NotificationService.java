@@ -66,7 +66,7 @@ public class NotificationService extends FirebaseMessagingService {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID);
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                NotificationMaker notificationMaker = new NotificationMaker();
+                NotificationMaker notificationMaker = new NotificationMaker(this);
                 notificationMaker.fetchingAndReturningString(notificationManager, pendingIntent, notification);
             });
         }
@@ -82,65 +82,4 @@ public class NotificationService extends FirebaseMessagingService {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
         notificationManager.createNotificationChannel(channel);
     }
-
-
-    /*
-
-    @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-        if (remoteMessage.getNotification() != null) {
-            // Get message sent by Firebase
-            RemoteMessage.Notification notification = remoteMessage.getNotification();
-            sendVisualNotification(notification);
-            Log.e("TAG", notification.getBody());
-        }
-    }
-
-    private int getFlag() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return PendingIntent.FLAG_IMMUTABLE;
-        }
-        else {
-            return PendingIntent.FLAG_MUTABLE;
-        }
-    }
-
-    private void sendVisualNotification(RemoteMessage.Notification notification) {
-
-        // Create an Intent that will be shown when user will click on the Notification
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0,
-                intent,
-                getFlag() | PendingIntent.FLAG_ONE_SHOT);
-
-        // Create a Channel (Android 8)
-        String channelId = getString(R.string.default_notification_channel_id);
-
-        // Build a Notification object
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.logo)
-                        .setContentTitle(notification.getTitle())
-                        .setContentText(notification.getBody())
-                        .setAutoCancel(true)
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                        .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Support Version >= Android 8
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence channelName = "Firebase Messages";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(channelId, channelName, importance);
-            notificationManager.createNotificationChannel(mChannel);
-        }
-
-        // Show notification
-        notificationManager.notify(NOTIFICATION_TAG, NOTIFICATION_ID, notificationBuilder.build());
-    }
-
-     */
 }

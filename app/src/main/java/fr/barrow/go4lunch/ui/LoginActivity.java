@@ -24,6 +24,7 @@ import java.util.List;
 import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityLoginBinding;
+import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
 import fr.barrow.go4lunch.utils.MyViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
