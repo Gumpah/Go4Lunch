@@ -2,7 +2,6 @@ package fr.barrow.go4lunch.utils;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LifecycleService;
@@ -11,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import fr.barrow.go4lunch.R;
+import fr.barrow.go4lunch.data.FirebaseHelper;
 import fr.barrow.go4lunch.data.UserRepository;
 import fr.barrow.go4lunch.model.User;
 
@@ -19,8 +19,8 @@ public class NotificationMaker extends LifecycleService {
     private final int NOTIFICATION_ID = 007;
     private final UserRepository mUserRepository;
 
-    public NotificationMaker(Context context) {
-        mUserRepository = new UserRepository(context);
+    public NotificationMaker() {
+        mUserRepository = new UserRepository(new FirebaseHelper());
     }
 
     public void fetchingAndReturningString(NotificationManager notificationManager, PendingIntent pendingIntent, NotificationCompat.Builder notification) {
@@ -69,7 +69,7 @@ public class NotificationMaker extends LifecycleService {
     }
 
     private LiveData<User> getUser() {
-        return mUserRepository.getUserNew();
+        return mUserRepository.getUserDataToLocalUser();
     }
 
     private String getWorkmatesJoiningString (List<User> users) {

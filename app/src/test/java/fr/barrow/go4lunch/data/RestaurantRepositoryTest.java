@@ -1,6 +1,6 @@
-package fr.barrow.go4lunch;
+package fr.barrow.go4lunch.data;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
@@ -15,7 +15,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.placedetails.Close;
 import fr.barrow.go4lunch.model.placedetails.Open;
@@ -26,7 +25,7 @@ import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 import fr.barrow.go4lunch.model.placesnearby.Geometry;
 import fr.barrow.go4lunch.model.placesnearby.Location;
 
-public class RestaurantRepositoryUnitTesting {
+public class RestaurantRepositoryTest {
 
     private RestaurantRepository mRestaurantRepository;
 
@@ -279,18 +278,5 @@ public class RestaurantRepositoryUnitTesting {
         int actual_dayOfWeek = mRestaurantRepository.getPlaceAPIDayOfWeek(true);
 
         assertEquals(expected_dayOfWeek, actual_dayOfWeek);
-    }
-
-    @Test
-    public void getRestaurantFromId() {
-        String expected_restaurantId = "2";
-        Restaurant restaurantA = new Restaurant("1", "test", null, null, null, null, null, 0, null, null, null);
-        Restaurant restaurantB = new Restaurant(expected_restaurantId, "test", null, null, null, null, null, 0, null, null, null);
-        List<Restaurant> list = Arrays.asList(restaurantA, restaurantB);
-        mRestaurantRepository.getRestaurantsMutableLiveData().setValue(list);
-
-        String actual_restaurantId = mRestaurantRepository.getRestaurantFromId(expected_restaurantId).getId();
-
-        assertEquals(expected_restaurantId, actual_restaurantId);
     }
 }

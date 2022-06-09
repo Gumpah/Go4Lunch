@@ -3,13 +3,11 @@ package fr.barrow.go4lunch.data;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FirebaseHelper {
 
@@ -26,7 +24,9 @@ public class FirebaseHelper {
     }
 
     public String getCurrentUserUid() {
-        return auth.getCurrentUser().getUid();
+        if (auth.getCurrentUser() != null) {
+            return auth.getCurrentUser().getUid();
+        } else return null;
     }
 
     public Task<DocumentSnapshot> getUser(){
@@ -43,5 +43,9 @@ public class FirebaseHelper {
 
     public Task<QuerySnapshot> getAllUsers() {
         return usersRef.orderBy(PICKED_RESTAURANT_FIELD, Query.Direction.DESCENDING).get();
+    }
+
+    public DocumentReference getUserDocumentReference() {
+        return usersRef.document(getCurrentUserUid());
     }
 }

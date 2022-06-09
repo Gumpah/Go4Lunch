@@ -71,6 +71,7 @@ public class MyViewModel extends ViewModel {
         mNetworkMonitoring.registerNetworkCallbackEvents();
     }
 
+    /*
     public LiveData<Boolean> getConnectionStatus() {
         return NetworkStateManager.getInstance().getNetworkConnectivityStatus();
     }
@@ -286,4 +287,5 @@ public class MyViewModel extends ViewModel {
         super.onCleared();
         if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
     }
+     */
 }

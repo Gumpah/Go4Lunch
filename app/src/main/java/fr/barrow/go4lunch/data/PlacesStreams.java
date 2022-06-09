@@ -15,7 +15,7 @@ import retrofit2.Response;
 
 public class PlacesStreams {
 
-    public static Observable<PlacesNearbyResult> streamFetchNearbyPlaces(String mapApiKey, String location) {
+    public Observable<PlacesNearbyResult> streamFetchNearbyPlaces(String mapApiKey, String location) {
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
         return placesService.getNearbyPlaces(mapApiKey, location)
                 .subscribeOn(Schedulers.io())
@@ -23,7 +23,7 @@ public class PlacesStreams {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-    public static Observable<PlaceDetailsResult> streamFetchPlaceDetails(String mapApiKey, String placeId) {
+    public Observable<PlaceDetailsResult> streamFetchPlaceDetails(String mapApiKey, String placeId) {
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
         return placesService.getPlaceDetails(mapApiKey, placeId)
                 .subscribeOn(Schedulers.io())
@@ -31,7 +31,7 @@ public class PlacesStreams {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-    public static Observable<CombinedPlaceAndString> streamFetchPhotoUrlAndAddToCombinedObject(String mapApiKey, String photoReference, CombinedPlaceAndString combinedPlaceAndString) {
+    public Observable<CombinedPlaceAndString> streamFetchPhotoUrlAndAddToCombinedObject(String mapApiKey, String photoReference, CombinedPlaceAndString combinedPlaceAndString) {
         PlacesService placesService = PlacesService.retrofit2.create(PlacesService.class);
         if (photoReference == null) {
             return Observable.just(combinedPlaceAndString)
@@ -52,7 +52,7 @@ public class PlacesStreams {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-    public static Observable<CombinedPlaceAndString> streamCombinePlaceDetailsAndPhotoUrl(String mapApiKey, String placeId) {
+    public Observable<CombinedPlaceAndString> streamCombinePlaceDetailsAndPhotoUrl(String mapApiKey, String placeId) {
         return streamFetchPlaceDetails(mapApiKey, placeId)
                 .map(new Function<PlaceDetailsResult, CombinedPlaceAndString>() {
                     @Override
@@ -71,7 +71,7 @@ public class PlacesStreams {
                         combinedPlaceAndString));
     }
 
-    public static Observable<CombinedPlaceAndString> streamFetchNearbyPlacesAndFetchTheirDetails(String mapApiKey, String location){
+    public Observable<CombinedPlaceAndString> streamFetchNearbyPlacesAndFetchTheirDetails(String mapApiKey, String location){
         return streamFetchNearbyPlaces(mapApiKey, location)
                 .map(new Function<PlacesNearbyResult, ArrayList<String>>() {
                     @Override

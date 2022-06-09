@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 
+import fr.barrow.go4lunch.data.FirebaseHelper;
 import fr.barrow.go4lunch.data.UserRepository;
 import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
 import fr.barrow.go4lunch.utils.NetworkMonitoring;
@@ -30,7 +31,7 @@ public class UserViewModelFactory implements ViewModelProvider.Factory {
     }
 
     private UserViewModelFactory(Context context) {
-        mUserRepository = new UserRepository(context);
+        mUserRepository = new UserRepository(new FirebaseHelper());
         mNetworkMonitoring = new NetworkMonitoring(context);
     }
 

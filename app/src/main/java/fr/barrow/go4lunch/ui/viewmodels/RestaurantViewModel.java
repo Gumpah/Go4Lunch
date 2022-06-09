@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.ArrayList;
@@ -37,15 +39,17 @@ public class RestaurantViewModel extends ViewModel {
     MutableLiveData<List<RestaurantAutocomplete>> myRestaurantAutocompleteList;
     MutableLiveData<Integer> mToastsInteger;
     MutableLiveData<String> mToastsString;
+    PlacesStreams mPlacesStreams;
 
     Location location;
 
-    public RestaurantViewModel(RestaurantRepository restaurantRepository) {
+    public RestaurantViewModel(RestaurantRepository restaurantRepository, PlacesStreams placesStreams) {
         mRestaurantRepository = restaurantRepository;
         myRestaurantList = new MutableLiveData<>();
         myRestaurantAutocompleteList = new MutableLiveData<>();
         mToastsInteger = new MutableLiveData<>();
         mToastsString = new MutableLiveData<>();
+        mPlacesStreams = placesStreams;
     }
 
     public Restaurant placeDetailsToRestaurantObject(PlaceDetailsResult placeDetails, String photoUrl) {
@@ -63,7 +67,9 @@ public class RestaurantViewModel extends ViewModel {
 
     public void autocompleteRequest(String text, PlacesClient placesClient) {
         ArrayList<RestaurantAutocomplete> restaurantsAutocomplete = new ArrayList<>();
+        System.out.println("Test");
         if (getLocation() != null) {
+            System.out.println("Test1");
             Location myLocation = getLocation();
             RectangularBounds bounds = RectangularBounds.newInstance(
                     new LatLng(myLocation.getLatitude() - 0.05, myLocation.getLongitude() - 0.05),
@@ -79,6 +85,7 @@ public class RestaurantViewModel extends ViewModel {
                     .build();
 
             placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
+                System.out.println("Test2");
                 restaurantsAutocomplete.clear();
                 for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
                     if (prediction.getPlaceTypes().toString().toLowerCase().contains("restaurant") && prediction.getPrimaryText(null).toString().toLowerCase().contains(text.toLowerCase())) {
@@ -91,6 +98,7 @@ public class RestaurantViewModel extends ViewModel {
                 }
                 getRestaurantsAutocompleteMutableLiveData().postValue(restaurantsAutocomplete);
             }).addOnFailureListener((exception) -> {
+                System.out.println("Test3");
                 if (exception instanceof ApiException) {
                     ApiException apiException = (ApiException) exception;
                     getToastSenderString().postValue(apiException.getMessage());
@@ -98,6 +106,7 @@ public class RestaurantViewModel extends ViewModel {
                 restaurantsAutocomplete.clear();
                 getRestaurantsAutocompleteMutableLiveData().postValue(restaurantsAutocomplete);
             });
+            System.out.println("Test4");
         }
     }
 
@@ -108,21 +117,27 @@ public class RestaurantViewModel extends ViewModel {
         }
         getRestaurantsMutableLiveData().postValue(null);
         ArrayList<Restaurant> restaurants = new ArrayList<>();
-        this.disposable = PlacesStreams.streamFetchNearbyPlacesAndFetchTheirDetails(apiKey, getLocationString()).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
+        System.out.println("AA 1");
+        this.disposable = mPlacesStreams.streamFetchNearbyPlacesAndFetchTheirDetails(apiKey, getLocationString()).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
             @Override
             public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
+                System.out.println("AA 2" + combinedPlaceAndString.getPhotoUrl());
                 PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
                 String photoUrl = combinedPlaceAndString.getPhotoUrl();
+                System.out.println("AA 2" + photoUrl);
                 restaurants.add(placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
+                System.out.println("AA 2A" + restaurants.get(0).getUrlPicture());
             }
 
             @Override
             public void onError(Throwable e) {
+                System.out.println("AA 3");
                 getToastSenderInteger().postValue(R.string.restaurant_fetch_error);
             }
 
             @Override
             public void onComplete() {
+                System.out.println("AA 4" + (getRestaurantsMutableLiveData().getValue() == null));
                 Collections.sort(restaurants, (v1, v2) -> v1.getName().compareTo(v2.getName()));
                 getRestaurantsMutableLiveData().postValue(restaurants);
             }
@@ -134,7 +149,7 @@ public class RestaurantViewModel extends ViewModel {
         if (getRestaurantsMutableLiveData().getValue() != null && !getRestaurantsMutableLiveData().getValue().isEmpty()) {
             restaurants.addAll(getRestaurantsMutableLiveData().getValue());
         }
-        this.disposable = PlacesStreams.streamCombinePlaceDetailsAndPhotoUrl(apiKey, placeId).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
+        this.disposable = mPlacesStreams.streamCombinePlaceDetailsAndPhotoUrl(apiKey, placeId).subscribeWith(new DisposableObserver<CombinedPlaceAndString>() {
             @Override
             public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
                 PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();

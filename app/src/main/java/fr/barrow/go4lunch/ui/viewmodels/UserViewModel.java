@@ -67,7 +67,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public LiveData<UserStateItem> getUser() {
-        return mapDataToViewState(mUserRepository.getUserNew());
+        return mapDataToViewState(mUserRepository.getUserDataToLocalUser());
     }
 
     public void createUser() {
@@ -112,7 +112,9 @@ public class UserViewModel extends ViewModel {
         return mUserRepository.signOut(context);
     }
 
-    public Task<Void> deleteUser(Context context){
-        return mUserRepository.deleteUser(context);
+    /*
+    public Task<Void> deleteUserFromFirebase(Context context){
+        return mUserRepository.deleteUserFromFirebase(context);
     }
+     */
 }

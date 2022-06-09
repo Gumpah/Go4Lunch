@@ -1,21 +1,10 @@
 package fr.barrow.go4lunch.utils.viewmodelsfactories;
 
-import android.content.Context;
+public class MyViewModelFactory {
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+    //implements ViewModelProvider.Factory
 
-import org.jetbrains.annotations.NotNull;
-
-import fr.barrow.go4lunch.data.Repository;
-import fr.barrow.go4lunch.data.RestaurantRepository;
-import fr.barrow.go4lunch.data.UserRepository;
-import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
-import fr.barrow.go4lunch.utils.NetworkMonitoring;
-
-public class MyViewModelFactory implements ViewModelProvider.Factory {
-
+    /*
     private static MyViewModelFactory factory;
     private final Repository mRepository;
     private final RestaurantRepository mRestaurantRepository;
@@ -36,7 +25,7 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
     private MyViewModelFactory(Context context) {
         mRepository = new Repository();
         mRestaurantRepository = new RestaurantRepository();
-        mUserRepository = new UserRepository(context);
+        mUserRepository = new UserRepository();
         mNetworkMonitoring = new NetworkMonitoring(context);
     }
 
@@ -49,4 +38,6 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
+
+     */
 }

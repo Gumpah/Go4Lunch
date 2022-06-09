@@ -66,7 +66,7 @@ public class NotificationService extends FirebaseMessagingService {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID);
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                NotificationMaker notificationMaker = new NotificationMaker(this);
+                NotificationMaker notificationMaker = new NotificationMaker();
                 notificationMaker.fetchingAndReturningString(notificationManager, pendingIntent, notification);
             });
         }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 
+import fr.barrow.go4lunch.data.PlacesStreams;
 import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
 
@@ -13,6 +14,7 @@ public class RestaurantViewModelFactory implements ViewModelProvider.Factory {
 
     private static RestaurantViewModelFactory factory;
     private final RestaurantRepository mRestaurantRepository;
+    private final PlacesStreams mPlacesStreams;
 
     public static RestaurantViewModelFactory getInstance() {
         if (factory == null) {
@@ -27,6 +29,7 @@ public class RestaurantViewModelFactory implements ViewModelProvider.Factory {
 
     private RestaurantViewModelFactory() {
         mRestaurantRepository = new RestaurantRepository();
+        mPlacesStreams = new PlacesStreams();
     }
 
     @SuppressWarnings("unchecked")
@@ -34,7 +37,7 @@ public class RestaurantViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull @NotNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(RestaurantViewModel.class)) {
-            return (T) new RestaurantViewModel(mRestaurantRepository);
+            return (T) new RestaurantViewModel(mRestaurantRepository, mPlacesStreams);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
