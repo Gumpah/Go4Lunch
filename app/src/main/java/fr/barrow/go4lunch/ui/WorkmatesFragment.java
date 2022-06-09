@@ -23,14 +23,19 @@ import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentWorkmatesBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
-import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
+import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
+import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
 import fr.barrow.go4lunch.utils.ClickCallback;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.RestaurantViewModelFactory;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 
 public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTextListener, ClickCallback {
 
     private FragmentWorkmatesBinding binding;
-    private MyViewModel mMyViewModel;
+    //private MyViewModel mMyViewModel;
+    private RestaurantViewModel mRestaurantViewModel;
+    private UserViewModel mUserViewModel;
+
     private ArrayList<UserStateItem> mUsers = new ArrayList<>();
     private String apiKey;
     private WorkmatesAdapter mAdapter;
@@ -56,7 +61,7 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     public void initUsersData() {
-        mMyViewModel.getAllUsers().observe(getViewLifecycleOwner(), list -> {
+        mUserViewModel.getAllUsers().observe(getViewLifecycleOwner(), list -> {
             if (list != null && !list.isEmpty() && binding.recyclerview.getAdapter() != null) {
                 mUsers.clear();
                 mUsers.addAll(list);
@@ -83,7 +88,9 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     public void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireContext())).get(MyViewModel.class);
+        //mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireContext())).get(MyViewModel.class);
+        mRestaurantViewModel = new ViewModelProvider(requireActivity(), RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
+        mUserViewModel = new ViewModelProvider(requireActivity(), UserViewModelFactory.getInstance(requireContext())).get(UserViewModel.class);
     }
 
     @Override
@@ -124,16 +131,16 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
 
     @Override
     public void myClickCallback(String restaurantId) {
-        if (mMyViewModel.getRestaurantFromId(restaurantId) == null) {
-            mMyViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurantId, requireContext());
-            mMyViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), list -> {
-                if (mMyViewModel.getRestaurantFromId(restaurantId) != null) {
-                    Restaurant mRestaurant = mMyViewModel.getRestaurantFromId(restaurantId);
+        if (mRestaurantViewModel.getRestaurantFromId(restaurantId) == null) {
+            mRestaurantViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurantId);
+            mRestaurantViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), list -> {
+                if (mRestaurantViewModel.getRestaurantFromId(restaurantId) != null) {
+                    Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
                     startDetailsActivity(mRestaurant);
                 }
             });
         } else {
-            Restaurant mRestaurant = mMyViewModel.getRestaurantFromId(restaurantId);
+            Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
             startDetailsActivity(mRestaurant);
         }
     }

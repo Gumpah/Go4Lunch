@@ -40,8 +40,10 @@ import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentMapViewBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
-import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
+import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.RestaurantViewModelFactory;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 import pub.devrel.easypermissions.AppSettingsDialog;
 
 
@@ -54,7 +56,9 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     private String apiKey;
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
 
-    private MyViewModel mMyViewModel;
+    //private MyViewModel mMyViewModel;
+    private RestaurantViewModel mRestaurantViewModel;
+    private UserViewModel mUserViewModel;
 
     @Nullable
     @Override
@@ -80,7 +84,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     }
 
     private void initRestaurantsData() {
-        mMyViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
+        mRestaurantViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
             if (restaurants != null) {
                 mRestaurants.clear();
                 mRestaurants.addAll(restaurants);
@@ -93,7 +97,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 
     private void initSearchUsersWhoPickedRestaurantFromArray(ArrayList<Restaurant> restaurants) {
         if (restaurants != null && !restaurants.isEmpty()) {
-            mMyViewModel.getUsersWhoPickedARestaurant().observe(requireActivity(), users -> {
+            mUserViewModel.getUsersWhoPickedARestaurant().observe(requireActivity(), users -> {
                 ArrayList<String> pickedRestaurantIdsList = new ArrayList<>();
                 if (users != null && !users.isEmpty()) {
                     for (UserStateItem u : users) {
@@ -136,13 +140,15 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     }
 
     private void setupDataRequest() {
-        if (mMyViewModel.getLocation() != null && mRestaurants.isEmpty()) {
-            mMyViewModel.fetchAndUpdateRestaurants(mMyViewModel.getLocationString(), apiKey, requireContext());
+        if (mRestaurantViewModel.getLocation() != null && mRestaurants.isEmpty()) {
+            mRestaurantViewModel.fetchAndUpdateRestaurants(apiKey);
         }
     }
 
     public void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireActivity())).get(MyViewModel.class);
+        //mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireContext())).get(MyViewModel.class);
+        mRestaurantViewModel = new ViewModelProvider(requireActivity(), RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
+        mUserViewModel = new ViewModelProvider(requireActivity(), UserViewModelFactory.getInstance(requireContext())).get(UserViewModel.class);
     }
 
     private void enableMyLocation() {
@@ -196,7 +202,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
             if (map != null) {
                 fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
                     if (location != null) {
-                        mMyViewModel.setLocation(location);
+                        mRestaurantViewModel.setLocation(location);
                         setupDataRequest();
                     }
                 });
@@ -213,7 +219,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
             showMissingPermissionError();
             permissionDenied = false;
         }
-        mMyViewModel.getUsersWhoPickedARestaurant();
+        mUserViewModel.getUsersWhoPickedARestaurant();
     }
 
     @Override

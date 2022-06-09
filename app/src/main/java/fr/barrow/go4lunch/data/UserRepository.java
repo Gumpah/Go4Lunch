@@ -3,13 +3,10 @@ package fr.barrow.go4lunch.data;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,7 +15,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,20 +29,21 @@ public class UserRepository {
     private final String PICKED_RESTAURANT_FIELD = "pickedRestaurant";
     private final FirebaseHelper mFirebaseHelper;
 
-
     private User user;
-    private MutableLiveData<ArrayList<User>> usersWhoPickedRestaurant;
 
-    private final MutableLiveData<List<User>> listOfUsersPickedRestaurant = new MutableLiveData<>();
-    private final MutableLiveData<List<User>> listOfUsersPickedRestaurantFromArray = new MutableLiveData<>();
-    private final MutableLiveData<List<User>> listOfAllUsers = new MutableLiveData<>();
-    private final MutableLiveData<User> userNew = new MutableLiveData<>();
+    private final MutableLiveData<List<User>> listOfUsersPickedRestaurant;
+    private final MutableLiveData<List<User>> listOfUsersPickedRestaurantFromArray;
+    private final MutableLiveData<List<User>> listOfAllUsers;
+    private final MutableLiveData<User> userNew;
     private Context mContext;
 
     public UserRepository(Context context) {
         mContext = context;
         mFirebaseHelper = new FirebaseHelper();
-        usersWhoPickedRestaurant = new MutableLiveData<>();
+        listOfUsersPickedRestaurant = new MutableLiveData<>();
+        listOfUsersPickedRestaurantFromArray = new MutableLiveData<>();
+        listOfAllUsers = new MutableLiveData<>();
+        userNew = new MutableLiveData<>();
     }
 
     // Get the Collection Reference
@@ -57,21 +54,24 @@ public class UserRepository {
     // Create User in Firestore
     public void createUser() {
         FirebaseUser user = getCurrentUser();
-        if(user != null) {
-            String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
-            String username = user.getDisplayName();
-            String uid = user.getUid();
+        mFirebaseHelper.getUser().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    updateUserData();
+                } else if (user != null) {
+                    String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
+                    String username = user.getDisplayName();
+                    String uid = user.getUid();
 
-            User userToCreate = new User(uid, username, urlPicture);
+                    User userToCreate = new User(uid, username, urlPicture);
 
-            Task<DocumentSnapshot> userData = getUserData();
-            // If the user already exist in Firestore, we get his data
-            userData.addOnSuccessListener(documentSnapshot -> {
-                this.getUsersCollection().document(uid).set(userToCreate);
-            });
-        } else {
-            //updateUserData();
-        }
+                    getUsersCollection().document(uid).set(userToCreate);
+                }
+            }
+        }).addOnFailureListener(e -> {
+            //handle error
+        });
     }
 
     public User getUser() {
@@ -79,7 +79,7 @@ public class UserRepository {
     }
 
     public Task<DocumentSnapshot> getUserData() {
-        String uid = this.getCurrentUser().getUid();
+        String uid = getCurrentUser().getUid();
         if(uid != null) {
             DocumentReference docRef = FirebaseFirestore.getInstance().collection(COLLECTION_NAME).document(uid);
             return docRef.get();
@@ -101,7 +101,7 @@ public class UserRepository {
     }
 
     public String getCurrentUserUid() {
-        return this.getCurrentUser().getUid();
+        return getCurrentUser().getUid();
     }
 
     public void setPickedRestaurant(String restaurantId, String restaurantName) {
@@ -147,7 +147,12 @@ public class UserRepository {
             if (task.isSuccessful()) {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    users.add(document.toObject(User.class));
+                    User user = document.toObject(User.class);
+                    if (getCurrentUser() != null) {
+                        if (!getCurrentUser().getUid().equals(user.getUid())) users.add(user);
+                    } else {
+                        users.add(user);
+                    }
                 }
                 listOfUsersPickedRestaurant.postValue(users);
             } else {

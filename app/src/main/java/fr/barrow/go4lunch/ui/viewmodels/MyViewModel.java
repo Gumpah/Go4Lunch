@@ -103,7 +103,7 @@ public class MyViewModel extends ViewModel {
         return mapListDataToViewState(mUserRepository.getAllUsers());
     }
 
-    public LiveData<UserStateItem> getUserNew() {
+    public LiveData<UserStateItem> getUser() {
         return mapDataToViewState(mUserRepository.getUserNew());
     }
 
@@ -132,29 +132,13 @@ public class MyViewModel extends ViewModel {
         mRepository.setLocation(location);
     }
 
-    public MutableLiveData<User> getUser() {
-        return mUser;
-    }
-
-    public CollectionReference getUsersCollection(){
-        return mUserRepository.getUsersCollection();
-    }
-
     public void createUser() {
        mUserRepository.createUser();
-    }
-
-    public Task<DocumentSnapshot> getUserData() {
-        return mUserRepository.getUserData();
     }
 
     public void updateUserData() {
         mUserRepository.updateUserData();
         mUser.setValue(mUserRepository.getUser());
-    }
-
-    public void deleteUserFromFirestore() {
-        mUserRepository.deleteUserFromFirestore();
     }
 
     public Boolean isCurrentUserLogged(){

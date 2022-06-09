@@ -1,4 +1,4 @@
-package fr.barrow.go4lunch.utils;
+package fr.barrow.go4lunch.utils.viewmodelsfactories;
 
 import android.content.Context;
 
@@ -12,6 +12,7 @@ import fr.barrow.go4lunch.data.Repository;
 import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.data.UserRepository;
 import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
+import fr.barrow.go4lunch.utils.NetworkMonitoring;
 
 public class MyViewModelFactory implements ViewModelProvider.Factory {
 

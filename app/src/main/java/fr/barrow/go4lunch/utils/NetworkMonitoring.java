@@ -18,6 +18,7 @@ public class NetworkMonitoring extends ConnectivityManager.NetworkCallback {
     private final NetworkRequest mNetworkRequest;
     private final ConnectivityManager mConnectivityManager;
     private final NetworkStateManager mNetworkStateManager;
+    private boolean registeringStatus;
 
     public NetworkMonitoring(Context context) {
         mNetworkRequest = new NetworkRequest.Builder()
@@ -43,8 +44,11 @@ public class NetworkMonitoring extends ConnectivityManager.NetworkCallback {
     }
 
     public void registerNetworkCallbackEvents() {
-        Log.d(TAG, "registerNetworkCallbackEvents() called");
-        mConnectivityManager.registerNetworkCallback(mNetworkRequest, this);
+        if (!registeringStatus) {
+            Log.d(TAG, "registerNetworkCallbackEvents() called");
+            mConnectivityManager.registerNetworkCallback(mNetworkRequest, this);
+            registeringStatus = true;
+        }
     }
 
     public void checkNetworkState() {

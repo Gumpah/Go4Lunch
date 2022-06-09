@@ -19,14 +19,16 @@ import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
-import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 
 public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private ActivityRestaurantDetailsBinding binding;
 
-    private MyViewModel mMyViewModel;
+    //private MyViewModel mMyViewModel;
+    private UserViewModel mUserViewModel;
+
     private Restaurant mRestaurant;
     private UserStateItem mUser = new UserStateItem();
     private RestaurantDetailsWorkmatesAdapter adapter;
@@ -47,7 +49,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+        //mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+        mUserViewModel = new ViewModelProvider(this, UserViewModelFactory.getInstance(this)).get(UserViewModel.class);
     }
 
     private void initRecyclerView(View view) {
@@ -65,7 +68,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             if (restaurant != null){
                 mRestaurant = restaurant;
                 initUserData();
-                mMyViewModel.updateUserData();
+                mUserViewModel.updateUserData();
                 initUI();
                 initRecyclerView(binding.getRoot());
             }
@@ -73,10 +76,10 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void initUserData() {
-        mUser = mMyViewModel.getUserNew().getValue();
-        mMyViewModel.getUserNew().observe(this, user -> {
+        mUser = mUserViewModel.getUser().getValue();
+        mUserViewModel.getUser().observe(this, user -> {
             mUser = user;
-            mMyViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId());
+            mUserViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId());
             binding.fabChooseRestaurant.setSelected(restaurantPick);
             binding.imageButtonLikeRestaurant.setSelected(restaurantLike);
             if (!isUIInit) {
@@ -91,7 +94,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void initUsersList() {
-        mMyViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId()).observe(this, users -> {
+        mUserViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId()).observe(this, users -> {
             adapter.setData(users);
             initLineVisibility(users);
         });
@@ -116,13 +119,13 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         isUIInit = true;
         binding.fabChooseRestaurant.setOnClickListener(view -> {
             if (restaurantPick) {
-                mMyViewModel.removePickedRestaurant();
+                mUserViewModel.removePickedRestaurant();
                 restaurantPick = false;
             } else {
-                mMyViewModel.setPickedRestaurant(mRestaurant.getId(), mRestaurant.getName());
+                mUserViewModel.setPickedRestaurant(mRestaurant.getId(), mRestaurant.getName());
                 restaurantPick = true;
             }
-            mMyViewModel.getUserNew();
+            mUserViewModel.getUser();
         });
     }
 
@@ -130,13 +133,13 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void initLikeRestaurantButton() {
         binding.imageButtonLikeRestaurant.setOnClickListener(view -> {
             if (restaurantLike) {
-                mMyViewModel.removeLikedRestaurant(mRestaurant.getId());
+                mUserViewModel.removeLikedRestaurant(mRestaurant.getId());
                 restaurantLike = false;
             } else {
-                mMyViewModel.addLikedRestaurant(mRestaurant.getId());
+                mUserViewModel.addLikedRestaurant(mRestaurant.getId());
                 restaurantLike = true;
             }
-            mMyViewModel.getUserNew();
+            mUserViewModel.getUser();
         });
     }
 

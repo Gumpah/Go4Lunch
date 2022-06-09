@@ -24,14 +24,15 @@ import java.util.List;
 import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityLoginBinding;
-import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
 
-    private MyViewModel mMyViewModel;
+    //private MyViewModel mMyViewModel;
+    private UserViewModel mUserViewModel;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -47,15 +48,15 @@ public class LoginActivity extends AppCompatActivity {
         checkIfUserConnected();
         initUI();
         setupListeners();
-        initNetworkStatus();
     }
 
     private void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+        //mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+        mUserViewModel = new ViewModelProvider(this, UserViewModelFactory.getInstance(this)).get(UserViewModel.class);
     }
 
     private void initNetworkStatus() {
-        mMyViewModel.getConnectionStatus().observe(this, activeNetworkStateObserver);
+        mUserViewModel.getConnectionStatus().observe(this, activeNetworkStateObserver);
     }
 
     private void onNetworkStatusChange(boolean isConnected) {
@@ -116,9 +117,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkIfUserConnected() {
-        if (mMyViewModel.isCurrentUserLogged()) {
+        if (mUserViewModel.isCurrentUserLogged()) {
             //finish();
             startActivity(new Intent(this, MainActivity.class));
+        } else {
+            initNetworkStatus();
         }
     }
 
@@ -141,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             showSnackBar(getString(R.string.connection_succeed));
-            mMyViewModel.createUser();
+            mUserViewModel.createUser();
             //finish();
             startActivity(new Intent(this, MainActivity.class));
         } else {

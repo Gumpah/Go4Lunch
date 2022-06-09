@@ -29,11 +29,15 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
+import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivityMainNavHeaderBinding;
-import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.model.Restaurant;
+import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
+import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.RestaurantViewModelFactory;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -42,8 +46,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavController;
 
-    private MyViewModel mMyViewModel;
+    //private MyViewModel mMyViewModel;
+    private RestaurantViewModel mRestaurantViewModel;
+    private UserViewModel mUserViewModel;
+
     private String restaurantId;
+    private String apiKey;
 
 
     private final Observer<Boolean> activeNetworkStateObserver = this::showConnectionToast;
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configureViewModel();
+        apiKey = BuildConfig.MAPS_API_KEY;
         initUI();
         initAppBarConfiguration();
         initNavController();
@@ -60,8 +69,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initBottomNavigationView();
         updateUIWithUserData();
         initNetworkStatus();
-        mMyViewModel.updateUserData();
+        mUserViewModel.updateUserData();
         initTest();
+        initToastObservers();
+    }
+
+    private void initToastObservers() {
+        mRestaurantViewModel.getToastSenderInteger().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            System.out.println("Test" + message);
+        });
+        mRestaurantViewModel.getToastSenderString().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            System.out.println("Test" + message);
+        });
     }
 
     private void getLocation() {
@@ -69,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
                 if (location != null) {
-                    mMyViewModel.setLocation(location);
+                    mRestaurantViewModel.setLocation(location);
                 }
             });
         } else {
@@ -86,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             );
 
     private void initTest() {
-        mMyViewModel.getUserNew().observe(this, user -> {
+        mUserViewModel.getUser().observe(this, user -> {
             if (user != null) {
                 restaurantId = user.getPickedRestaurant();
             }
@@ -94,11 +115,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+        //mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
+        mRestaurantViewModel = new ViewModelProvider(this, RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
+        mUserViewModel = new ViewModelProvider(this, UserViewModelFactory.getInstance(this)).get(UserViewModel.class);
     }
 
     private void initNetworkStatus() {
-        mMyViewModel.getConnectionStatus().observe(this, activeNetworkStateObserver);
+        mUserViewModel.getConnectionStatus().observe(this, activeNetworkStateObserver);
     }
 
     private void showConnectionToast(boolean isConnected) {
@@ -116,8 +139,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateUIWithUserData(){
-        if(mMyViewModel.isCurrentUserLogged()){
-            FirebaseUser user = mMyViewModel.getCurrentUser();
+        if(mUserViewModel.isCurrentUserLogged()){
+            FirebaseUser user = mUserViewModel.getCurrentUser();
             if (user != null) {
                 if(user.getPhotoUrl() != null){
                     setProfilePicture(user.getPhotoUrl());
@@ -193,9 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id=item.getItemId();
         if (id==R.id.mainMenuDrawer_lunch) {
             if (restaurantId != null) {
-                Intent intent = new Intent(this, RestaurantDetailsActivity.class);
-                intent.putExtra("RESTAURANT_ID", restaurantId);
-                startActivity(intent);
+                getRestaurant(restaurantId);
             } else {
                 Toast.makeText(this, R.string.no_restaurant_chosen, Toast.LENGTH_SHORT).show();
             }
@@ -205,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
         if (id==R.id.mainMenuDrawer_logout) {
-            mMyViewModel.signOut(this).addOnSuccessListener(aVoid -> {
+            mUserViewModel.signOut(this).addOnSuccessListener(aVoid -> {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish(); });
         }
@@ -221,5 +242,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void getRestaurant(String restaurantId) {
+        if (mRestaurantViewModel.getRestaurantFromId(restaurantId) == null) {
+            mRestaurantViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurantId);
+            mRestaurantViewModel.getRestaurantsMutableLiveData().observe(this, list -> {
+                if (mRestaurantViewModel.getRestaurantFromId(restaurantId) != null) {
+                    Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
+                    startDetailsActivity(mRestaurant);
+                }
+            });
+        } else {
+            Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
+            startDetailsActivity(mRestaurant);
+        }
+    }
+
+    private void startDetailsActivity(Restaurant restaurant) {
+        Intent intent = new Intent(this, RestaurantDetailsActivity.class);
+        intent.putExtra("RESTAURANT", restaurant);
+        startActivity(intent);
     }
 }

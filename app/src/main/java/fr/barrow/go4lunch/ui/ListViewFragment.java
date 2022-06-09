@@ -20,25 +20,33 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
+
 import java.util.ArrayList;
 
 import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentListViewBinding;
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.ui.viewmodels.MyViewModel;
+import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
+import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
 import fr.barrow.go4lunch.utils.ClickCallback;
-import fr.barrow.go4lunch.utils.MyViewModelFactory;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.RestaurantViewModelFactory;
+import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 
 public class ListViewFragment extends Fragment implements SearchView.OnQueryTextListener, ClickCallback {
 
     private FragmentListViewBinding binding;
-    private MyViewModel mMyViewModel;
+    //private MyViewModel mMyViewModel;
+    private RestaurantViewModel mRestaurantViewModel;
+    private UserViewModel mUserViewModel;
     private RecyclerView mRecyclerView;
     private String apiKey;
 
     private AutocompleteSearchAdapter mAutocompleteSearchAdapter;
     private ListViewAdapter mListViewAdapter;
+    private PlacesClient placesClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -46,12 +54,20 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
         binding = FragmentListViewBinding.inflate(inflater, container, false);
         apiKey = BuildConfig.MAPS_API_KEY;
         configureViewModel();
+        initPlaceClient();
         initRecyclerView();
         initRestaurantsData();
         initUsersData();
         setHasOptionsMenu(true);
         initRestaurantsAutocompleteObserver();
         return binding.getRoot();
+    }
+
+    private void initPlaceClient() {
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), apiKey);
+        }
+        placesClient = Places.createClient(requireContext());
     }
 
     @Override
@@ -78,14 +94,16 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
     }
 
     private void initRestaurantsAutocompleteObserver() {
-        mMyViewModel.getRestaurantsAutocompleteMutableLiveData().observe(requireActivity(), list -> {
+        mRestaurantViewModel.getRestaurantsAutocompleteMutableLiveData().observe(requireActivity(), list -> {
             mAutocompleteSearchAdapter.setData(list);
         });
     }
 
     private void filter(String text) {
-        changeRecyclerView(!text.isEmpty());
-        mMyViewModel.autocompleteRequest(text, requireContext(), apiKey);
+        if (placesClient != null) {
+            changeRecyclerView(!text.isEmpty());
+            mRestaurantViewModel.autocompleteRequest(text, placesClient);
+        }
     }
 
     private void initRecyclerView() {
@@ -99,7 +117,7 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        mListViewAdapter = new ListViewAdapter(new ArrayList<>(), this, this, mMyViewModel.getLocation());
+        mListViewAdapter = new ListViewAdapter(new ArrayList<>(), this, this, mRestaurantViewModel.getLocation());
         mAutocompleteSearchAdapter = new AutocompleteSearchAdapter(new ArrayList<>(), this, this);
         mRecyclerView.setAdapter(mListViewAdapter);
     }
@@ -113,11 +131,13 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
     }
 
     public void configureViewModel() {
-        mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireContext())).get(MyViewModel.class);
+        //mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireContext())).get(MyViewModel.class);
+        mRestaurantViewModel = new ViewModelProvider(requireActivity(), RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
+        mUserViewModel = new ViewModelProvider(requireActivity(), UserViewModelFactory.getInstance(requireContext())).get(UserViewModel.class);
     }
 
     public void initRestaurantsData() {
-        mMyViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), list -> {
+        mRestaurantViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), list -> {
             if (list != null && !list.isEmpty() && binding.recyclerview.getAdapter() != null) {
                 mListViewAdapter.setData(list);
             }
@@ -125,7 +145,7 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
     }
 
     public void initUsersData() {
-        mMyViewModel.getUsersWhoPickedARestaurant().observe(getViewLifecycleOwner(), users -> {
+        mUserViewModel.getUsersWhoPickedARestaurant().observe(getViewLifecycleOwner(), users -> {
             if (users != null && !users.isEmpty() && binding.recyclerview.getAdapter() != null)
                 mListViewAdapter.setDataUsers(users);
         });
@@ -145,16 +165,16 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
 
     @Override
     public void myClickCallback(String restaurantId) {
-        if (mMyViewModel.getRestaurantFromId(restaurantId) == null) {
-            mMyViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurantId, requireContext());
-            mMyViewModel.getRestaurantsMutableLiveData().observe(this, list -> {
-                if (mMyViewModel.getRestaurantFromId(restaurantId) != null) {
-                    Restaurant mRestaurant = mMyViewModel.getRestaurantFromId(restaurantId);
+        if (mRestaurantViewModel.getRestaurantFromId(restaurantId) == null) {
+            mRestaurantViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurantId);
+            mRestaurantViewModel.getRestaurantsMutableLiveData().observe(this, list -> {
+                if (mRestaurantViewModel.getRestaurantFromId(restaurantId) != null) {
+                    Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
                     startDetailsActivity(mRestaurant);
                 }
             });
         } else {
-            Restaurant mRestaurant = mMyViewModel.getRestaurantFromId(restaurantId);
+            Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
             startDetailsActivity(mRestaurant);
         }
     }
