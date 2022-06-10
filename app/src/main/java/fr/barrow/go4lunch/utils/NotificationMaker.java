@@ -69,7 +69,7 @@ public class NotificationMaker extends LifecycleService {
     }
 
     private LiveData<User> getUser() {
-        return mUserRepository.getUserDataToLocalUser();
+        return mUserRepository.getUpdatedLocalUserData();
     }
 
     private String getWorkmatesJoiningString (List<User> users) {

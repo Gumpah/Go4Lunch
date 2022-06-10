@@ -1,7 +1,9 @@
 package fr.barrow.go4lunch.data;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,10 +19,22 @@ public class FirebaseHelper {
     public final FirebaseFirestore db = FirebaseFirestore.getInstance();
     public final FirebaseAuth auth = FirebaseAuth.getInstance();
 
+    public final AuthUI authUI = AuthUI.getInstance();
+
     public final CollectionReference usersRef = db.collection(COLLECTION_NAME);
 
 
     public FirebaseHelper() {
+    }
+
+    public AuthUI getAuthUI() {
+        return authUI;
+    }
+
+    public FirebaseUser getCurrentUser() {
+        if (auth.getCurrentUser() != null) {
+            return auth.getCurrentUser();
+        } else return null;
     }
 
     public String getCurrentUserUid() {

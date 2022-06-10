@@ -6,9 +6,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
-import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,9 +39,16 @@ public class UserRepository {
         localUser = new MutableLiveData<>();
     }
 
+    public void test() {
+        testMethodToCall();
+    }
+
+    public void testMethodToCall() {
+    }
+
     // Create User in Firestore
     public void createUser() {
-        FirebaseUser user = getCurrentUser();
+        FirebaseUser user = mFirebaseHelper.getCurrentUser();
         mFirebaseHelper.getUser().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -68,7 +74,7 @@ public class UserRepository {
     }
 
     public Task<DocumentSnapshot> getUserData() {
-        if (getCurrentUser() != null) {
+        if (mFirebaseHelper.getCurrentUser() != null) {
             return mFirebaseHelper.getUser();
         } else {
             return null;
@@ -76,10 +82,8 @@ public class UserRepository {
     }
 
     public void sendUserDataToFirestore() {
-        getUserData().addOnSuccessListener(documentSnapshot -> {
-            mFirebaseHelper.getUserDocumentReference().set(user);
-            getUserDataToLocalUser();
-        });
+        mFirebaseHelper.getUserDocumentReference().set(user);
+        getUpdatedLocalUserData();
     }
 
     public void updateUserData() {
@@ -87,22 +91,22 @@ public class UserRepository {
     }
 
     public void setPickedRestaurant(String restaurantId, String restaurantName) {
-        user.setPickedRestaurant(restaurantId, restaurantName);
+        getUser().setPickedRestaurant(restaurantId, restaurantName);
         sendUserDataToFirestore();
     }
 
     public void removePickedRestaurant() {
-        user.removePickedRestaurant();
+        getUser().removePickedRestaurant();
         sendUserDataToFirestore();
     }
 
     public void addLikedRestaurant(String restaurantId) {
-        user.addLikedRestaurant(restaurantId);
+        getUser().addLikedRestaurant(restaurantId);
         sendUserDataToFirestore();
     }
 
     public void removeLikedRestaurant(String restaurantId) {
-        user.removeLikedRestaurant(restaurantId);
+        getUser().removeLikedRestaurant(restaurantId);
         sendUserDataToFirestore();
     }
 
@@ -112,11 +116,7 @@ public class UserRepository {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     User user = document.toObject(User.class);
-                    if (getCurrentUser() != null) {
-                        if (!getCurrentUser().getUid().equals(user.getUid())) users.add(user);
-                    } else {
-                        users.add(user);
-                    }
+                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) users.add(user);
                 }
                 listOfUsersPickedRestaurant.postValue(users);
             } else {
@@ -135,11 +135,7 @@ public class UserRepository {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     User user = document.toObject(User.class);
-                    if (getCurrentUser() != null) {
-                        if (!getCurrentUser().getUid().equals(user.getUid())) users.add(user);
-                    } else {
-                        users.add(user);
-                    }
+                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) users.add(user);
                 }
                 listOfUsersPickedRestaurantFromArray.postValue(users);
             } else {
@@ -158,7 +154,7 @@ public class UserRepository {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     User user = document.toObject(User.class);
-                    if (!user.getUid().equals(mFirebaseHelper.getCurrentUserUid())) users.add(user);
+                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) users.add(user);
                 }
                 listOfAllUsers.postValue(users);
             } else {
@@ -171,7 +167,7 @@ public class UserRepository {
         return listOfAllUsers;
     }
 
-    public MutableLiveData<User> getUserDataToLocalUser() {
+    public MutableLiveData<User> getUpdatedLocalUserData() {
         System.out.println("1");
         mFirebaseHelper.getUser().addOnCompleteListener(task -> {
             System.out.println("2");
@@ -192,19 +188,11 @@ public class UserRepository {
 
     @Nullable
     public FirebaseUser getCurrentUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
+        return mFirebaseHelper.getCurrentUser();
     }
 
     public Task<Void> signOut(Context context){
-        return AuthUI.getInstance().signOut(context);
-    }
-
-    public MutableLiveData<List<User>> getListOfAllUsers() {
-        return listOfAllUsers;
-    }
-
-    public MutableLiveData<User> getLocalUser() {
-        return localUser;
+        return mFirebaseHelper.getAuthUI().signOut(context);
     }
 
     /*

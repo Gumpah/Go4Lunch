@@ -67,7 +67,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public LiveData<UserStateItem> getUser() {
-        return mapDataToViewState(mUserRepository.getUserDataToLocalUser());
+        return mapDataToViewState(mUserRepository.getUpdatedLocalUserData());
     }
 
     public void createUser() {

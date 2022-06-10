@@ -70,6 +70,7 @@ public class User {
     public void addLikedRestaurant(String restaurantId) {
         if (likedRestaurants == null) {
             likedRestaurants = new ArrayList<>();
+            likedRestaurants.add(restaurantId);
         } else if (!likedRestaurants.contains(restaurantId)) {
             likedRestaurants.add(restaurantId);
         }
