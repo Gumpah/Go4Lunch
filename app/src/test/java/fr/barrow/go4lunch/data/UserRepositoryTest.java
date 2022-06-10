@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.jraska.livedata.TestObserver;
 
 import org.junit.Before;
@@ -36,7 +38,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import fr.barrow.go4lunch.LiveDataTestUtils;
 import fr.barrow.go4lunch.model.User;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,6 +59,15 @@ public class UserRepositoryTest {
 
     @Mock
     private Task<DocumentSnapshot> documentSnapshotTask;
+
+    @Mock
+    private Task<QuerySnapshot> querySnapshotTask;
+
+    @Mock
+    private QuerySnapshot querySnapshot;
+
+    @Mock
+    private QueryDocumentSnapshot queryDocumentSnapshot;
 
     private UserRepository mUserRepository;
 
@@ -71,27 +86,6 @@ public class UserRepositoryTest {
     private String getNextID() {
         idIncrementing++;
         return String.valueOf(idIncrementing);
-    }
-
-    @Test
-    public void getUserDataToLocalUser() throws InterruptedException {
-        String uid = getNextID();
-        User user = new User(uid, "username", "url.com");
-        when(mFirebaseHelper.getUser()).thenReturn(documentSnapshotTask);
-
-        when(documentSnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(documentSnapshotTask);
-        when(documentSnapshotTask.getResult()).thenReturn(documentSnapshot);
-        when(documentSnapshot.toObject(User.class)).thenReturn(user);
-        when(documentSnapshotTask.isSuccessful()).thenReturn(true);
-
-        MutableLiveData<User> result = mUserRepository.getUpdatedLocalUserData();
-
-        testOnCompleteListener.getValue().onComplete(documentSnapshotTask);
-
-
-        TestObserver.test(result)
-                .awaitValue()
-                .assertValue(user);
     }
 
     @Mock
@@ -284,8 +278,109 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getAllUsersWhoPickedARestaurant() {
+    public void getAllUsersWhoPickedARestaurant() throws InterruptedException {
+        String urlPicture1 = "url.com";
+        String username1 = "username1";
+        String uid1 = getNextID();
+        User testUser1 = new User(uid1, username1, urlPicture1);
+        String urlPicture2 = "url.com";
+        String username2 = "username2";
+        String uid2 = getNextID();
+        User testUser2 = new User(uid2, username2, urlPicture2);
+        String restaurantId = getNextID();
+        when(mFirebaseHelper.getAllUsersWhoPickedARestaurant(restaurantId)).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.isSuccessful()).thenReturn(true);
+        when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
+        when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
+        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(testUser1, testUser2);
+        when(mFirebaseHelper.getCurrentUserUid()).thenReturn(uid2);
 
+        MutableLiveData<List<User>> result = mUserRepository.getAllUsersWhoPickedARestaurant(restaurantId);
+
+        testOnCompleteListener.getValue().onComplete(querySnapshotTask);
+
+        LiveDataTestUtils.observeForTesting(result, liveData -> {
+            assertEquals(liveData.getValue().size(), 1);
+            assertEquals(liveData.getValue().get(0), testUser1);
+        });
+    }
+
+    @Test
+    public void getUsersWhoPickedARestaurant() {
+        String urlPicture1 = "url.com";
+        String username1 = "username1";
+        String uid1 = getNextID();
+        User testUser1 = new User(uid1, username1, urlPicture1);
+        String urlPicture2 = "url.com";
+        String username2 = "username2";
+        String uid2 = getNextID();
+        User testUser2 = new User(uid2, username2, urlPicture2);
+        when(mFirebaseHelper.getUsersWhoPickedARestaurant()).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.isSuccessful()).thenReturn(true);
+        when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
+        when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
+        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(testUser1, testUser2);
+        when(mFirebaseHelper.getCurrentUserUid()).thenReturn(uid2);
+
+        MutableLiveData<List<User>> result = mUserRepository.getUsersWhoPickedARestaurant();
+
+        testOnCompleteListener.getValue().onComplete(querySnapshotTask);
+
+        LiveDataTestUtils.observeForTesting(result, liveData -> {
+            assertEquals(liveData.getValue().size(), 1);
+            assertEquals(liveData.getValue().get(0), testUser1);
+        });
+    }
+
+    @Test
+    public void getAllUsers() {
+        String urlPicture1 = "url.com";
+        String username1 = "username1";
+        String uid1 = getNextID();
+        User testUser1 = new User(uid1, username1, urlPicture1);
+        String urlPicture2 = "url.com";
+        String username2 = "username2";
+        String uid2 = getNextID();
+        User testUser2 = new User(uid2, username2, urlPicture2);
+        when(mFirebaseHelper.getAllUsers()).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.isSuccessful()).thenReturn(true);
+        when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
+        when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
+        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(testUser1, testUser2);
+        when(mFirebaseHelper.getCurrentUserUid()).thenReturn(uid2);
+
+        MutableLiveData<List<User>> result = mUserRepository.getAllUsers();
+
+        testOnCompleteListener.getValue().onComplete(querySnapshotTask);
+
+        LiveDataTestUtils.observeForTesting(result, liveData -> {
+            assertEquals(liveData.getValue().size(), 1);
+            assertEquals(liveData.getValue().get(0), testUser1);
+        });
+    }
+
+    @Test
+    public void getUserDataToLocalUser() throws InterruptedException {
+        String uid = getNextID();
+        User user = new User(uid, "username", "url.com");
+        when(mFirebaseHelper.getUser()).thenReturn(documentSnapshotTask);
+
+        when(documentSnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.getResult()).thenReturn(documentSnapshot);
+        when(documentSnapshot.toObject(User.class)).thenReturn(user);
+        when(documentSnapshotTask.isSuccessful()).thenReturn(true);
+
+        MutableLiveData<User> result = mUserRepository.getUpdatedLocalUserData();
+
+        testOnCompleteListener.getValue().onComplete(documentSnapshotTask);
+
+
+        TestObserver.test(result)
+                .awaitValue()
+                .assertValue(user);
     }
 
     @Test

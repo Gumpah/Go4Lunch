@@ -39,13 +39,6 @@ public class UserRepository {
         localUser = new MutableLiveData<>();
     }
 
-    public void test() {
-        testMethodToCall();
-    }
-
-    public void testMethodToCall() {
-    }
-
     // Create User in Firestore
     public void createUser() {
         FirebaseUser user = mFirebaseHelper.getCurrentUser();
@@ -116,7 +109,10 @@ public class UserRepository {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     User user = document.toObject(User.class);
-                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) users.add(user);
+                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) {
+                        users.add(user);
+                        System.out.println("Test" + mFirebaseHelper.getCurrentUserUid() + " " + user.getUid());
+                    }
                 }
                 listOfUsersPickedRestaurant.postValue(users);
             } else {

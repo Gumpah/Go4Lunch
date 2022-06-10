@@ -18,9 +18,6 @@ import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
 
 public class RestaurantRepository {
 
-    private final MutableLiveData<List<Restaurant>> myRestaurantList = new MutableLiveData<>();
-    private final MutableLiveData<List<RestaurantAutocomplete>> myRestaurantAutocompleteList = new MutableLiveData<>();
-
     public RestaurantRepository() {
     }
 
@@ -111,23 +108,6 @@ public class RestaurantRepository {
         if (bool) cal.add(Calendar.DATE, -1);
         int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
         return dayOfWeek-1;
-    }
-
-    public Restaurant getRestaurantFromId(String id) {
-        if (myRestaurantList.getValue() != null) {
-            for (Restaurant r : myRestaurantList.getValue()) {
-                if (r.getId().equals(id)) return r;
-            }
-        }
-        return null;
-    }
-
-    public MutableLiveData<List<Restaurant>> getRestaurantsMutableLiveData() {
-        return myRestaurantList;
-    }
-
-    public MutableLiveData<List<RestaurantAutocomplete>> getRestaurantsAutocompleteMutableLiveData() {
-        return myRestaurantAutocompleteList;
     }
 }
 
