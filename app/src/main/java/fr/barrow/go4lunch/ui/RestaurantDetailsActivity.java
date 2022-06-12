@@ -68,7 +68,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             if (restaurant != null){
                 mRestaurant = restaurant;
                 initUserData();
-                mUserViewModel.updateUserData();
+                mUserViewModel.updateLocalUserData();
                 initUI();
                 initRecyclerView(binding.getRoot());
             }
@@ -76,10 +76,10 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void initUserData() {
-        mUser = mUserViewModel.getUser().getValue();
-        mUserViewModel.getUser().observe(this, user -> {
+        mUser = mUserViewModel.getUpdatedLocalUserData().getValue();
+        mUserViewModel.getUpdatedLocalUserData().observe(this, user -> {
             mUser = user;
-            mUserViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId());
+            mUserViewModel.getEveryFirestoreUserWhoPickedThisRestaurant(mRestaurant.getId());
             binding.fabChooseRestaurant.setSelected(restaurantPick);
             binding.imageButtonLikeRestaurant.setSelected(restaurantLike);
             if (!isUIInit) {
@@ -94,7 +94,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void initUsersList() {
-        mUserViewModel.getAllUsersWhoPickedARestaurant(mRestaurant.getId()).observe(this, users -> {
+        mUserViewModel.getEveryFirestoreUserWhoPickedThisRestaurant(mRestaurant.getId()).observe(this, users -> {
             adapter.setData(users);
             initLineVisibility(users);
         });
@@ -125,7 +125,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 mUserViewModel.setPickedRestaurant(mRestaurant.getId(), mRestaurant.getName());
                 restaurantPick = true;
             }
-            mUserViewModel.getUser();
+            mUserViewModel.getUpdatedLocalUserData();
         });
     }
 
@@ -139,7 +139,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 mUserViewModel.addLikedRestaurant(mRestaurant.getId());
                 restaurantLike = true;
             }
-            mUserViewModel.getUser();
+            mUserViewModel.getUpdatedLocalUserData();
         });
     }
 

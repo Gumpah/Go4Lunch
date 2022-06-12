@@ -1,16 +1,12 @@
 package fr.barrow.go4lunch.data;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.RestaurantAutocomplete;
 import fr.barrow.go4lunch.model.placedetails.OpeningHoursDetails;
 import fr.barrow.go4lunch.model.placedetails.Period;
 import fr.barrow.go4lunch.model.placedetails.PlaceDetails;

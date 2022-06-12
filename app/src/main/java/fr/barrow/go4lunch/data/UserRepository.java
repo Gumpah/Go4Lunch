@@ -4,11 +4,12 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -19,15 +20,14 @@ import fr.barrow.go4lunch.model.User;
 
 public class UserRepository {
 
-    private final FirebaseHelper mFirebaseHelper;
+    FirebaseHelper mFirebaseHelper;
 
-    private User user;
+    @VisibleForTesting
+    public User user;
 
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurant;
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurantFromArray;
-
     private final MutableLiveData<List<User>> listOfAllUsers;
-
 
     private final MutableLiveData<User> localUser;
 
@@ -41,20 +41,19 @@ public class UserRepository {
 
     // Create User in Firestore
     public void createUser() {
-        FirebaseUser user = mFirebaseHelper.getCurrentUser();
-        mFirebaseHelper.getUser().addOnCompleteListener(task -> {
+        FirebaseUser user = mFirebaseHelper.getCurrentFirebaseUser();
+        mFirebaseHelper.getFirestoreUserDocumentReference().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    updateUserData();
-                } else if (user != null) {
+                    updateLocalUserData();
+                } else if (mFirebaseHelper.isFirebaseUserNotNull()) {
                     String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
                     String username = user.getDisplayName();
                     String uid = user.getUid();
-
                     User userToCreate = new User(uid, username, urlPicture);
-
-                    mFirebaseHelper.getUserDocumentReference().set(userToCreate);
+                    DocumentReference documentReference = mFirebaseHelper.getUserDocumentReference();
+                    documentReference.set(userToCreate);
                 }
             }
         }).addOnFailureListener(e -> {
@@ -67,8 +66,8 @@ public class UserRepository {
     }
 
     public Task<DocumentSnapshot> getUserData() {
-        if (mFirebaseHelper.getCurrentUser() != null) {
-            return mFirebaseHelper.getUser();
+        if (mFirebaseHelper.isFirebaseUserNotNull()) {
+            return mFirebaseHelper.getFirestoreUserDocumentReference();
         } else {
             return null;
         }
@@ -79,7 +78,7 @@ public class UserRepository {
         getUpdatedLocalUserData();
     }
 
-    public void updateUserData() {
+    public void updateLocalUserData() {
         getUserData().addOnSuccessListener(documentSnapshot -> user = documentSnapshot.toObject(User.class));
     }
 
@@ -103,15 +102,15 @@ public class UserRepository {
         sendUserDataToFirestore();
     }
 
-    public MutableLiveData<List<User>> getAllUsersWhoPickedARestaurant(String restaurantId) {
-        mFirebaseHelper.getAllUsersWhoPickedARestaurant(restaurantId).addOnCompleteListener(task -> {
+    public MutableLiveData<List<User>> getEveryFirestoreUserWhoPickedThisRestaurant(String restaurantId) {
+        mFirebaseHelper.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     User user = document.toObject(User.class);
-                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) {
+                    if (!mFirebaseHelper.getCurrentFirebaseUserUID().equals(user.getUid())) {
                         users.add(user);
-                        System.out.println("Test" + mFirebaseHelper.getCurrentUserUid() + " " + user.getUid());
+                        System.out.println("Test" + mFirebaseHelper.getCurrentFirebaseUserUID() + " " + user.getUid());
                     }
                 }
                 listOfUsersPickedRestaurant.postValue(users);
@@ -125,13 +124,13 @@ public class UserRepository {
         return listOfUsersPickedRestaurant;
     }
 
-    public MutableLiveData<List<User>> getUsersWhoPickedARestaurant() {
-        mFirebaseHelper.getUsersWhoPickedARestaurant().addOnCompleteListener(task -> {
+    public MutableLiveData<List<User>> getEveryUserWhoPickedARestaurant() {
+        mFirebaseHelper.getEveryUserWhoPickedARestaurant().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     User user = document.toObject(User.class);
-                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) users.add(user);
+                    if (!mFirebaseHelper.getCurrentFirebaseUserUID().equals(user.getUid())) users.add(user);
                 }
                 listOfUsersPickedRestaurantFromArray.postValue(users);
             } else {
@@ -144,13 +143,13 @@ public class UserRepository {
         return listOfUsersPickedRestaurantFromArray;
     }
 
-    public MutableLiveData<List<User>> getAllUsers() {
-        mFirebaseHelper.getAllUsers().addOnCompleteListener(task -> {
+    public MutableLiveData<List<User>> getEveryFirestoreUser() {
+        mFirebaseHelper.getEveryFirestoreUser().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 ArrayList<User> users = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     User user = document.toObject(User.class);
-                    if (!mFirebaseHelper.getCurrentUserUid().equals(user.getUid())) users.add(user);
+                    if (!mFirebaseHelper.getCurrentFirebaseUserUID().equals(user.getUid())) users.add(user);
                 }
                 listOfAllUsers.postValue(users);
             } else {
@@ -165,7 +164,7 @@ public class UserRepository {
 
     public MutableLiveData<User> getUpdatedLocalUserData() {
         System.out.println("1");
-        mFirebaseHelper.getUser().addOnCompleteListener(task -> {
+        mFirebaseHelper.getFirestoreUserDocumentReference().addOnCompleteListener(task -> {
             System.out.println("2");
             if (task.isSuccessful()) {
                 User user;
@@ -183,24 +182,11 @@ public class UserRepository {
     }
 
     @Nullable
-    public FirebaseUser getCurrentUser() {
-        return mFirebaseHelper.getCurrentUser();
+    public FirebaseUser getCurrentFirebaseUser() {
+        return mFirebaseHelper.getCurrentFirebaseUser();
     }
 
     public Task<Void> signOut(Context context){
         return mFirebaseHelper.getAuthUI().signOut(context);
     }
-
-    /*
-    public Task<Void> deleteUserFromFirebase(Context context){
-        return AuthUI.getInstance().delete(context);
-    }
-
-    public void deleteUserFromFirestore() {
-        if (getCurrentUser() != null) {
-            String uid = getCurrentUser().getUid();
-            mFirebaseHelper.getUserDocumentReference().delete();
-        }
-    }
-     */
 }

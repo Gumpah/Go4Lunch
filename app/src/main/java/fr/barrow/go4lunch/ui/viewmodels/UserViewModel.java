@@ -50,23 +50,23 @@ public class UserViewModel extends ViewModel {
         });
     }
 
-    private LiveData<UserStateItem> mapDataToViewState(LiveData<User> user) {
+    public LiveData<UserStateItem> mapDataToViewState(LiveData<User> user) {
         return Transformations.map(user, UserStateItem::new);
     }
 
-    public LiveData<List<UserStateItem>> getAllUsersWhoPickedARestaurant(String restaurantId) {
-        return mapListDataToViewState(mUserRepository.getAllUsersWhoPickedARestaurant(restaurantId));
+    public LiveData<List<UserStateItem>> getEveryFirestoreUserWhoPickedThisRestaurant(String restaurantId) {
+        return mapListDataToViewState(mUserRepository.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId));
     }
 
-    public LiveData<List<UserStateItem>> getUsersWhoPickedARestaurant() {
-        return mapListDataToViewState(mUserRepository.getUsersWhoPickedARestaurant());
+    public LiveData<List<UserStateItem>> getEveryUserWhoPickedARestaurant() {
+        return mapListDataToViewState(mUserRepository.getEveryUserWhoPickedARestaurant());
     }
 
-    public LiveData<List<UserStateItem>> getAllUsers() {
-        return mapListDataToViewState(mUserRepository.getAllUsers());
+    public LiveData<List<UserStateItem>> getEveryFirestoreUser() {
+        return mapListDataToViewState(mUserRepository.getEveryFirestoreUser());
     }
 
-    public LiveData<UserStateItem> getUser() {
+    public LiveData<UserStateItem> getUpdatedLocalUserData() {
         return mapDataToViewState(mUserRepository.getUpdatedLocalUserData());
     }
 
@@ -74,13 +74,13 @@ public class UserViewModel extends ViewModel {
         mUserRepository.createUser();
     }
 
-    public void updateUserData() {
-        mUserRepository.updateUserData();
+    public void updateLocalUserData() {
+        mUserRepository.updateLocalUserData();
         mUser.setValue(mUserRepository.getUser());
     }
 
-    public Boolean isCurrentUserLogged(){
-        return (mUserRepository.getCurrentUser() != null);
+    public Boolean isCurrentUserLogged() {
+        return (mUserRepository.getCurrentFirebaseUser() != null);
     }
 
     public void setPickedRestaurant(String restaurantId, String restaurantName) {
@@ -105,13 +105,13 @@ public class UserViewModel extends ViewModel {
 
     @Nullable
     public FirebaseUser getCurrentUser(){
-        return mUserRepository.getCurrentUser();
+        return mUserRepository.getCurrentFirebaseUser();
     }
 
     public Task<Void> signOut(Context context){
         return mUserRepository.signOut(context);
     }
-
+    
     /*
     public Task<Void> deleteUserFromFirebase(Context context){
         return mUserRepository.deleteUserFromFirebase(context);

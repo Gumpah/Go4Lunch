@@ -61,7 +61,7 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     public void initUsersData() {
-        mUserViewModel.getAllUsers().observe(getViewLifecycleOwner(), list -> {
+        mUserViewModel.getEveryFirestoreUser().observe(getViewLifecycleOwner(), list -> {
             if (list != null && !list.isEmpty() && binding.recyclerview.getAdapter() != null) {
                 mUsers.clear();
                 mUsers.addAll(list);

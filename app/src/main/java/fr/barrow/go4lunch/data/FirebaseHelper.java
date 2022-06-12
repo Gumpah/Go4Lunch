@@ -31,35 +31,39 @@ public class FirebaseHelper {
         return authUI;
     }
 
-    public FirebaseUser getCurrentUser() {
+    public FirebaseUser getCurrentFirebaseUser() {
         if (auth.getCurrentUser() != null) {
             return auth.getCurrentUser();
         } else return null;
     }
 
-    public String getCurrentUserUid() {
+    public String getCurrentFirebaseUserUID() {
         if (auth.getCurrentUser() != null) {
             return auth.getCurrentUser().getUid();
         } else return null;
     }
 
-    public Task<DocumentSnapshot> getUser(){
-        return usersRef.document(getCurrentUserUid()).get();
+    public boolean isFirebaseUserNotNull() {
+        return (getCurrentFirebaseUser() != null);
     }
 
-    public Task<QuerySnapshot> getAllUsersWhoPickedARestaurant(String restaurantId) {
+    public Task<DocumentSnapshot> getFirestoreUserDocumentReference(){
+        return usersRef.document(getCurrentFirebaseUserUID()).get();
+    }
+
+    public Task<QuerySnapshot> getEveryFirestoreUserWhoPickedThisRestaurant(String restaurantId) {
         return usersRef.whereEqualTo(PICKED_RESTAURANT_FIELD, restaurantId).get();
     }
 
-    public Task<QuerySnapshot> getUsersWhoPickedARestaurant() {
+    public Task<QuerySnapshot> getEveryUserWhoPickedARestaurant() {
         return usersRef.whereNotEqualTo(PICKED_RESTAURANT_FIELD, null).get();
     }
 
-    public Task<QuerySnapshot> getAllUsers() {
+    public Task<QuerySnapshot> getEveryFirestoreUser() {
         return usersRef.orderBy(PICKED_RESTAURANT_FIELD, Query.Direction.DESCENDING).get();
     }
 
     public DocumentReference getUserDocumentReference() {
-        return usersRef.document(getCurrentUserUid());
+        return usersRef.document(getCurrentFirebaseUserUID());
     }
 }

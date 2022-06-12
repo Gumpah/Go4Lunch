@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
     private String uid;
@@ -91,5 +92,18 @@ public class User {
 
     public String getPickedRestaurantName() {
         return pickedRestaurantName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(uid, user.uid) && Objects.equals(username, user.username) && Objects.equals(pickedRestaurant, user.pickedRestaurant) && Objects.equals(pickedRestaurantName, user.pickedRestaurantName) && Objects.equals(likedRestaurants, user.likedRestaurants) && Objects.equals(urlPicture, user.urlPicture);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid, username, pickedRestaurant, pickedRestaurantName, likedRestaurants, urlPicture);
     }
 }

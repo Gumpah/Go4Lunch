@@ -65,7 +65,7 @@ public class NotificationMaker extends LifecycleService {
     }
 
     private LiveData<List<User>> getUsersWhoPickedRestaurant(String restaurantId) {
-        return mUserRepository.getAllUsersWhoPickedARestaurant(restaurantId);
+        return mUserRepository.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId);
     }
 
     private LiveData<User> getUser() {

@@ -97,7 +97,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 
     private void initSearchUsersWhoPickedRestaurantFromArray(ArrayList<Restaurant> restaurants) {
         if (restaurants != null && !restaurants.isEmpty()) {
-            mUserViewModel.getUsersWhoPickedARestaurant().observe(requireActivity(), users -> {
+            mUserViewModel.getEveryUserWhoPickedARestaurant().observe(requireActivity(), users -> {
                 ArrayList<String> pickedRestaurantIdsList = new ArrayList<>();
                 if (users != null && !users.isEmpty()) {
                     for (UserStateItem u : users) {
@@ -219,7 +219,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
             showMissingPermissionError();
             permissionDenied = false;
         }
-        mUserViewModel.getUsersWhoPickedARestaurant();
+        mUserViewModel.getEveryUserWhoPickedARestaurant();
     }
 
     @Override

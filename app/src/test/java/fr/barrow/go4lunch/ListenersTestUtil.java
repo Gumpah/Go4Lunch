@@ -25,18 +25,9 @@ public class ListenersTestUtil {
     static final Exception EXCEPTION = new Exception("Something bad happen");
     static final long ANY_TIME = 12000;
 
+    @SuppressWarnings("rawtypes")
     public static ArgumentCaptor<OnCompleteListener> testOnCompleteListener = ArgumentCaptor.forClass(OnCompleteListener.class);
+    @SuppressWarnings("rawtypes")
     public static ArgumentCaptor<OnSuccessListener> testOnSuccessListener = ArgumentCaptor.forClass(OnSuccessListener.class);
     public static ArgumentCaptor<OnFailureListener> testOnFailureListener = ArgumentCaptor.forClass(OnFailureListener.class);
-    public static ArgumentCaptor<EventListener<DocumentSnapshot>> eventSnapshotListener = ArgumentCaptor.forClass(EventListener.class);
-
-    public static <T> void setupTask(Task<T> task) {
-        when(task.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(task);
-        when(task.addOnSuccessListener(testOnSuccessListener.capture())).thenReturn(task);
-        when(task.addOnFailureListener(testOnFailureListener.capture())).thenReturn(task);
-    }
-
-    public static void setupOfflineTask(DocumentReference documentReference, ListenerRegistration registration) {
-        when(documentReference.addSnapshotListener(eventSnapshotListener.capture())).thenReturn(registration);
-    }
 }

@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initBottomNavigationView();
         updateUIWithUserData();
         initNetworkStatus();
-        mUserViewModel.updateUserData();
+        mUserViewModel.updateLocalUserData();
         initTest();
         initToastObservers();
     }
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             );
 
     private void initTest() {
-        mUserViewModel.getUser().observe(this, user -> {
+        mUserViewModel.getUpdatedLocalUserData().observe(this, user -> {
             if (user != null) {
                 restaurantId = user.getPickedRestaurant();
             }

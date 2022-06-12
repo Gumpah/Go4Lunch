@@ -26,13 +26,13 @@ public interface PlacesService {
     @GET("maps/api/place/photo?maxwidth=800")
     Observable<Response<String>> getPhotoUrlTest(@Query("key") String apiKey, @Query("photo_reference") String photoReference);
 
-    Retrofit retrofit = new Retrofit.Builder()
+    Retrofit retrofitGsonConverter = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
-    Retrofit retrofit2 = new Retrofit.Builder()
+    Retrofit retrofitScalarsConverter = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

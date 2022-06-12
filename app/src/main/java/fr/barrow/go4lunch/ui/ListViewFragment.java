@@ -145,7 +145,7 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
     }
 
     public void initUsersData() {
-        mUserViewModel.getUsersWhoPickedARestaurant().observe(getViewLifecycleOwner(), users -> {
+        mUserViewModel.getEveryUserWhoPickedARestaurant().observe(getViewLifecycleOwner(), users -> {
             if (users != null && !users.isEmpty() && binding.recyclerview.getAdapter() != null)
                 mListViewAdapter.setDataUsers(users);
         });
