@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="@dimen/constraintLayout_headerHeight"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:gravity="center"
@@ -32,12 +32,12 @@
 
     <ImageView
         android:id="@+id/imageView_userAvatar"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/imageView_userAvatarWidth"
+        android:layout_height="@dimen/imageView_userAvatarHeight"
         app:layout_constraintTop_toBottomOf="@id/textView_appNameHeader"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginVertical="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginVertical="@dimen/imageView_userAvatarMarginVertical"
+        android:layout_marginStart="@dimen/imageView_userAvatarMarginStart"
         android:contentDescription="@string/contentDesc_userAvatar" />
 
     <TextView
@@ -46,9 +46,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/imageView_userAvatar"
         app:layout_constraintTop_toTopOf="@id/imageView_userAvatar"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/textView_userNameMarginStart"
         android:textColor="@color/white"
-        android:textSize="16sp"/>
+        android:textSize="@dimen/textView_userNameTextSize"/>
 
     <TextView
         android:id="@+id/textView_userMail"
@@ -56,8 +56,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/imageView_userAvatar"
         app:layout_constraintBottom_toBottomOf="@id/imageView_userAvatar"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/textView_userMailMarginStart"
         android:textColor="@color/white"
-        android:textSize="16sp"/>
+        android:textSize="@dimen/textView_userMailTextSize"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

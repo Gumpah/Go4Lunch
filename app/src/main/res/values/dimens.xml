@@ -2,5 +2,43 @@
 <resources>
 
     <!-- LOGIN ACTIVITY -->
-    <dimen name="test"></dimen>
+    <dimen name="imageView_LogoWidth">300dp</dimen>
+    <dimen name="imageView_LogoHeight">300dp</dimen>
+    <dimen name="imageView_LogoMarginTop">48dp</dimen>
+    <dimen name="button_LoginHeight">70dp</dimen>
+    <dimen name="button_LoginWidth">300dp</dimen>
+    <dimen name="button_LoginMarginTopFirst">50dp</dimen>
+    <dimen name="button_LoginIconSize">28dp</dimen>
+    <dimen name="button_LoginMarginTop">20dp</dimen>
+
+
+    <!-- MAIN ACTIVITY -->
+    <!-- main nav header -->
+    <dimen name="constraintLayout_headerHeight">240dp</dimen>
+    <dimen name="imageView_userAvatarWidth">56dp</dimen>
+    <dimen name="imageView_userAvatarHeight">56dp</dimen>
+    <dimen name="imageView_userAvatarMarginVertical">20dp</dimen>
+    <dimen name="imageView_userAvatarMarginStart">20dp</dimen>
+    <dimen name="textView_userNameMarginStart">20dp</dimen>
+    <dimen name="textView_userNameTextSize">16sp</dimen>
+    <dimen name="textView_userMailMarginStart">20dp</dimen>
+    <dimen name="textView_userMailTextSize">16sp</dimen>
+
+    <!-- RESTAURANT DETAILS ACTIVITY -->
+    <dimen name="imageView_restaurantPhotoHeight">300dp</dimen>
+    <dimen name="fab_chooseRestaurantMaxImageSize">28dp</dimen>
+    <dimen name="fab_chooseRestaurantMarginEnd">16dp</dimen>
+    <dimen name="constraintLayout_containerHeight">90dp</dimen>
+    <dimen name="textView_restaurantNameMargin">12dp</dimen>
+    <dimen name="textView_restaurantNameTextSize">19sp</dimen>
+    <dimen name="imageView_star1MarginStart">8dp</dimen>
+    <dimen name="imageView_star1MarginEnd">4dp</dimen>
+    <dimen name="imageView_starMargin">4dp</dimen>
+    <dimen name="textView_restaurantTypeAndAddressWidth">320dp</dimen>
+    <dimen name="textView_restaurantTypeAndAddressTextSize">14sp</dimen>
+    <dimen name="textView_restaurantTypeAndAddressMarginTop">4dp</dimen>
+    <dimen name="constraintLayout_container2Height">90dp</dimen>
+    <dimen name="imageButton_callRestaurantWidth">32dp</dimen>
+    <dimen name="imageButton_callRestaurantHeight">32dp</dimen>
+
 </resources>

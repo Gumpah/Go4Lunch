@@ -11,8 +11,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static fr.barrow.go4lunch.ListenersTestUtil.testOnCompleteListener;
-import static fr.barrow.go4lunch.ListenersTestUtil.testOnSuccessListener;
 
 import android.content.Context;
 import android.net.Uri;
@@ -21,6 +19,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,6 +33,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -66,6 +68,15 @@ public class UserRepositoryTest {
 
     @Mock
     private QueryDocumentSnapshot queryDocumentSnapshot;
+
+    @Captor
+    ArgumentCaptor<OnSuccessListener<DocumentSnapshot>> onSuccessListenerCaptorDocumentSnapshot;
+
+    @Captor
+    ArgumentCaptor<OnCompleteListener<QuerySnapshot>> onCompleteListenerCaptorQuerySnapshot;
+
+    @Captor
+    ArgumentCaptor<OnCompleteListener<DocumentSnapshot>> onCompleteListenerCaptorDocumentSnapshot;
 
     private UserRepository mUserRepository;
 
@@ -102,7 +113,7 @@ public class UserRepositoryTest {
         User expected_user = new User(uid, username, urlPicture);
         when(mFirebaseHelper.getCurrentFirebaseUser()).thenReturn(mFirebaseUser);
         when(mFirebaseHelper.getFirestoreUserDocumentReference()).thenReturn(documentSnapshotTask);
-        when(documentSnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.addOnCompleteListener(onCompleteListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshotTask.isSuccessful()).thenReturn(true);
         when(documentSnapshotTask.getResult()).thenReturn(documentSnapshot);
         when(documentSnapshot.exists()).thenReturn(false);
@@ -117,7 +128,7 @@ public class UserRepositoryTest {
 
         mUserRepository.createUser();
 
-        testOnCompleteListener.getValue().onComplete(documentSnapshotTask);
+        onCompleteListenerCaptorDocumentSnapshot.getValue().onComplete(documentSnapshotTask);
         verify(mDocumentReference, times(1)).set(expected_user);
     }
 
@@ -141,6 +152,8 @@ public class UserRepositoryTest {
         verify(spyUserRepository, times(1)).getUpdatedLocalUserData();
     }
 
+
+
     @Test
     public void updateUserData() {
         String urlPicture = "url.com";
@@ -148,12 +161,12 @@ public class UserRepositoryTest {
         String uid = getNextID();
         User expected_user = new User(uid, username, urlPicture);
         doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
-        when(documentSnapshotTask.addOnSuccessListener(testOnSuccessListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(expected_user);
 
         spyUserRepository.updateLocalUserData();
 
-        testOnSuccessListener.getValue().onSuccess(documentSnapshot);
+        onSuccessListenerCaptorDocumentSnapshot.getValue().onSuccess(documentSnapshot);
 
         User actual_user = spyUserRepository.getUser();
 
@@ -168,12 +181,12 @@ public class UserRepositoryTest {
         User expected_user = new User(uid, username, urlPicture);
 
         doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
-        when(documentSnapshotTask.addOnSuccessListener(testOnSuccessListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(expected_user);
 
         spyUserRepository.updateLocalUserData();
 
-        testOnSuccessListener.getValue().onSuccess(documentSnapshot);
+        onSuccessListenerCaptorDocumentSnapshot.getValue().onSuccess(documentSnapshot);
 
         doNothing().when(spyUserRepository).sendUserDataToFirestore();
 
@@ -202,12 +215,12 @@ public class UserRepositoryTest {
         testUser.setPickedRestaurant(restaurantId, restaurantName);
 
         doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
-        when(documentSnapshotTask.addOnSuccessListener(testOnSuccessListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(testUser);
 
         spyUserRepository.updateLocalUserData();
 
-        testOnSuccessListener.getValue().onSuccess(documentSnapshot);
+        onSuccessListenerCaptorDocumentSnapshot.getValue().onSuccess(documentSnapshot);
 
         doNothing().when(spyUserRepository).sendUserDataToFirestore();
 
@@ -230,12 +243,12 @@ public class UserRepositoryTest {
         String restaurantId = getNextID();
 
         doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
-        when(documentSnapshotTask.addOnSuccessListener(testOnSuccessListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(testUser);
 
         spyUserRepository.updateLocalUserData();
 
-        testOnSuccessListener.getValue().onSuccess(documentSnapshot);
+        onSuccessListenerCaptorDocumentSnapshot.getValue().onSuccess(documentSnapshot);
 
         doNothing().when(spyUserRepository).sendUserDataToFirestore();
 
@@ -257,12 +270,12 @@ public class UserRepositoryTest {
         testUser.addLikedRestaurant(restaurantId);
 
         doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
-        when(documentSnapshotTask.addOnSuccessListener(testOnSuccessListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(testUser);
 
         spyUserRepository.updateLocalUserData();
 
-        testOnSuccessListener.getValue().onSuccess(documentSnapshot);
+        onSuccessListenerCaptorDocumentSnapshot.getValue().onSuccess(documentSnapshot);
 
         doNothing().when(spyUserRepository).sendUserDataToFirestore();
 
@@ -285,7 +298,7 @@ public class UserRepositoryTest {
         User testUser2 = new User(uid2, username2, urlPicture2);
         String restaurantId = getNextID();
         when(mFirebaseHelper.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId)).thenReturn(querySnapshotTask);
-        when(querySnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.addOnCompleteListener(onCompleteListenerCaptorQuerySnapshot.capture())).thenReturn(querySnapshotTask);
         when(querySnapshotTask.isSuccessful()).thenReturn(true);
         when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
         when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
@@ -294,7 +307,7 @@ public class UserRepositoryTest {
 
         MutableLiveData<List<User>> result = mUserRepository.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId);
 
-        testOnCompleteListener.getValue().onComplete(querySnapshotTask);
+        onCompleteListenerCaptorQuerySnapshot.getValue().onComplete(querySnapshotTask);
 
         LiveDataTestUtils.observeForTesting(result, liveData -> {
             assertEquals(liveData.getValue().size(), 1);
@@ -313,7 +326,7 @@ public class UserRepositoryTest {
         String uid2 = getNextID();
         User testUser2 = new User(uid2, username2, urlPicture2);
         when(mFirebaseHelper.getEveryUserWhoPickedARestaurant()).thenReturn(querySnapshotTask);
-        when(querySnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.addOnCompleteListener(onCompleteListenerCaptorQuerySnapshot.capture())).thenReturn(querySnapshotTask);
         when(querySnapshotTask.isSuccessful()).thenReturn(true);
         when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
         when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
@@ -322,7 +335,7 @@ public class UserRepositoryTest {
 
         MutableLiveData<List<User>> result = mUserRepository.getEveryUserWhoPickedARestaurant();
 
-        testOnCompleteListener.getValue().onComplete(querySnapshotTask);
+        onCompleteListenerCaptorQuerySnapshot.getValue().onComplete(querySnapshotTask);
 
         LiveDataTestUtils.observeForTesting(result, liveData -> {
             assertEquals(liveData.getValue().size(), 1);
@@ -335,26 +348,32 @@ public class UserRepositoryTest {
         String urlPicture1 = "url.com";
         String username1 = "username1";
         String uid1 = getNextID();
-        User testUser1 = new User(uid1, username1, urlPicture1);
+        User expected_user = new User(uid1, username1, urlPicture1);
         String urlPicture2 = "url.com";
         String username2 = "username2";
         String uid2 = getNextID();
-        User testUser2 = new User(uid2, username2, urlPicture2);
+        User user2 = new User(uid2, username2, urlPicture2);
         when(mFirebaseHelper.getEveryFirestoreUser()).thenReturn(querySnapshotTask);
-        when(querySnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(querySnapshotTask);
+        when(querySnapshotTask.addOnCompleteListener(onCompleteListenerCaptorQuerySnapshot.capture())).thenReturn(querySnapshotTask);
         when(querySnapshotTask.isSuccessful()).thenReturn(true);
         when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
         when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
-        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(testUser1, testUser2);
+        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(expected_user, user2);
         when(mFirebaseHelper.getCurrentFirebaseUserUID()).thenReturn(uid2);
 
         MutableLiveData<List<User>> result = mUserRepository.getEveryFirestoreUser();
 
-        testOnCompleteListener.getValue().onComplete(querySnapshotTask);
+        onCompleteListenerCaptorQuerySnapshot.getValue().onComplete(querySnapshotTask);
 
         LiveDataTestUtils.observeForTesting(result, liveData -> {
-            assertEquals(liveData.getValue().size(), 1);
-            assertEquals(liveData.getValue().get(0), testUser1);
+            User actual_user = new User();
+            List<User> actual_userList = new ArrayList<>();
+            if (liveData.getValue() != null) {
+                actual_userList = liveData.getValue();
+                actual_user = actual_userList.get(0);
+            }
+            assertEquals(actual_userList.size(), 1);
+            assertEquals(actual_user, expected_user);
         });
     }
 
@@ -364,15 +383,14 @@ public class UserRepositoryTest {
         User user = new User(uid, "username", "url.com");
         when(mFirebaseHelper.getFirestoreUserDocumentReference()).thenReturn(documentSnapshotTask);
 
-        when(documentSnapshotTask.addOnCompleteListener(testOnCompleteListener.capture())).thenReturn(documentSnapshotTask);
+        when(documentSnapshotTask.addOnCompleteListener(onCompleteListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshotTask.getResult()).thenReturn(documentSnapshot);
         when(documentSnapshot.toObject(User.class)).thenReturn(user);
         when(documentSnapshotTask.isSuccessful()).thenReturn(true);
 
         MutableLiveData<User> result = mUserRepository.getUpdatedLocalUserData();
 
-        testOnCompleteListener.getValue().onComplete(documentSnapshotTask);
-
+        onCompleteListenerCaptorDocumentSnapshot.getValue().onComplete(documentSnapshotTask);
 
         TestObserver.test(result)
                 .awaitValue()

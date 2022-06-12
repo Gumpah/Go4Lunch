@@ -8,6 +8,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.content.Context;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -50,11 +52,20 @@ public class UserViewModelTest {
     @Mock
     UserViewModel spyUserViewModel;
 
+    private int idIncrementing;
+
     @Before
     public void setUp() throws Exception {
         mUserViewModel = new UserViewModel(mUserRepository, mNetworkMonitoring);
         spyUserViewModel = spy(mUserViewModel);
+        idIncrementing = 1;
     }
+
+    private String getNextID() {
+        idIncrementing++;
+        return String.valueOf(idIncrementing);
+    }
+
 
     @Test
     public void getConnectionStatus() {
@@ -69,7 +80,7 @@ public class UserViewModelTest {
 
     @Test
     public void mapListDataToViewState() {
-        String expected_uid = "1";
+        String expected_uid = getNextID();
         String expected_username = "username";
         String expected_urlPicture = "url.com";
         User user = new User(expected_uid, expected_username, expected_urlPicture);
@@ -96,7 +107,7 @@ public class UserViewModelTest {
 
     @Test
     public void mapDataToViewState() {
-        String expected_uid = "12";
+        String expected_uid = getNextID();
         String expected_username = "username";
         String expected_urlPicture = "url.com";
         User user = new User(expected_uid, expected_username, expected_urlPicture);
@@ -122,7 +133,7 @@ public class UserViewModelTest {
 
     @Test
     public void getEveryFirestoreUserWhoPickedThisRestaurant() {
-        String restaurantId = "123";
+        String restaurantId = getNextID();
         when(mUserRepository.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId)).thenReturn(mListUserStateItemMutableLiveData);
 
         spyUserViewModel.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId);
@@ -169,7 +180,7 @@ public class UserViewModelTest {
 
     @Test
     public void updateLocalUserData() {
-        String expected_uid = "1234";
+        String expected_uid = getNextID();
         String expected_username = "username";
         String expected_urlPicture = "url.com";
         User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
@@ -208,25 +219,99 @@ public class UserViewModelTest {
 
     @Test
     public void setPickedRestaurant() {
+        String expected_id = getNextID();
+        String expected_name = "restaurant";
+
+        String expected_uid = getNextID();
+        String expected_username = "username";
+        String expected_urlPicture = "url.com";
+        User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
+        expected_user.setPickedRestaurant(expected_id, expected_name);
+
+        when(mUserRepository.getUser()).thenReturn(expected_user);
+
+        mUserViewModel.setPickedRestaurant(expected_id, expected_name);
+
+        MutableLiveData<User> userLiveData = mUserViewModel.mUser;
+        User actual_user = userLiveData.getValue();
+
+        verify(mUserRepository, times(1)).setPickedRestaurant(expected_id, expected_name);
+        assertEquals(expected_user, actual_user);
     }
 
     @Test
     public void removePickedRestaurant() {
+        String expected_uid = getNextID();
+        String expected_username = "username";
+        String expected_urlPicture = "url.com";
+        User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
+
+        when(mUserRepository.getUser()).thenReturn(expected_user);
+
+        mUserViewModel.removePickedRestaurant();
+
+        MutableLiveData<User> userLiveData = mUserViewModel.mUser;
+        User actual_user = userLiveData.getValue();
+
+        verify(mUserRepository, times(1)).removePickedRestaurant();
+        assertEquals(expected_user, actual_user);
     }
 
     @Test
     public void addLikedRestaurant() {
+        String expected_id = getNextID();
+
+        String expected_uid = getNextID();
+        String expected_username = "username";
+        String expected_urlPicture = "url.com";
+        User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
+        expected_user.addLikedRestaurant(expected_id);
+
+        when(mUserRepository.getUser()).thenReturn(expected_user);
+
+        mUserViewModel.addLikedRestaurant(expected_id);
+
+        MutableLiveData<User> userLiveData = mUserViewModel.mUser;
+        User actual_user = userLiveData.getValue();
+
+        verify(mUserRepository, times(1)).addLikedRestaurant(expected_id);
+        assertEquals(expected_user, actual_user);
     }
 
     @Test
     public void removeLikedRestaurant() {
+        String expected_id = getNextID();
+
+        String expected_uid = getNextID();
+        String expected_username = "username";
+        String expected_urlPicture = "url.com";
+        User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
+
+        when(mUserRepository.getUser()).thenReturn(expected_user);
+
+        mUserViewModel.removeLikedRestaurant(expected_id);
+
+        MutableLiveData<User> userLiveData = mUserViewModel.mUser;
+        User actual_user = userLiveData.getValue();
+
+        verify(mUserRepository, times(1)).removeLikedRestaurant(expected_id);
+        assertEquals(expected_user, actual_user);
     }
 
     @Test
     public void getCurrentUser() {
+        mUserViewModel.getCurrentUser();
+
+        verify(mUserRepository, times(1)).getCurrentFirebaseUser();
     }
+
+    @Mock
+    Context mContext;
 
     @Test
     public void signOut() {
+        mUserViewModel.signOut(mContext);
+
+        verify(mUserRepository, times(1)).signOut(mContext);
     }
 }

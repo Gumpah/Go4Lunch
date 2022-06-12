@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/imageView_restaurantPhoto"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="@dimen/imageView_restaurantPhotoHeight"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/restaurant_photo" />
@@ -23,19 +23,19 @@
         android:src="@drawable/fab_pickrestaurant_states"
         android:backgroundTint="@color/white"
         app:tint="@color/fab_pickrestaurant_states"
-        app:maxImageSize="28dp"
+        app:maxImageSize="@dimen/fab_chooseRestaurantMaxImageSize"
         android:clickable="true"
         app:borderWidth="0dp"
         app:layout_constraintTop_toBottomOf="@id/imageView_restaurantPhoto"
         app:layout_constraintBottom_toBottomOf="@id/imageView_restaurantPhoto"
         android:contentDescription="@string/choose_restaurant"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/fab_chooseRestaurantMarginEnd"
         android:focusable="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_container"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="@dimen/constraintLayout_containerHeight"
         app:layout_constraintTop_toBottomOf="@id/imageView_restaurantPhoto"
         android:background="@color/orange1">
 
@@ -46,8 +46,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/constraintLayout_container"
             tools:text="Restaurant"
-            android:layout_margin="12dp"
-            android:textSize="19sp"
+            android:layout_margin="@dimen/textView_restaurantNameMargin"
+            android:textSize="@dimen/textView_restaurantNameTextSize"
             android:textColor="@color/white"
             android:maxLength="30"
             android:ellipsize="end"
@@ -59,8 +59,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="@dimen/imageView_star1MarginStart"
+            android:layout_marginEnd="@dimen/imageView_star1MarginEnd"
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
-            android:layout_margin="4dp"
+            android:layout_margin="@dimen/imageView_starMargin"
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/imageView_star1"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
-            android:layout_margin="4dp"
+            android:layout_margin="@dimen/imageView_starMargin"
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/imageView_star2"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
@@ -95,13 +95,13 @@
 
         <TextView
             android:id="@+id/textView_restaurantTypeAndAddress"
-            android:layout_width="320dp"
+            android:layout_width="@dimen/textView_restaurantTypeAndAddressWidth"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
             app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
             tools:text="Address"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
+            android:textSize="@dimen/textView_restaurantTypeAndAddressTextSize"
+            android:layout_marginTop="@dimen/textView_restaurantTypeAndAddressMarginTop"
             android:textColor="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -110,12 +110,12 @@
         android:id="@+id/constraintLayout_container2"
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@id/constraintLayout_container"
-        android:layout_height="90dp">
+        android:layout_height="@dimen/constraintLayout_container2Height">
 
         <ImageButton
             android:id="@+id/imageButton_callRestaurant"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/imageButton_callRestaurantWidth"
+            android:layout_height="@dimen/imageButton_callRestaurantHeight"
             android:src="@drawable/ic_baseline_call_24"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
