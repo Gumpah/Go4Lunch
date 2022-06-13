@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static fr.barrow.go4lunch.ListenersTestUtil.testOnSuccessListener;
 
 import android.location.Location;
 import android.text.SpannableString;
@@ -13,6 +12,7 @@ import android.text.SpannableString;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.Place;
@@ -25,6 +25,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -33,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import fr.barrow.go4lunch.LiveDataTestUtils;
 import fr.barrow.go4lunch.RxImmediateSchedulerRule;
 import fr.barrow.go4lunch.data.PlacesStreams;
 import fr.barrow.go4lunch.data.RestaurantRepository;
@@ -104,7 +107,7 @@ public class RestaurantViewModelTest {
     }
 
     @Test
-    public void fetchAndUpdateRestaurants() throws InterruptedException {
+    public void fetchAndUpdateRestaurants() {
 
         Location location = new Location("MyLocation");
         mRestaurantViewModel.setLocation(location);
@@ -113,18 +116,24 @@ public class RestaurantViewModelTest {
 
 
         PlaceDetailsResult placeDetailsResult = new PlaceDetailsResult();
-        String photoUrl = "1";
-        CombinedPlaceAndString combinedPlaceAndString = new CombinedPlaceAndString(placeDetailsResult, photoUrl);
+        String expected_photoUrl = "url.com";
+        CombinedPlaceAndString combinedPlaceAndString = new CombinedPlaceAndString(placeDetailsResult, expected_photoUrl);
 
         when(mPlacesStreams.streamFetchNearbyPlacesAndFetchTheirDetails(anyString(), any())).thenReturn(Observable.just(combinedPlaceAndString));
-        when(mRestaurantRepository.placeDetailsToRestaurantObject(placeDetailsResult, photoUrl)).thenReturn(new Restaurant(null, null, null, photoUrl, null, null, null, 1, null, null,null));
+        when(mRestaurantRepository.placeDetailsToRestaurantObject(placeDetailsResult, expected_photoUrl)).thenReturn(new Restaurant(null, null, null, expected_photoUrl, null, null, null, 1, null, null,null));
 
-        //mRestaurantViewModel.setLocation(mLocation);
         mRestaurantViewModel.fetchAndUpdateRestaurants("");
 
-        TestObserver.test(result)
-                .awaitValue()
-                .assertValue(value -> value.get(0).getUrlPicture().equals(photoUrl));
+        LiveDataTestUtils.observeForTesting(result, liveData -> {
+            List<Restaurant> actual_restaurantList = liveData.getValue();
+            String actual_photoUrl = "";
+            if (actual_restaurantList != null) {
+                Restaurant actual_restaurant = actual_restaurantList.get(0);
+                actual_photoUrl = actual_restaurant.getUrlPicture();
+            }
+
+            assertEquals(expected_photoUrl, actual_photoUrl);
+        });
     }
 
     @Test
@@ -164,6 +173,9 @@ public class RestaurantViewModelTest {
     @Mock
     SpannableString spannableString;
 
+    @Captor
+    ArgumentCaptor<OnSuccessListener<FindAutocompletePredictionsResponse>> onSuccessListenerCaptorFindAutocompletePredictionsResponse;
+
     @Test
     public void autocompleteRequest() throws InterruptedException {
         Location location = new Location("MyLocation");
@@ -176,7 +188,7 @@ public class RestaurantViewModelTest {
         String textSearched = "Test";
         String placeId = "1";
         when(mPlacesClient.findAutocompletePredictions(any(FindAutocompletePredictionsRequest.class))).thenReturn(responseTask);
-        when(responseTask.addOnSuccessListener(testOnSuccessListener.capture())).thenReturn(responseTask);
+        when(responseTask.addOnSuccessListener(onSuccessListenerCaptorFindAutocompletePredictionsResponse.capture())).thenReturn(responseTask);
 
         when(response.getAutocompletePredictions()).thenReturn(list);
         when(list.iterator()).thenReturn(Collections.singletonList(autocompletePrediction).iterator());
@@ -189,7 +201,7 @@ public class RestaurantViewModelTest {
 
         mRestaurantViewModel.autocompleteRequest(textSearched, mPlacesClient);
 
-        testOnSuccessListener.getValue().onSuccess(response);
+        onSuccessListenerCaptorFindAutocompletePredictionsResponse.getValue().onSuccess(response);
 
         TestObserver.test(result)
                 .awaitValue()

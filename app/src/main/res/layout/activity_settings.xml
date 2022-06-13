@@ -14,15 +14,15 @@
         app:layout_constraintTop_toTopOf="@id/textView_notifications"
         app:layout_constraintBottom_toBottomOf="@id/textView_notifications"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="@dimen/switch_notificationsMarginEnd"/>
 
     <TextView
         android:id="@+id/textView_notifications"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/notifications"
-        android:layout_margin="16dp"
-        android:textSize="18sp"
+        android:layout_margin="@dimen/textView_notificationsMargin"
+        android:textSize="@dimen/textView_notificationsTextSize"
         android:textColor="@color/grey"
         app:layout_constraintEnd_toStartOf="@+id/switch_notifications"
         app:layout_constraintTop_toTopOf="parent"

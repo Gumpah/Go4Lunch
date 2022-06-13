@@ -11,27 +11,27 @@
     android:id="@+id/constraintLayout_restaurantListItem">
 
     <TextView
-        android:id="@+id/textView_restaurantName"
+        android:id="@+id/textView_searchListRestaurantName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Restaurant's name"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        android:layout_margin="12dp"
+        android:textSize="@dimen/textView_searchListRestaurantNameTextSize"
+        android:layout_margin="@dimen/textView_searchListRestaurantNameMargin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/textView_restaurantDistance"
+        app:layout_constraintEnd_toStartOf="@id/textView_searchListRestaurantDistance"
         />
 
     <TextView
-        android:id="@+id/textView_restaurantDistance"
+        android:id="@+id/textView_searchListRestaurantDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="distance"
         android:textColor="@color/greyText"
-        android:textSize="12sp"
-        android:layout_marginEnd="8dp"
+        android:textSize="@dimen/textView_searchListRestaurantDistanceTextSize"
+        android:layout_marginEnd="@dimen/textView_searchListRestaurantDistanceMarginEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

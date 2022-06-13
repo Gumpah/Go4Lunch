@@ -93,21 +93,21 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
         }
 
         void bind(Restaurant restaurant, Location location) {
-            binding.textViewRestaurantName.setText(restaurant.getName());
-            binding.textViewRestaurantAddress.setText(restaurant.getAddress());
+            binding.textViewListRestaurantName.setText(restaurant.getName());
+            binding.textViewListRestaurantAddress.setText(restaurant.getAddress());
             if (restaurant.getUrlPicture() != null) {
                 Glide.with(binding.getRoot())
                         .load(restaurant.getUrlPicture())
                         .centerCrop()
                         .placeholder(R.drawable.backgroundblurred)
-                        .into(binding.imageViewRestaurantPhoto);
+                        .into(binding.imageViewListRestaurantPhoto);
             } else {
                 Glide.with(binding.getRoot())
                         .load(R.drawable.backgroundblurred)
                         .centerCrop()
-                        .into(binding.imageViewRestaurantPhoto);
+                        .into(binding.imageViewListRestaurantPhoto);
             }
-            binding.textViewRestaurantDistance.setText(getDistance(restaurant.getPosition(), location));
+            binding.textViewListRestaurantDistance.setText(getDistance(restaurant.getPosition(), location));
             setupStarsRating(restaurant);
         }
 
@@ -137,44 +137,44 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
                 if (u.getPickedRestaurant().equals(restaurant.getId())) list.add(u);
             }
             if (list.size() > 0) {
-                binding.imageViewWorkmatesIcon.setVisibility(View.VISIBLE);
+                binding.imageViewListWorkmatesIcon.setVisibility(View.VISIBLE);
                 String workmateCount = ('(' + String.valueOf(list.size()) + ')');
-                binding.textViewWorkmatesNumber.setText(workmateCount);
+                binding.textViewListWorkmatesNumber.setText(workmateCount);
             } else {
-                binding.imageViewWorkmatesIcon.setVisibility(View.INVISIBLE);
-                binding.textViewWorkmatesNumber.setText("");
+                binding.imageViewListWorkmatesIcon.setVisibility(View.INVISIBLE);
+                binding.textViewListWorkmatesNumber.setText("");
             }
         }
 
         void setupStarsRating(Restaurant restaurant) {
-            binding.imageViewStar3.setVisibility(View.INVISIBLE);
-            binding.imageViewStar2.setVisibility(View.INVISIBLE);
-            binding.imageViewStar1.setVisibility(View.INVISIBLE);
+            binding.imageViewListStar3.setVisibility(View.INVISIBLE);
+            binding.imageViewListStar2.setVisibility(View.INVISIBLE);
+            binding.imageViewListStar1.setVisibility(View.INVISIBLE);
             switch (restaurant.getRating()) {
                 case 1:
-                    binding.imageViewStar3.setVisibility(View.VISIBLE);
+                    binding.imageViewListStar3.setVisibility(View.VISIBLE);
                     break;
                 case 2:
-                    binding.imageViewStar3.setVisibility(View.VISIBLE);
-                    binding.imageViewStar2.setVisibility(View.VISIBLE);
+                    binding.imageViewListStar3.setVisibility(View.VISIBLE);
+                    binding.imageViewListStar2.setVisibility(View.VISIBLE);
                     break;
                 case 3:
-                    binding.imageViewStar3.setVisibility(View.VISIBLE);
-                    binding.imageViewStar2.setVisibility(View.VISIBLE);
-                    binding.imageViewStar1.setVisibility(View.VISIBLE);
+                    binding.imageViewListStar3.setVisibility(View.VISIBLE);
+                    binding.imageViewListStar2.setVisibility(View.VISIBLE);
+                    binding.imageViewListStar1.setVisibility(View.VISIBLE);
                     break;
                 default:
-                    binding.imageViewStar3.setVisibility(View.INVISIBLE);
-                    binding.imageViewStar2.setVisibility(View.INVISIBLE);
-                    binding.imageViewStar1.setVisibility(View.INVISIBLE);
+                    binding.imageViewListStar3.setVisibility(View.INVISIBLE);
+                    binding.imageViewListStar2.setVisibility(View.INVISIBLE);
+                    binding.imageViewListStar1.setVisibility(View.INVISIBLE);
                     break;
             }
         }
 
         void setupClosingTime(Restaurant restaurant, Date now) {
             if (restaurant.getClosingTimeDate() == null) {
-                binding.textViewRestaurantClosingTime.setText(R.string.restaurant_Closed);
-                binding.textViewRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.redClosingTime, null));
+                binding.textViewListRestaurantClosingTime.setText(R.string.restaurant_Closed);
+                binding.textViewListRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.redClosingTime, null));
             } else if (restaurant.getOpeningTimeDate() != null) {
 
                 Date opening = restaurant.getOpeningTimeDate();
@@ -187,17 +187,17 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListVi
                 long diffOpening  = now.getTime() - opening.getTime();
                 long diffInMinutesOpening = TimeUnit.MILLISECONDS.toMinutes(diffOpening);
                 if (diffInMinutesClosing <= 0 || diffInMinutesOpening < 0) {
-                    binding.textViewRestaurantClosingTime.setText(R.string.restaurant_Closed);
-                    binding.textViewRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.redClosingTime, null));
+                    binding.textViewListRestaurantClosingTime.setText(R.string.restaurant_Closed);
+                    binding.textViewListRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.redClosingTime, null));
                 } else if (diffInMinutesClosing <= 30) {
-                    binding.textViewRestaurantClosingTime.setText(R.string.closing_Soon);
-                    binding.textViewRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.redClosingTime, null));
+                    binding.textViewListRestaurantClosingTime.setText(R.string.closing_Soon);
+                    binding.textViewListRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.redClosingTime, null));
                 } else {
                     String closingTimeHour = restaurant.getClosingTime().substring(0,2);
                     String closingTimeMinute = restaurant.getClosingTime().substring(2,4);
                     String closingTimeFormat = (binding.getRoot().getResources().getString(R.string.open_Until)  + closingTimeHour + "h" + closingTimeMinute);
-                    binding.textViewRestaurantClosingTime.setText(closingTimeFormat);
-                    binding.textViewRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.grey, null));
+                    binding.textViewListRestaurantClosingTime.setText(closingTimeFormat);
+                    binding.textViewListRestaurantClosingTime.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.grey, null));
                 }
             }
         }

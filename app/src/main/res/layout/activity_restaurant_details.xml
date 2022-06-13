@@ -54,7 +54,7 @@
             android:maxLines="1"/>
 
         <ImageView
-            android:id="@+id/imageView_star1"
+            android:id="@+id/imageView_listStar1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
@@ -68,27 +68,27 @@
             android:contentDescription="@string/star" />
 
         <ImageView
-            android:id="@+id/imageView_star2"
+            android:id="@+id/imageView_listStar2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
             android:layout_margin="@dimen/imageView_starMargin"
             android:visibility="invisible"
-            app:layout_constraintStart_toEndOf="@id/imageView_star1"
+            app:layout_constraintStart_toEndOf="@id/imageView_listStar1"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
             app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
             android:contentDescription="@string/star" />
 
         <ImageView
-            android:id="@+id/imageView_star3"
+            android:id="@+id/imageView_listStar3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_star_24"
             app:tint="@color/star_yellow"
             android:layout_margin="@dimen/imageView_starMargin"
             android:visibility="invisible"
-            app:layout_constraintStart_toEndOf="@id/imageView_star2"
+            app:layout_constraintStart_toEndOf="@id/imageView_listStar2"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
             app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
             android:contentDescription="@string/star" />
@@ -120,19 +120,20 @@
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
             android:scaleType="fitCenter"
-            android:layout_marginStart="48dp"
+            android:layout_marginStart="@dimen/imageButton_callRestaurantMarginStart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/imageButton_likeRestaurant"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/textView_callRestaurant"
             android:contentDescription="@string/call_button"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintVertical_chainStyle="spread"/>
+            app:layout_constraintVertical_chainStyle="packed"
+            android:padding="@dimen/imageButton_callRestaurantPadding"/>
 
         <ImageButton
             android:id="@+id/imageButton_likeRestaurant"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/imageButton_likeRestaurantWidth"
+            android:layout_height="@dimen/imageButton_likeRestaurantHeight"
             android:src="@drawable/imagebutton_likerestaurant_states"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
@@ -144,23 +145,25 @@
             app:layout_constraintBottom_toTopOf="@id/textView_likeRestaurant"
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/like_button"
-            app:layout_constraintVertical_chainStyle="spread" />
+            app:layout_constraintVertical_chainStyle="packed"
+            android:padding="@dimen/imageButton_likeRestaurantPadding" />
 
         <ImageButton
             android:id="@+id/imageButton_websiteRestaurant"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/imageButton_websiteRestaurantWidth"
+            android:layout_height="@dimen/imageButton_websiteRestaurantHeight"
             android:src="@drawable/ic_baseline_public_24"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
             android:scaleType="fitCenter"
-            android:layout_marginEnd="48dp"
+            android:layout_marginEnd="@dimen/imageButton_websiteRestaurantMarginEnd"
             app:layout_constraintStart_toEndOf="@id/imageButton_likeRestaurant"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/textView_websiteRestaurant"
             android:contentDescription="@string/website_button"
-            app:layout_constraintVertical_chainStyle="spread" />
+            app:layout_constraintVertical_chainStyle="packed"
+            android:padding="@dimen/imageButton_websiteRestaurantPadding" />
 
         <TextView
             android:id="@+id/textView_callRestaurant"
@@ -168,7 +171,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/call"
-            android:textSize="15sp"
+            android:textSize="@dimen/textView_callRestaurantTextSize"
             app:layout_constraintTop_toBottomOf="@id/imageButton_callRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_callRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_callRestaurant"
@@ -181,7 +184,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/like"
-            android:textSize="15sp"
+            android:textSize="@dimen/textView_likeRestaurantTextSize"
             app:layout_constraintTop_toBottomOf="@id/imageButton_likeRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_likeRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_likeRestaurant"
@@ -194,7 +197,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/website"
-            android:textSize="15sp"
+            android:textSize="@dimen/textView_websiteRestaurantTextSize"
             app:layout_constraintTop_toBottomOf="@id/imageButton_websiteRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_websiteRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_websiteRestaurant"
@@ -204,10 +207,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/view_lineSeparator"
+        android:id="@+id/view_workmateItemLineSeparator"
         app:layout_constraintTop_toBottomOf="@id/constraintLayout_container2"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/view_lineSeparatorHeight"
         android:visibility="invisible"
         android:background="@color/lightGrey"/>
 
@@ -215,7 +218,7 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/view_lineSeparator"
+        app:layout_constraintTop_toBottomOf="@id/view_workmateItemLineSeparator"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/restaurant_details_workmates_item"/>
 

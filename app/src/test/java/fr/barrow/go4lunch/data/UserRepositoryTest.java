@@ -287,11 +287,12 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getAllUsersWhoPickedARestaurant() throws InterruptedException {
+    public void getAllUsersWhoPickedARestaurant() {
+        int expected_listSize = 1;
         String urlPicture1 = "url.com";
         String username1 = "username1";
         String uid1 = getNextID();
-        User testUser1 = new User(uid1, username1, urlPicture1);
+        User expected_user = new User(uid1, username1, urlPicture1);
         String urlPicture2 = "url.com";
         String username2 = "username2";
         String uid2 = getNextID();
@@ -302,7 +303,7 @@ public class UserRepositoryTest {
         when(querySnapshotTask.isSuccessful()).thenReturn(true);
         when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
         when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
-        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(testUser1, testUser2);
+        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(expected_user, testUser2);
         when(mFirebaseHelper.getCurrentFirebaseUserUID()).thenReturn(uid2);
 
         MutableLiveData<List<User>> result = mUserRepository.getEveryFirestoreUserWhoPickedThisRestaurant(restaurantId);
@@ -310,17 +311,25 @@ public class UserRepositoryTest {
         onCompleteListenerCaptorQuerySnapshot.getValue().onComplete(querySnapshotTask);
 
         LiveDataTestUtils.observeForTesting(result, liveData -> {
-            assertEquals(liveData.getValue().size(), 1);
-            assertEquals(liveData.getValue().get(0), testUser1);
+            List<User> actual_userList = liveData.getValue();
+            int actual_listSize = 0;
+            User actual_user = null;
+            if (actual_userList != null) {
+                actual_listSize = actual_userList.size();
+                actual_user = actual_userList.get(0);
+            }
+            assertEquals(actual_listSize, expected_listSize);
+            assertEquals(actual_user, expected_user);
         });
     }
 
     @Test
     public void getUsersWhoPickedARestaurant() {
+        int expected_listSize = 1;
         String urlPicture1 = "url.com";
         String username1 = "username1";
         String uid1 = getNextID();
-        User testUser1 = new User(uid1, username1, urlPicture1);
+        User expected_user = new User(uid1, username1, urlPicture1);
         String urlPicture2 = "url.com";
         String username2 = "username2";
         String uid2 = getNextID();
@@ -330,7 +339,7 @@ public class UserRepositoryTest {
         when(querySnapshotTask.isSuccessful()).thenReturn(true);
         when(querySnapshotTask.getResult()).thenReturn(querySnapshot);
         when(querySnapshot.iterator()).thenReturn(Arrays.asList(queryDocumentSnapshot, queryDocumentSnapshot).iterator());
-        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(testUser1, testUser2);
+        when(queryDocumentSnapshot.toObject(User.class)).thenReturn(expected_user, testUser2);
         when(mFirebaseHelper.getCurrentFirebaseUserUID()).thenReturn(uid2);
 
         MutableLiveData<List<User>> result = mUserRepository.getEveryUserWhoPickedARestaurant();
@@ -338,8 +347,15 @@ public class UserRepositoryTest {
         onCompleteListenerCaptorQuerySnapshot.getValue().onComplete(querySnapshotTask);
 
         LiveDataTestUtils.observeForTesting(result, liveData -> {
-            assertEquals(liveData.getValue().size(), 1);
-            assertEquals(liveData.getValue().get(0), testUser1);
+            List<User> actual_userList = liveData.getValue();
+            int actual_listSize = 0;
+            User actual_user = null;
+            if (actual_userList != null) {
+                actual_listSize = actual_userList.size();
+                actual_user = actual_userList.get(0);
+            }
+            assertEquals(actual_listSize, expected_listSize);
+            assertEquals(actual_user, expected_user);
         });
     }
 

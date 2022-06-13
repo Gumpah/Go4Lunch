@@ -1,7 +1,6 @@
 package fr.barrow.go4lunch.ui.viewmodels;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -55,7 +54,7 @@ public class UserViewModelTest {
     private int idIncrementing;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mUserViewModel = new UserViewModel(mUserRepository, mNetworkMonitoring);
         spyUserViewModel = spy(mUserViewModel);
         idIncrementing = 1;

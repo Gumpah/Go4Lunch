@@ -26,7 +26,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private ActivityRestaurantDetailsBinding binding;
 
-    //private MyViewModel mMyViewModel;
     private UserViewModel mUserViewModel;
 
     private Restaurant mRestaurant;
@@ -49,7 +48,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void configureViewModel() {
-        //mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
         mUserViewModel = new ViewModelProvider(this, UserViewModelFactory.getInstance(this)).get(UserViewModel.class);
     }
 
@@ -102,9 +100,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private void initLineVisibility(List<UserStateItem> users) {
         if (users.isEmpty()) {
-            binding.viewLineSeparator.setVisibility(View.INVISIBLE);
+            binding.viewWorkmateItemLineSeparator.setVisibility(View.INVISIBLE);
         } else {
-            binding.viewLineSeparator.setVisibility(View.VISIBLE);
+            binding.viewWorkmateItemLineSeparator.setVisibility(View.VISIBLE);
         }
     }
 
@@ -182,21 +180,21 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void setupStarsRating () {
         switch (mRestaurant.getRating()) {
             case 1:
-                binding.imageViewStar1.setVisibility(View.VISIBLE);
+                binding.imageViewListStar1.setVisibility(View.VISIBLE);
                 break;
             case 2:
-                binding.imageViewStar1.setVisibility(View.VISIBLE);
-                binding.imageViewStar2.setVisibility(View.VISIBLE);
+                binding.imageViewListStar1.setVisibility(View.VISIBLE);
+                binding.imageViewListStar2.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                binding.imageViewStar1.setVisibility(View.VISIBLE);
-                binding.imageViewStar2.setVisibility(View.VISIBLE);
-                binding.imageViewStar3.setVisibility(View.VISIBLE);
+                binding.imageViewListStar1.setVisibility(View.VISIBLE);
+                binding.imageViewListStar2.setVisibility(View.VISIBLE);
+                binding.imageViewListStar3.setVisibility(View.VISIBLE);
                 break;
             default:
-                binding.imageViewStar1.setVisibility(View.INVISIBLE);
-                binding.imageViewStar2.setVisibility(View.INVISIBLE);
-                binding.imageViewStar3.setVisibility(View.INVISIBLE);
+                binding.imageViewListStar1.setVisibility(View.INVISIBLE);
+                binding.imageViewListStar2.setVisibility(View.INVISIBLE);
+                binding.imageViewListStar3.setVisibility(View.INVISIBLE);
                 break;
         }
     }
