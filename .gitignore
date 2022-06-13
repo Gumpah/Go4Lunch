@@ -10,3 +10,4 @@
 local.properties
 app/src/main/res/values/developer-config.xml
 /keys.properties
+/.idea/
