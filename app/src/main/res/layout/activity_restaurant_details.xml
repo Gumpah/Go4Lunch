@@ -10,9 +10,11 @@
     <ImageView
         android:id="@+id/imageView_restaurantPhoto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/imageView_restaurantPhotoHeight"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="30"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/constraintLayout_container"
         android:contentDescription="@string/restaurant_photo" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -35,8 +37,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/constraintLayout_containerHeight"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="10"
         app:layout_constraintTop_toBottomOf="@id/imageView_restaurantPhoto"
+        app:layout_constraintBottom_toTopOf="@id/constraintLayout_container2"
         android:background="@color/orange1">
 
         <TextView
@@ -109,13 +113,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_container2"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="11"
         app:layout_constraintTop_toBottomOf="@id/constraintLayout_container"
-        android:layout_height="@dimen/constraintLayout_container2Height">
+        app:layout_constraintBottom_toTopOf="@id/view_workmateItemLineSeparator">
 
         <ImageButton
             android:id="@+id/imageButton_callRestaurant"
-            android:layout_width="@dimen/imageButton_callRestaurantWidth"
-            android:layout_height="@dimen/imageButton_callRestaurantHeight"
+            android:layout_width="@dimen/imageButton_eachWidthAndHeight"
+            android:layout_height="@dimen/imageButton_eachWidthAndHeight"
             android:src="@drawable/ic_baseline_call_24"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
@@ -128,12 +134,12 @@
             android:contentDescription="@string/call_button"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintVertical_chainStyle="packed"
-            android:padding="@dimen/imageButton_callRestaurantPadding"/>
+            android:padding="@dimen/imageButton_eachPadding"/>
 
         <ImageButton
             android:id="@+id/imageButton_likeRestaurant"
-            android:layout_width="@dimen/imageButton_likeRestaurantWidth"
-            android:layout_height="@dimen/imageButton_likeRestaurantHeight"
+            android:layout_width="@dimen/imageButton_eachWidthAndHeight"
+            android:layout_height="@dimen/imageButton_eachWidthAndHeight"
             android:src="@drawable/imagebutton_likerestaurant_states"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
@@ -146,12 +152,12 @@
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/like_button"
             app:layout_constraintVertical_chainStyle="packed"
-            android:padding="@dimen/imageButton_likeRestaurantPadding" />
+            android:padding="@dimen/imageButton_eachPadding" />
 
         <ImageButton
             android:id="@+id/imageButton_websiteRestaurant"
-            android:layout_width="@dimen/imageButton_websiteRestaurantWidth"
-            android:layout_height="@dimen/imageButton_websiteRestaurantHeight"
+            android:layout_width="@dimen/imageButton_eachWidthAndHeight"
+            android:layout_height="@dimen/imageButton_eachWidthAndHeight"
             android:src="@drawable/ic_baseline_public_24"
             android:background="@color/fui_transparent"
             app:tint="@color/orange1"
@@ -163,7 +169,7 @@
             app:layout_constraintBottom_toTopOf="@id/textView_websiteRestaurant"
             android:contentDescription="@string/website_button"
             app:layout_constraintVertical_chainStyle="packed"
-            android:padding="@dimen/imageButton_websiteRestaurantPadding" />
+            android:padding="@dimen/imageButton_eachPadding" />
 
         <TextView
             android:id="@+id/textView_callRestaurant"
@@ -171,7 +177,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/call"
-            android:textSize="@dimen/textView_callRestaurantTextSize"
+            android:textSize="@dimen/textView_eachTextSize"
             app:layout_constraintTop_toBottomOf="@id/imageButton_callRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_callRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_callRestaurant"
@@ -184,7 +190,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/like"
-            android:textSize="@dimen/textView_likeRestaurantTextSize"
+            android:textSize="@dimen/textView_eachTextSize"
             app:layout_constraintTop_toBottomOf="@id/imageButton_likeRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_likeRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_likeRestaurant"
@@ -197,7 +203,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/orange1"
             android:text="@string/website"
-            android:textSize="@dimen/textView_websiteRestaurantTextSize"
+            android:textSize="@dimen/textView_eachTextSize"
             app:layout_constraintTop_toBottomOf="@id/imageButton_websiteRestaurant"
             app:layout_constraintStart_toStartOf="@id/imageButton_websiteRestaurant"
             app:layout_constraintEnd_toEndOf="@id/imageButton_websiteRestaurant"
@@ -209,6 +215,7 @@
     <View
         android:id="@+id/view_workmateItemLineSeparator"
         app:layout_constraintTop_toBottomOf="@id/constraintLayout_container2"
+        app:layout_constraintBottom_toTopOf="@id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/view_lineSeparatorHeight"
         android:visibility="invisible"
@@ -218,6 +225,7 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintVertical_weight="25"
         app:layout_constraintTop_toBottomOf="@id/view_workmateItemLineSeparator"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/restaurant_details_workmates_item"/>

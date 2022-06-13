@@ -70,6 +70,9 @@ public class AutocompleteSearchAdapter extends RecyclerView.Adapter<Autocomplete
                 String distanceText = restaurant.getDistance() + context.getString(R.string.distance_meters_unit);
                 binding.textViewSearchListRestaurantDistance.setText(distanceText);
             }
+            if (restaurant.getAddress() != null) {
+                binding.textViewSearchListRestaurantAddress.setText(restaurant.getAddress());
+            }
         }
 
         void setClickListener(String restaurantId, ClickCallback callback) {

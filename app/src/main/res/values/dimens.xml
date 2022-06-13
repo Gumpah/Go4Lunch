@@ -2,72 +2,54 @@
 <resources>
 
     <!-- LOGIN ACTIVITY -->
-    <dimen name="imageView_LogoWidth">300dp</dimen>
-    <dimen name="imageView_LogoHeight">300dp</dimen>
-    <dimen name="imageView_LogoMarginTop">48dp</dimen>
     <dimen name="button_LoginHeight">70dp</dimen>
-    <dimen name="button_LoginWidth">300dp</dimen>
-    <dimen name="button_LoginMarginTopFirst">50dp</dimen>
     <dimen name="button_LoginIconSize">28dp</dimen>
-    <dimen name="button_LoginMarginTop">20dp</dimen>
+    <dimen name="constraintLayout_containerPadding">44dp</dimen>
 
 
     <!-- MAIN ACTIVITY -->
     <!-- nav header -->
     <dimen name="constraintLayout_headerHeight">240dp</dimen>
-    <dimen name="imageView_userAvatarWidth">56dp</dimen>
-    <dimen name="imageView_userAvatarHeight">56dp</dimen>
+    <dimen name="imageView_userAvatarWidth">64dp</dimen>
+    <dimen name="imageView_userAvatarHeight">@dimen/imageView_userAvatarWidth</dimen>
     <dimen name="imageView_userAvatarMarginVertical">20dp</dimen>
     <dimen name="imageView_userAvatarMarginStart">20dp</dimen>
     <dimen name="textView_userNameMarginStart">20dp</dimen>
     <dimen name="textView_userNameTextSize">16sp</dimen>
-    <dimen name="textView_userMailMarginStart">20dp</dimen>
     <dimen name="textView_userMailTextSize">16sp</dimen>
 
     <!-- RESTAURANT DETAILS ACTIVITY -->
-    <dimen name="imageView_restaurantPhotoHeight">300dp</dimen>
     <dimen name="fab_chooseRestaurantMaxImageSize">28dp</dimen>
     <dimen name="fab_chooseRestaurantMarginEnd">16dp</dimen>
-    <dimen name="constraintLayout_containerHeight">90dp</dimen>
     <dimen name="textView_restaurantNameMargin">12dp</dimen>
-    <dimen name="textView_restaurantNameTextSize">19sp</dimen>
+    <dimen name="textView_restaurantNameTextSize">22sp</dimen>
     <dimen name="imageView_star1MarginStart">8dp</dimen>
-    <dimen name="imageView_star1MarginEnd">4dp</dimen>
     <dimen name="imageView_starMargin">4dp</dimen>
+    <dimen name="imageView_star1MarginEnd">@dimen/imageView_starMargin</dimen>
     <dimen name="textView_restaurantTypeAndAddressWidth">320dp</dimen>
-    <dimen name="textView_restaurantTypeAndAddressTextSize">14sp</dimen>
+    <dimen name="textView_restaurantTypeAndAddressTextSize">15sp</dimen>
     <dimen name="textView_restaurantTypeAndAddressMarginTop">4dp</dimen>
-    <dimen name="constraintLayout_container2Height">90dp</dimen>
-    <dimen name="imageButton_callRestaurantWidth">48dp</dimen>
-    <dimen name="imageButton_callRestaurantHeight">48dp</dimen>
+    <dimen name="imageButton_eachWidthAndHeight">48dp</dimen>
     <dimen name="imageButton_callRestaurantMarginStart">48dp</dimen>
-    <dimen name="imageButton_callRestaurantPadding">8dp</dimen>
-    <dimen name="imageButton_likeRestaurantHeight">48dp</dimen>
-    <dimen name="imageButton_likeRestaurantWidth">48dp</dimen>
-    <dimen name="imageButton_likeRestaurantPadding">8dp</dimen>
-    <dimen name="imageButton_websiteRestaurantHeight">48dp</dimen>
-    <dimen name="imageButton_websiteRestaurantWidth">48dp</dimen>
-    <dimen name="imageButton_websiteRestaurantMarginEnd">48dp</dimen>
-    <dimen name="imageButton_websiteRestaurantPadding">8dp</dimen>
-    <dimen name="textView_callRestaurantTextSize">15sp</dimen>
-    <dimen name="textView_likeRestaurantTextSize">15sp</dimen>
-    <dimen name="textView_websiteRestaurantTextSize">15sp</dimen>
+    <dimen name="imageButton_eachPadding">8dp</dimen>
+    <dimen name="imageButton_websiteRestaurantMarginEnd">@dimen/imageButton_callRestaurantMarginStart</dimen>
+    <dimen name="textView_eachTextSize">15sp</dimen>
     <dimen name="view_lineSeparatorHeight">2dp</dimen>
     <!-- workmates item -->
-    <dimen name="imageView_userAvatarListWidth">50dp</dimen>
-    <dimen name="imageView_userAvatarListHeight">50dp</dimen>
+    <dimen name="imageView_userAvatarListWidth">64dp</dimen>
+    <dimen name="imageView_userAvatarListHeight">@dimen/imageView_userAvatarListWidth</dimen>
     <dimen name="imageView_userAvatarListMargin">12dp</dimen>
-    <dimen name="textView_userNameListTextSize">16sp</dimen>
+    <dimen name="textView_userNameListTextSize">17sp</dimen>
     <dimen name="textView_userNameListMargin">12dp</dimen>
 
     <!-- SETTINGS ACTIVITY -->
     <dimen name="switch_notificationsMarginEnd">16dp</dimen>
-    <dimen name="textView_notificationsMargin">16dp</dimen>
+    <dimen name="textView_notificationsMargin">@dimen/switch_notificationsMarginEnd</dimen>
     <dimen name="textView_notificationsTextSize">18sp</dimen>
 
     <!-- MAP VIEW FRAGMENT -->
     <dimen name="fab_backToCameraMarginEnd">16dp</dimen>
-    <dimen name="fab_backToCameraMarginBottom">16dp</dimen>
+    <dimen name="fab_backToCameraMarginBottom">@dimen/fab_backToCameraMarginEnd</dimen>
 
     <!-- LIST VIEW FRAGMENT -->
     <!-- restaurant list item -->
@@ -75,35 +57,34 @@
     <dimen name="textView_listRestaurantNameMargin">12dp</dimen>
     <dimen name="textView_listRestaurantAddressTextSize">12sp</dimen>
     <dimen name="textView_listRestaurantAddressMarginTop">4dp</dimen>
-    <dimen name="textView_textView_listRestaurantClosingTimeTextSize">12sp</dimen>
-    <dimen name="textView_textView_listRestaurantClosingTimeMarginTop">4dp</dimen>
-    <dimen name="textView_textView_listRestaurantDistanceTextSize">12sp</dimen>
+    <dimen name="textView_textView_listRestaurantClosingTimeTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
+    <dimen name="textView_textView_listRestaurantClosingTimeMarginTop">@dimen/textView_listRestaurantAddressMarginTop</dimen>
+    <dimen name="textView_textView_listRestaurantDistanceTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
     <dimen name="textView_textView_listRestaurantDistanceMarginEnd">8dp</dimen>
     <dimen name="imageView_listRestaurantPhotoHeight">60dp</dimen>
-    <dimen name="imageView_listRestaurantPhotoWidth">60dp</dimen>
+    <dimen name="imageView_listRestaurantPhotoWidth">@dimen/imageView_listRestaurantPhotoHeight</dimen>
     <dimen name="imageView_listRestaurantPhotoMargin">12dp</dimen>
-    <dimen name="textView_listWorkmatesNumberTextSize">12sp</dimen>
+    <dimen name="textView_listWorkmatesNumberTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
     <dimen name="imageView_listWorkmatesIconHeight">16dp</dimen>
-    <dimen name="imageView_listWorkmatesIconWidth">16dp</dimen>
-    <dimen name="imageView_listStarHeight">16dp</dimen>
-    <dimen name="imageView_listStarWidth">16dp</dimen>
+    <dimen name="imageView_listWorkmatesIconWidth">@dimen/imageView_listWorkmatesIconHeight</dimen>
+    <dimen name="imageView_listStarHeight">@dimen/imageView_listWorkmatesIconHeight</dimen>
+    <dimen name="imageView_listStarWidth">@dimen/imageView_listWorkmatesIconHeight</dimen>
     <dimen name="imageView_listStar1MarginEnd">4dp</dimen>
-    <dimen name="imageView_listStar2MarginEnd">4dp</dimen>
+    <dimen name="imageView_listStar2MarginEnd">@dimen/imageView_listStar1MarginEnd</dimen>
     <!-- restaurant search item -->
-    <dimen name="textView_searchListRestaurantNameTextSize">16sp</dimen>
-    <dimen name="textView_searchListRestaurantNameMargin">12dp</dimen>
-    <dimen name="textView_searchListRestaurantDistanceTextSize">12sp</dimen>
-    <dimen name="textView_searchListRestaurantDistanceMarginEnd">8dp</dimen>
+    <dimen name="textView_searchListRestaurantNameTextSize">@dimen/textView_listRestaurantNameTextSize</dimen>
+    <dimen name="textView_searchListRestaurantAddressTextSize">14sp</dimen>
+    <dimen name="textView_searchListRestaurantNameMargin">8dp</dimen>
+    <dimen name="textView_searchListRestaurantDistanceTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
+    <dimen name="textView_searchListRestaurantDistanceMarginEnd">@dimen/textView_searchListRestaurantNameMargin</dimen>
 
     <!-- WORKMATES FRAGMENT -->
     <!-- item -->
     <dimen name="imageView_workmateIconHeight">60dp</dimen>
-    <dimen name="imageView_workmateIconWidth">60dp</dimen>
+    <dimen name="imageView_workmateIconWidth">@dimen/imageView_workmateIconHeight</dimen>
     <dimen name="imageView_workmateIconMargin">12dp</dimen>
     <dimen name="textView_workmateChoiceTextSize">17sp</dimen>
     <dimen name="textView_workmateChoiceMargin">16dp</dimen>
     <dimen name="view_workmateItemLineSeparatorHeight">2dp</dimen>
-
-
 
 </resources>

@@ -90,7 +90,7 @@ public class RestaurantViewModel extends ViewModel {
                         if (prediction.getDistanceMeters() != null) {
                             distance = prediction.getDistanceMeters().toString();
                         }
-                        restaurantsAutocomplete.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(), distance));
+                        restaurantsAutocomplete.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(), distance, prediction.getSecondaryText(null).toString()));
                     }
                 }
                 getRestaurantsAutocompleteMutableLiveData().postValue(restaurantsAutocomplete);

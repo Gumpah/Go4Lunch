@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep custom model classes
+-keep class fr.barrow.go4lunch.model.** { *; }
+
+# https://github.com/firebase/FirebaseUI-Android/issues/1175
+-dontwarn okio.**
+-dontwarn retrofit2.Call

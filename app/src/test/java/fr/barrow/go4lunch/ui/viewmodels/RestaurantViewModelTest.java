@@ -171,7 +171,9 @@ public class RestaurantViewModelTest {
     @Mock
     AutocompletePrediction autocompletePrediction;
     @Mock
-    SpannableString spannableString;
+    SpannableString spannableStringName;
+    @Mock
+    SpannableString spannableStringAddress;
 
     @Captor
     ArgumentCaptor<OnSuccessListener<FindAutocompletePredictionsResponse>> onSuccessListenerCaptorFindAutocompletePredictionsResponse;
@@ -185,27 +187,47 @@ public class RestaurantViewModelTest {
 
         List<Place.Type> typeList = Collections.singletonList(Place.Type.RESTAURANT);
 
-        String textSearched = "Test";
-        String placeId = "1";
+        String expected_restaurantName = "Test";
+        String expected_placeId = "1";
+        String expected_address = "Address";
+        int distance = 100;
+        String expected_distance = "100";
         when(mPlacesClient.findAutocompletePredictions(any(FindAutocompletePredictionsRequest.class))).thenReturn(responseTask);
         when(responseTask.addOnSuccessListener(onSuccessListenerCaptorFindAutocompletePredictionsResponse.capture())).thenReturn(responseTask);
 
         when(response.getAutocompletePredictions()).thenReturn(list);
         when(list.iterator()).thenReturn(Collections.singletonList(autocompletePrediction).iterator());
         when(autocompletePrediction.getPlaceTypes()).thenReturn(typeList);
-        when(autocompletePrediction.getPrimaryText(any())).thenReturn(spannableString);
-        when(spannableString.toString()).thenReturn("Test");
-        when(autocompletePrediction.getDistanceMeters()).thenReturn(1);
-        when(autocompletePrediction.getPlaceId()).thenReturn(placeId);
+        when(autocompletePrediction.getPrimaryText(any())).thenReturn(spannableStringName);
+        when(spannableStringName.toString()).thenReturn("Test");
+        when(autocompletePrediction.getSecondaryText(any())).thenReturn(spannableStringAddress);
+        when(spannableStringAddress.toString()).thenReturn(expected_address);
+        when(autocompletePrediction.getDistanceMeters()).thenReturn(distance);
+        when(autocompletePrediction.getPlaceId()).thenReturn(expected_placeId);
 
 
-        mRestaurantViewModel.autocompleteRequest(textSearched, mPlacesClient);
+        mRestaurantViewModel.autocompleteRequest(expected_restaurantName, mPlacesClient);
 
         onSuccessListenerCaptorFindAutocompletePredictionsResponse.getValue().onSuccess(response);
 
+        LiveDataTestUtils.observeForTesting(result, liveData -> {
+            List<RestaurantAutocomplete> actual_restaurantList = liveData.getValue();
+            RestaurantAutocomplete actual_restaurant = new RestaurantAutocomplete(null, null, null, null);
+            if (actual_restaurantList != null) {
+                actual_restaurant = actual_restaurantList.get(0);
+            }
+            String actual_restaurantName = actual_restaurant.getName();
+            String actual_placeId = actual_restaurant.getPlaceId();
+            String actual_address = actual_restaurant.getAddress();
+            String actual_distance = actual_restaurant.getDistance();
+            assertEquals(expected_restaurantName, actual_restaurantName);
+            assertEquals(expected_placeId, actual_placeId);
+            assertEquals(expected_address, actual_address);
+            assertEquals(expected_distance, actual_distance);
+        });
         TestObserver.test(result)
                 .awaitValue()
-                .assertValue(value -> value.get(0).getPlaceId().equals(placeId));
+                .assertValue(value -> value.get(0).getPlaceId().equals(expected_placeId));
     }
 
     @Test

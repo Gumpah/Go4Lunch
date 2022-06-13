@@ -248,10 +248,26 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     public void onInfoWindowClick(@NonNull Marker marker) {
         if (marker.getTag() != null) {
             String restaurantId = marker.getTag().toString();
-            Intent intent = new Intent(requireContext(), RestaurantDetailsActivity.class);
-            intent.putExtra("RESTAURANT_ID", restaurantId);
-            requireContext().startActivity(intent);
+            if (mRestaurantViewModel.getRestaurantFromId(restaurantId) == null) {
+                mRestaurantViewModel.fetchRestaurantDetailsAndAddRestaurant(apiKey, restaurantId);
+                mRestaurantViewModel.getRestaurantsMutableLiveData().observe(this, list -> {
+                    if (mRestaurantViewModel.getRestaurantFromId(restaurantId) != null) {
+                        Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
+                        startDetailsActivity(mRestaurant);
+                    }
+                });
+            } else {
+                Restaurant mRestaurant = mRestaurantViewModel.getRestaurantFromId(restaurantId);
+                startDetailsActivity(mRestaurant);
+            }
         }
+    }
+
+
+    private void startDetailsActivity(Restaurant restaurant) {
+        Intent intent = new Intent(requireContext(), RestaurantDetailsActivity.class);
+        intent.putExtra("RESTAURANT", restaurant);
+        requireContext().startActivity(intent);
     }
 
 

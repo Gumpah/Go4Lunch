@@ -18,7 +18,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/textView_searchListRestaurantNameTextSize"
         android:layout_margin="@dimen/textView_searchListRestaurantNameMargin"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textView_searchListRestaurantAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/textView_searchListRestaurantDistance"
@@ -33,7 +33,21 @@
         android:textSize="@dimen/textView_searchListRestaurantDistanceTextSize"
         android:layout_marginEnd="@dimen/textView_searchListRestaurantDistanceMarginEnd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/textView_searchListRestaurantName"
+        app:layout_constraintBottom_toBottomOf="@id/textView_searchListRestaurantName"/>
+
+    <TextView
+        android:id="@+id/textView_searchListRestaurantAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Restaurant's name"
+        android:textColor="@color/greyText"
+        android:textSize="@dimen/textView_searchListRestaurantAddressTextSize"
+        android:layout_marginBottom="@dimen/textView_searchListRestaurantNameMargin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/textView_searchListRestaurantName"
+        app:layout_constraintTop_toBottomOf="@id/textView_searchListRestaurantName"
+        app:layout_constraintEnd_toEndOf="@id/textView_searchListRestaurantName"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

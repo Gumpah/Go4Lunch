@@ -15,85 +15,105 @@
         android:scaleType="centerCrop"
         android:contentDescription="@string/contentDesc_loginBackground" />
 
-    <ImageView
-        android:id="@+id/imageView_loginLogo"
-        android:layout_width="@dimen/imageView_LogoWidth"
-        android:layout_height="@dimen/imageView_LogoHeight"
-        android:src="@drawable/logo"
-        android:layout_marginTop="@dimen/imageView_LogoMarginTop"
-        app:layout_constraintTop_toTopOf="@id/constraintLayout_mainActivity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/contentDesc_loginLogo" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_topContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="4"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/constraintLayout_containerPadding"
+        app:layout_constraintBottom_toTopOf="@id/constraintLayout_bottomContainer">
 
-    <Button
-        android:id="@+id/button_signInFacebook"
-        android:layout_width="@dimen/button_LoginWidth"
-        android:layout_height="@dimen/button_LoginHeight"
-        app:layout_constraintTop_toBottomOf="@id/imageView_loginLogo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/button_LoginMarginTopFirst"
-        android:text="@string/button_facebookSignIn"
-        android:textColor="@color/textColor"
-        app:icon="@drawable/ic_facebook"
-        app:iconSize="@dimen/button_LoginIconSize"
-        app:iconTint="@color/textColor"
-        android:backgroundTint="@color/facebook"/>
+        <ImageView
+            android:id="@+id/imageView_loginLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            android:src="@drawable/logo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/contentDesc_loginLogo" />
 
-    <Button
-        android:id="@+id/button_signInGoogle"
-        android:layout_width="@dimen/button_LoginWidth"
-        android:layout_height="@dimen/button_LoginHeight"
-        app:layout_constraintTop_toBottomOf="@id/button_signInFacebook"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/button_LoginMarginTop"
-        android:text="@string/button_googleSignIn"
-        android:textColor="@color/textColor"
-        app:icon="@drawable/ic_google"
-        app:iconSize="@dimen/button_LoginIconSize"
-        app:iconTint="@color/textColor"
-        android:backgroundTint="@color/google"
-        android:clickable="true"
-        android:focusable="true"
-        />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/button_signInTwitter"
-        android:layout_width="@dimen/button_LoginWidth"
-        android:layout_height="@dimen/button_LoginHeight"
-        app:layout_constraintTop_toBottomOf="@id/button_signInGoogle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/button_LoginMarginTop"
-        android:text="@string/button_twitterSignIn"
-        android:textColor="@color/textColor"
-        app:icon="@drawable/ic_twitter"
-        app:iconSize="@dimen/button_LoginIconSize"
-        app:iconTint="@color/textColor"
-        android:backgroundTint="@color/twitter"
-        android:clickable="true"
-        android:focusable="true"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout_topContainer"
+        android:paddingHorizontal="@dimen/constraintLayout_containerPadding"
+        android:paddingBottom="@dimen/constraintLayout_containerPadding">
 
-    <Button
-        android:id="@+id/button_signInEmail"
-        android:layout_width="@dimen/button_LoginWidth"
-        android:layout_height="@dimen/button_LoginHeight"
-        app:layout_constraintTop_toBottomOf="@id/button_signInTwitter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/button_LoginMarginTop"
-        android:text="@string/button_EmailSignIn"
-        android:textColor="@color/black"
-        app:icon="@drawable/fui_ic_mail_white_24dp"
-        app:iconSize="@dimen/button_LoginIconSize"
-        app:iconTint="@color/black"
-        android:backgroundTint="@color/mail"
-        android:clickable="true"
-        android:focusable="true"
-        />
+        <Button
+            android:id="@+id/button_signInFacebook"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_LoginHeight"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button_signInGoogle"
+            android:text="@string/button_facebookSignIn"
+            android:textColor="@color/textColor"
+            app:icon="@drawable/ic_facebook"
+            app:iconSize="@dimen/button_LoginIconSize"
+            app:iconTint="@color/textColor"
+            android:backgroundTint="@color/facebook"
+            app:layout_constraintVertical_chainStyle="spread" />
 
+        <Button
+            android:id="@+id/button_signInGoogle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_LoginHeight"
+            app:layout_constraintTop_toBottomOf="@id/button_signInFacebook"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintBottom_toTopOf="@id/button_signInTwitter"
+            android:text="@string/button_googleSignIn"
+            android:textColor="@color/textColor"
+            app:icon="@drawable/ic_google"
+            app:iconSize="@dimen/button_LoginIconSize"
+            app:iconTint="@color/textColor"
+            android:backgroundTint="@color/google"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/button_signInTwitter"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_LoginHeight"
+            app:layout_constraintTop_toBottomOf="@id/button_signInGoogle"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintBottom_toTopOf="@id/button_signInEmail"
+            android:text="@string/button_twitterSignIn"
+            android:textColor="@color/textColor"
+            app:icon="@drawable/ic_twitter"
+            app:iconSize="@dimen/button_LoginIconSize"
+            app:iconTint="@color/textColor"
+            android:backgroundTint="@color/twitter"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/button_signInEmail"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_LoginHeight"
+            app:layout_constraintTop_toBottomOf="@id/button_signInTwitter"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/button_EmailSignIn"
+            android:textColor="@color/black"
+            app:icon="@drawable/fui_ic_mail_white_24dp"
+            app:iconSize="@dimen/button_LoginIconSize"
+            app:iconTint="@color/black"
+            android:backgroundTint="@color/mail"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

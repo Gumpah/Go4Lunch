@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/constraintLayout_headerHeight"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
@@ -38,6 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginVertical="@dimen/imageView_userAvatarMarginVertical"
         android:layout_marginStart="@dimen/imageView_userAvatarMarginStart"
+        tools:src="@drawable/ic_person"
         android:contentDescription="@string/contentDesc_userAvatar" />
 
     <TextView
@@ -45,7 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/imageView_userAvatar"
-        app:layout_constraintTop_toTopOf="@id/imageView_userAvatar"
+        app:layout_constraintTop_toBottomOf="@id/imageView_userAvatar"
+        app:layout_constraintBottom_toTopOf="@id/textView_userMail"
+        tools:text="Username"
         android:layout_marginStart="@dimen/textView_userNameMarginStart"
         android:textColor="@color/white"
         android:textSize="@dimen/textView_userNameTextSize"/>
@@ -55,8 +59,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/imageView_userAvatar"
-        app:layout_constraintBottom_toBottomOf="@id/imageView_userAvatar"
-        android:layout_marginStart="@dimen/textView_userMailMarginStart"
+        app:layout_constraintBottom_toTopOf="@id/imageView_userAvatar"
+        app:layout_constraintTop_toBottomOf="@id/textView_userName"
+        app:layout_constraintStart_toStartOf="@id/textView_userName"
+        tools:text="mail@google.com"
         android:textColor="@color/white"
         android:textSize="@dimen/textView_userMailTextSize"/>
 
