@@ -17,10 +17,10 @@
         tools:text="Restaurant's name"
         android:textColor="@color/black"
         android:textSize="@dimen/textView_listRestaurantNameTextSize"
-        android:layout_margin="@dimen/textView_listRestaurantNameMargin"
         app:layout_constraintEnd_toEndOf="@id/textView_listRestaurantClosingTime"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/space"
+        app:layout_constraintTop_toBottomOf="@id/space"
+        app:layout_constraintBottom_toTopOf="@id/space3"
         />
 
     <TextView
@@ -30,10 +30,10 @@
         tools:text="Restaurant's address"
         android:textColor="@color/grey"
         android:textSize="@dimen/textView_listRestaurantAddressTextSize"
-        android:layout_marginTop="@dimen/textView_listRestaurantAddressMarginTop"
         app:layout_constraintEnd_toEndOf="@id/textView_listRestaurantClosingTime"
         app:layout_constraintStart_toStartOf="@id/textView_listRestaurantName"
-        app:layout_constraintTop_toBottomOf="@id/textView_listRestaurantName"
+        app:layout_constraintTop_toBottomOf="@id/space3"
+        app:layout_constraintBottom_toTopOf="@id/space4"
         />
 
     <TextView
@@ -43,35 +43,33 @@
         tools:text="Restaurant's closing time"
         android:textColor="@color/grey"
         android:textSize="@dimen/textView_textView_listRestaurantClosingTimeTextSize"
-        android:layout_marginTop="@dimen/textView_textView_listRestaurantClosingTimeMarginTop"
         android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@id/imageView_listStar1"
+        app:layout_constraintBottom_toTopOf="@id/space2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/textView_listRestaurantName"
-        app:layout_constraintTop_toBottomOf="@id/textView_listRestaurantAddress"
+        app:layout_constraintTop_toBottomOf="@id/space4"
         />
 
     <TextView
         android:id="@+id/textView_listRestaurantDistance"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         tools:text="distance"
         android:textColor="@color/greyText"
         android:textSize="@dimen/textView_textView_listRestaurantDistanceTextSize"
-        android:layout_marginEnd="@dimen/textView_textView_listRestaurantDistanceMarginEnd"
-        app:layout_constraintTop_toTopOf="@id/imageView_listRestaurantPhoto"
-        app:layout_constraintEnd_toStartOf="@id/imageView_listRestaurantPhoto"
-        app:layout_constraintBottom_toTopOf="@id/imageView_listWorkmatesIcon"
-        app:layout_constraintVertical_chainStyle="spread_inside"/>
+        app:layout_constraintTop_toTopOf="@id/textView_listRestaurantName"
+        app:layout_constraintEnd_toStartOf="@id/space5"
+        app:layout_constraintBottom_toBottomOf="@id/textView_listRestaurantName"/>
 
     <ImageView
         android:id="@+id/imageView_listRestaurantPhoto"
-        android:layout_width="@dimen/imageView_listRestaurantPhotoWidth"
-        android:layout_height="@dimen/imageView_listRestaurantPhotoHeight"
-        android:layout_margin="@dimen/imageView_listRestaurantPhotoMargin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="@id/textView_listRestaurantName"
+        app:layout_constraintBottom_toBottomOf="@id/textView_listRestaurantClosingTime"
         android:contentDescription="@string/contentDesc_photo_du_restaurant"
         tools:src="@drawable/backgroundblurred"/>
 
@@ -82,55 +80,141 @@
         tools:text="(x)"
         android:textColor="@color/black"
         android:textSize="@dimen/textView_listWorkmatesNumberTextSize"
-        app:layout_constraintEnd_toEndOf="@id/textView_listRestaurantDistance"
-        app:layout_constraintBottom_toBottomOf="@id/imageView_listWorkmatesIcon"
+        app:layout_constraintEnd_toStartOf="@id/space5"
+        app:layout_constraintBottom_toBottomOf="@id/textView_listRestaurantAddress"
         />
 
     <ImageView
         android:id="@+id/imageView_listWorkmatesIcon"
-        android:layout_width="@dimen/imageView_listWorkmatesIconWidth"
-        android:layout_height="@dimen/imageView_listWorkmatesIconHeight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
         app:tint="@color/black"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/textView_listWorkmatesNumber"
-        app:layout_constraintTop_toBottomOf="@id/textView_listRestaurantDistance"
-        app:layout_constraintBottom_toTopOf="@id/imageView_listStar3"
+        app:layout_constraintTop_toTopOf="@id/textView_listRestaurantAddress"
+        app:layout_constraintBottom_toBottomOf="@id/textView_listRestaurantAddress"
         android:contentDescription="@string/contentDesc_icon_interested"
-        android:src="@drawable/ic_baseline_person_outline_24"
-        app:layout_constraintVertical_chainStyle="spread_inside"/>
+        android:src="@drawable/ic_baseline_person_outline_24"/>
 
     <ImageView
         android:id="@+id/imageView_listStar1"
-        android:layout_width="@dimen/imageView_listStarWidth"
-        android:layout_height="@dimen/imageView_listStarHeight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/ic_baseline_star_24"
+        app:layout_constraintDimensionRatio="1:1"
         app:tint="@color/star_yellow"
         android:visibility="invisible"
-        android:layout_marginEnd="@dimen/imageView_listStar1MarginEnd"
+        app:layout_constraintStart_toEndOf="@id/space6"
         app:layout_constraintEnd_toStartOf="@id/imageView_listStar2"
-        app:layout_constraintTop_toTopOf="@id/imageView_listStar2" />
+        app:layout_constraintTop_toTopOf="@id/textView_listRestaurantClosingTime"
+        app:layout_constraintBottom_toBottomOf="@id/textView_listRestaurantClosingTime"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
     <ImageView
         android:id="@+id/imageView_listStar2"
-        android:layout_width="@dimen/imageView_listStarWidth"
-        android:layout_height="@dimen/imageView_listStarHeight"
-        android:layout_marginEnd="@dimen/imageView_listStar2MarginEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
         android:src="@drawable/ic_baseline_star_24"
         app:tint="@color/star_yellow"
         android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@id/imageView_listStar1"
         app:layout_constraintEnd_toStartOf="@id/imageView_listStar3"
-        app:layout_constraintTop_toTopOf="@id/imageView_listStar3"/>
+        app:layout_constraintTop_toTopOf="@id/textView_listRestaurantClosingTime"
+        app:layout_constraintBottom_toBottomOf="@id/textView_listRestaurantClosingTime"/>
 
     <ImageView
         android:id="@+id/imageView_listStar3"
-        android:layout_width="@dimen/imageView_listStarWidth"
-        android:layout_height="@dimen/imageView_listStarHeight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
         android:src="@drawable/ic_baseline_star_24"
         app:tint="@color/star_yellow"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@id/textView_listRestaurantDistance"
-        app:layout_constraintTop_toBottomOf="@id/imageView_listWorkmatesIcon"
-        app:layout_constraintBottom_toBottomOf="@id/imageView_listRestaurantPhoto"
-        app:layout_constraintVertical_chainStyle="spread_inside"/>
+        app:layout_constraintStart_toEndOf="@id/imageView_listStar2"
+        app:layout_constraintEnd_toStartOf="@id/space5"
+        app:layout_constraintTop_toTopOf="@id/textView_listRestaurantClosingTime"
+        app:layout_constraintBottom_toBottomOf="@id/textView_listRestaurantClosingTime"  />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.63"/>
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textView_listRestaurantName"/>
+
+    <Space
+        android:id="@+id/space2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/space"
+        app:layout_constraintTop_toBottomOf="@id/textView_listRestaurantClosingTime"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Space
+        android:id="@+id/space3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/space"
+        app:layout_constraintTop_toBottomOf="@id/textView_listRestaurantName"
+        app:layout_constraintBottom_toTopOf="@id/textView_listRestaurantAddress"/>
+
+    <Space
+        android:id="@+id/space4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/space"
+        app:layout_constraintBottom_toTopOf="@id/textView_listRestaurantClosingTime"
+        app:layout_constraintTop_toBottomOf="@id/textView_listRestaurantAddress"/>
+
+    <Space
+        android:id="@+id/space5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/imageView_listRestaurantPhoto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/space2"/>
+
+    <Space
+        android:id="@+id/space6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="@id/guideline3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/space2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

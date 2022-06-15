@@ -3,9 +3,11 @@
     <item
         android:state_selected="false"
         android:drawable="@drawable/ic_baseline_close_24"
-        android:color="@color/grey"/>
+        android:tint="@color/orange1"
+        android:color="@color/orange1"/>
     <item
         android:state_selected="true"
-        android:drawable="@drawable/ic_baseline_check_24"
-        android:color="@color/green"/>
+        android:drawable="@drawable/ic_check_mark"
+        android:tint="@null"
+        android:color="@null"/>
 </selector>
