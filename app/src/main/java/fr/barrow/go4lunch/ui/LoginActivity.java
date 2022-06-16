@@ -31,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
 
-    //private MyViewModel mMyViewModel;
     private UserViewModel mUserViewModel;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
@@ -51,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void configureViewModel() {
-        //mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
         mUserViewModel = new ViewModelProvider(this, UserViewModelFactory.getInstance(this)).get(UserViewModel.class);
     }
 
@@ -98,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void createSignInIntent(AuthUI.IdpConfig provider) {
-        //List<AuthUI.IdpConfig> providers =  Collections.singletonList(provider);
         List<AuthUI.IdpConfig> providers =  Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
@@ -111,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setAvailableProviders(providers)
                 .setDefaultProvider(provider)
                 .setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
+                .setTheme(R.style.PopUpStyle)
                 .setLogo(R.drawable.logo)
                 .build();
         signInLauncher.launch(signInIntent);
@@ -118,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkIfUserConnected() {
         if (mUserViewModel.isCurrentUserLogged()) {
-            //finish();
+            finish();
             startActivity(new Intent(this, MainActivity.class));
         } else {
             initNetworkStatus();
@@ -145,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             // Successfully signed in
             showSnackBar(getString(R.string.connection_succeed));
             mUserViewModel.createUser();
-            //finish();
+            finish();
             startActivity(new Intent(this, MainActivity.class));
         } else {
             if (response == null) {

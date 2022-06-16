@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppBarConfiguration mAppBarConfiguration;
     private NavController mNavController;
 
-    //private MyViewModel mMyViewModel;
     private RestaurantViewModel mRestaurantViewModel;
     private UserViewModel mUserViewModel;
 
@@ -77,11 +76,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initToastObservers() {
         mRestaurantViewModel.getToastSenderInteger().observe(this, message -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            System.out.println("Test" + message);
         });
         mRestaurantViewModel.getToastSenderString().observe(this, message -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            System.out.println("Test" + message);
         });
     }
 
@@ -115,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void configureViewModel() {
-        //mMyViewModel = new ViewModelProvider(this, MyViewModelFactory.getInstance(this)).get(MyViewModel.class);
         mRestaurantViewModel = new ViewModelProvider(this, RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
         mUserViewModel = new ViewModelProvider(this, UserViewModelFactory.getInstance(this)).get(UserViewModel.class);
     }
@@ -224,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id==R.id.mainMenuDrawer_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+
         }
         if (id==R.id.mainMenuDrawer_logout) {
             mUserViewModel.signOut(this).addOnSuccessListener(aVoid -> {

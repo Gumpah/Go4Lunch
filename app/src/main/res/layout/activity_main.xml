@@ -52,9 +52,8 @@
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_gravity="start"
-        android:background="#FC7540"
-        app:itemTextColor="@color/white"
         app:headerLayout="@layout/activity_main_nav_header"
+        style="@style/NavigationView"
         app:menu="@menu/main_menu_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

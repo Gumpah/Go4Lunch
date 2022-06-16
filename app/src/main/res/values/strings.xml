@@ -80,6 +80,10 @@
 
     <string name="no_restaurant_chosen">You haven\'t chosen any restaurant</string>
 
+    <string name="search">Search</string>
+    <string name="search_restaurants">Search restaurants</string>
+    <string name="search_workmates">Search workmates</string>
+
     <!-- NOTIFICATIONS -->
     <string name="notification_alone_firstPart">You\'re eating alone at&#160;</string>
     <string name="notification_notAlone_firstPart">You\'re eating at&#160;</string>

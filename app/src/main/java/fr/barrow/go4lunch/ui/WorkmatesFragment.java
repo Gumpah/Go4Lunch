@@ -32,7 +32,6 @@ import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTextListener, ClickCallback {
 
     private FragmentWorkmatesBinding binding;
-    //private MyViewModel mMyViewModel;
     private RestaurantViewModel mRestaurantViewModel;
     private UserViewModel mUserViewModel;
 
@@ -88,7 +87,6 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     public void configureViewModel() {
-        //mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireContext())).get(MyViewModel.class);
         mRestaurantViewModel = new ViewModelProvider(requireActivity(), RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
         mUserViewModel = new ViewModelProvider(requireActivity(), UserViewModelFactory.getInstance(requireContext())).get(UserViewModel.class);
     }
@@ -102,6 +100,7 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(requireActivity().getComponentName()));
+        searchView.setQueryHint(requireActivity().getString(R.string.search_workmates));
         searchView.setOnQueryTextListener(this);
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override

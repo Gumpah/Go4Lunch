@@ -38,7 +38,6 @@ import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 public class ListViewFragment extends Fragment implements SearchView.OnQueryTextListener, ClickCallback {
 
     private FragmentListViewBinding binding;
-    //private MyViewModel mMyViewModel;
     private RestaurantViewModel mRestaurantViewModel;
     private UserViewModel mUserViewModel;
     private RecyclerView mRecyclerView;
@@ -73,12 +72,14 @@ public class ListViewFragment extends Fragment implements SearchView.OnQueryText
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
+
         SearchManager searchManager =
                 (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(requireActivity().getComponentName()));
+        searchView.setQueryHint(requireActivity().getString(R.string.search_restaurants));
         searchView.setOnQueryTextListener(this);
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override

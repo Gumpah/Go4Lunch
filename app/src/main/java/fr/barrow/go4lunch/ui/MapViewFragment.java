@@ -1,6 +1,8 @@
 package fr.barrow.go4lunch.ui;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -8,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -16,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -38,6 +43,7 @@ import java.util.ArrayList;
 import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.FragmentMapViewBinding;
+import fr.barrow.go4lunch.model.MarkerAndRestaurantId;
 import fr.barrow.go4lunch.model.Restaurant;
 import fr.barrow.go4lunch.model.UserStateItem;
 import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
@@ -47,7 +53,7 @@ import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
 import pub.devrel.easypermissions.AppSettingsDialog;
 
 
-public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, SearchView.OnQueryTextListener {
 
     private FragmentMapViewBinding binding;
     private GoogleMap map;
@@ -56,9 +62,11 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     private String apiKey;
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
 
-    //private MyViewModel mMyViewModel;
     private RestaurantViewModel mRestaurantViewModel;
     private UserViewModel mUserViewModel;
+
+    private ArrayList<MarkerAndRestaurantId> mMarkerAndRestaurantIdList;
+    private ArrayList<String> mPickedRestaurantIdsList;
 
     @Nullable
     @Override
@@ -81,7 +89,25 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
         configureViewModel();
         initRestaurantsData();
         setLocation();
+        setHasOptionsMenu(true);
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.search_menu, menu);
+        SearchManager searchManager =
+                (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(requireActivity().getComponentName()));
+        searchView.setQueryHint(requireActivity().getString(R.string.search_restaurants));
+        searchView.setOnQueryTextListener(this);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
 
     private void initRestaurantsData() {
         mRestaurantViewModel.getRestaurantsMutableLiveData().observe(getViewLifecycleOwner(), restaurants -> {
@@ -98,27 +124,51 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
     private void initSearchUsersWhoPickedRestaurantFromArray(ArrayList<Restaurant> restaurants) {
         if (restaurants != null && !restaurants.isEmpty()) {
             mUserViewModel.getEveryUserWhoPickedARestaurant().observe(requireActivity(), users -> {
-                ArrayList<String> pickedRestaurantIdsList = new ArrayList<>();
+                mPickedRestaurantIdsList = new ArrayList<>();
                 if (users != null && !users.isEmpty()) {
                     for (UserStateItem u : users) {
-                        pickedRestaurantIdsList.add(u.getPickedRestaurant());
+                        mPickedRestaurantIdsList.add(u.getPickedRestaurant());
                     }
                 }
                 if (map != null) {
-                    map.clear();
-                    for (Restaurant r : restaurants) {
-                        boolean picked = pickedRestaurantIdsList.contains(r.getId());
-                        MarkerOptions marker = new MarkerOptions()
-                                .position(r.getPosition())
-                                .title(r.getName());
-
-                        Bitmap bitmap = getBitmapIcon(picked);
-                        if (bitmap != null) marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-
-                        map.addMarker(marker).setTag(r.getId());
-                    }
+                    createMarkerList(restaurants, false);
                 }
             });
+        }
+    }
+
+    private void createMarkerList(ArrayList<Restaurant> restaurants, boolean isInSearchMode) {
+        ArrayList<MarkerAndRestaurantId> markerAndRestaurantIdList = new ArrayList<>();
+        mMarkerAndRestaurantIdList = new ArrayList<>();
+        for (Restaurant r : restaurants) {
+            boolean picked = mPickedRestaurantIdsList.contains(r.getId());
+            MarkerOptions marker = new MarkerOptions()
+                    .position(r.getPosition())
+                    .title(r.getName());
+
+            Bitmap bitmap = getBitmapIcon(picked);
+            if (bitmap != null) marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+
+            if (isInSearchMode) {
+                markerAndRestaurantIdList.add(new MarkerAndRestaurantId(marker, r.getId()));
+            } else {
+                mMarkerAndRestaurantIdList.add(new MarkerAndRestaurantId(marker, r.getId()));
+            }
+        }
+        if (isInSearchMode) {
+            clearMapAndSetNewMarkers(markerAndRestaurantIdList);
+        } else {
+            clearMapAndSetNewMarkers(mMarkerAndRestaurantIdList);
+        }
+
+    }
+
+    private void clearMapAndSetNewMarkers(ArrayList<MarkerAndRestaurantId> markerAndRestaurantIdList) {
+        map.clear();
+        for (MarkerAndRestaurantId mr : markerAndRestaurantIdList) {
+            if (mr.getMarker() != null && mr.getRestaurantId() != null) {
+                map.addMarker(mr.getMarker()).setTag(mr.getRestaurantId());
+            }
         }
     }
 
@@ -263,12 +313,39 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
         }
     }
 
-
     private void startDetailsActivity(Restaurant restaurant) {
         Intent intent = new Intent(requireContext(), RestaurantDetailsActivity.class);
         intent.putExtra("RESTAURANT", restaurant);
         requireContext().startActivity(intent);
     }
 
+    private void filter(String text) {
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+        if (mRestaurants != null && !mRestaurants.isEmpty()) {
+            if(text.isEmpty()){
+                createMarkerList(mRestaurants, false);
+            } else {
+                text = text.toLowerCase();
+                for(Restaurant restaurant: mRestaurants){
+                    if(restaurant.getName().toLowerCase().contains(text)){
+                        restaurants.add(restaurant);
+                    }
+                }
+                createMarkerList(restaurants, true);
+            }
+        }
+    }
 
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filter(newText);
+        return false;
+    }
 }

@@ -73,6 +73,10 @@
 
     <string name="no_restaurant_chosen">Vous n\'avez choisi aucun restaurant</string>
 
+    <string name="search">Recherche</string>
+    <string name="search_restaurants">Rechercher un restaurant</string>
+    <string name="search_workmates">Rechercher un collègue</string>
+
     <!-- NOTIFICATIONS -->
     <string name="notification_alone_firstPart">Vous mangez tout seul chez&#160;</string>
     <string name="notification_notAlone_firstPart">Vous mangez chez&#160;</string>
