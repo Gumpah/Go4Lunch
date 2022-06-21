@@ -7,6 +7,14 @@ plugins {
 
 android {
 
+    signingConfigs {
+        release {
+            storeFile file('D:\\Documents\\Formation_OC\\store.jks')
+            storePassword '***REMOVED***'
+            keyPassword '***REMOVED***'
+            keyAlias 'key0'
+        }
+    }
     def keys = new Properties()
     file("../keys.properties").withInputStream {
         stream -> keys.load(stream)
@@ -93,7 +101,6 @@ dependencies {
     //FIREBASE UI
     implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
     implementation 'com.facebook.android:facebook-login:13.1.0'
-    implementation 'com.twitter.sdk.android:twitter-core:3.0.0'
     implementation 'com.google.android.gms:play-services-auth:20.0.1'
 
     //NAVIGATION

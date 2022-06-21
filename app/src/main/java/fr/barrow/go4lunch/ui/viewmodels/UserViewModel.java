@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.barrow.go4lunch.data.UserRepository;
-import fr.barrow.go4lunch.model.User;
-import fr.barrow.go4lunch.model.UserStateItem;
+import fr.barrow.go4lunch.data.model.User;
+import fr.barrow.go4lunch.data.model.UserStateItem;
 import fr.barrow.go4lunch.utils.NetworkMonitoring;
 import fr.barrow.go4lunch.utils.NetworkStateManager;
 

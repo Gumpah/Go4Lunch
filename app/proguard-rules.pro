@@ -21,8 +21,9 @@
 #-renamesourcefileattribute SourceFile
 
 # Keep custom model classes
--keep class fr.barrow.go4lunch.model.** { *; }
+-keep class fr.barrow.go4lunch.data.model.** { *; }
 
 # https://github.com/firebase/FirebaseUI-Android/issues/1175
 -dontwarn okio.**
 -dontwarn retrofit2.Call
+-dontwarn java.beans.Transient

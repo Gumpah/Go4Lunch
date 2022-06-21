@@ -1,8 +1,6 @@
 package fr.barrow.go4lunch.ui;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,10 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,8 +19,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -33,11 +26,12 @@ import fr.barrow.go4lunch.BuildConfig;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.databinding.ActivityMainBinding;
 import fr.barrow.go4lunch.databinding.ActivityMainNavHeaderBinding;
-import fr.barrow.go4lunch.model.Restaurant;
+import fr.barrow.go4lunch.data.model.Restaurant;
+import fr.barrow.go4lunch.ui.restaurantdetails.RestaurantDetailsActivity;
 import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
 import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
-import fr.barrow.go4lunch.utils.viewmodelsfactories.RestaurantViewModelFactory;
-import fr.barrow.go4lunch.utils.viewmodelsfactories.UserViewModelFactory;
+import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModelFactory;
+import fr.barrow.go4lunch.ui.viewmodels.UserViewModelFactory;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -81,27 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
     }
-
-    private void getLocation() {
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-                if (location != null) {
-                    mRestaurantViewModel.setLocation(location);
-                }
-            });
-        } else {
-            locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-    }
-
-    private final ActivityResultLauncher<String> locationPermissionRequest =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                        if (isGranted) {
-                            getLocation();
-                        }
-                    }
-            );
 
     private void initTest() {
         mUserViewModel.getUpdatedLocalUserData().observe(this, user -> {

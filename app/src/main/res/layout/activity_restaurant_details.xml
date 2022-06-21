@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.RestaurantDetailsActivity">
+    tools:context=".ui.restaurantdetails.RestaurantDetailsActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -92,9 +92,9 @@
             tools:text="Restaurant"
             android:textSize="@dimen/textView_restaurantNameTextSize"
             android:textColor="@color/white"
-            android:maxLength="30"
+            android:maxLength="28"
             android:ellipsize="end"
-            android:maxLines="1"/>
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/imageView_listStar1"

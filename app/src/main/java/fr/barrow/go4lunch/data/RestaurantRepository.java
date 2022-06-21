@@ -6,11 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.placedetails.OpeningHoursDetails;
-import fr.barrow.go4lunch.model.placedetails.Period;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetails;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
+import fr.barrow.go4lunch.data.model.Restaurant;
+import fr.barrow.go4lunch.data.model.placedetails.OpeningHoursDetails;
+import fr.barrow.go4lunch.data.model.placedetails.Period;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetails;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetailsResult;
 
 public class RestaurantRepository {
 
@@ -106,4 +106,3 @@ public class RestaurantRepository {
         return dayOfWeek-1;
     }
 }
-

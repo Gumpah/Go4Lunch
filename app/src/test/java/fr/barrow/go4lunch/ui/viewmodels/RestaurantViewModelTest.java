@@ -39,10 +39,10 @@ import fr.barrow.go4lunch.LiveDataTestUtils;
 import fr.barrow.go4lunch.RxImmediateSchedulerRule;
 import fr.barrow.go4lunch.data.PlacesStreams;
 import fr.barrow.go4lunch.data.RestaurantRepository;
-import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.RestaurantAutocomplete;
-import fr.barrow.go4lunch.model.placedetails.CombinedPlaceAndString;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
+import fr.barrow.go4lunch.data.model.Restaurant;
+import fr.barrow.go4lunch.data.model.RestaurantAutocomplete;
+import fr.barrow.go4lunch.data.model.placedetails.CombinedPlaceAndString;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetailsResult;
 import io.reactivex.Observable;
 import kotlin.jvm.JvmField;
 

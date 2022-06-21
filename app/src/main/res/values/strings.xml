@@ -29,13 +29,16 @@
     <string name="title_mapView">Map View</string>
     <string name="title_listView">List View</string>
     <string name="title_workmates">Workmates</string>
+    <string name="titleToolbar_mapView">I\'m hungry</string>
+    <string name="titleToolbar_listView">I\'m hungry</string>
+    <string name="titleToolbar_workmates">Available workmates</string>
 
     <!--Header menu-->
     <string name="contentDesc_headerBackground">Header\'s background image</string>
     <string name="contentDesc_userAvatar">User\'s avatar</string>
-    <string name="menuTitle_Lunch">Your lunch</string>
-    <string name="menuTitle_settings">Settings</string>
-    <string name="menuTitle_logout">Logout</string>
+    <string name="menuTitle_Lunch">YOUR LUNCH</string>
+    <string name="menuTitle_settings">SETTINGS</string>
+    <string name="menuTitle_logout">LOGOUT</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -83,6 +86,9 @@
     <string name="search">Search</string>
     <string name="search_restaurants">Search restaurants</string>
     <string name="search_workmates">Search workmates</string>
+
+    <string name="location_permission_denied_dialog_title">Permission required</string>
+    <string name="location_permission_denied_dialog_message">This app needs the location permission to work properly. Open the app settings screen to modify app permissions.</string>
 
     <!-- NOTIFICATIONS -->
     <string name="notification_alone_firstPart">You\'re eating alone at&#160;</string>

@@ -1,12 +1,11 @@
 package fr.barrow.go4lunch.utils;
 
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.NetworkRequest;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -51,13 +50,25 @@ public class NetworkMonitoring extends ConnectivityManager.NetworkCallback {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void checkNetworkState() {
-        try {
-            NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
-            mNetworkStateManager.setNetworkConnectivityStatus(networkInfo != null
-                    && networkInfo.isConnected());
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                Network network = mConnectivityManager.getActiveNetwork();
+                NetworkCapabilities actNw = mConnectivityManager.getNetworkCapabilities(network);
+                mNetworkStateManager.setNetworkConnectivityStatus(network != null
+                        && actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        } else {
+            try {
+                android.net.NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
+                mNetworkStateManager.setNetworkConnectivityStatus(networkInfo != null
+                        && networkInfo.isConnected());
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }

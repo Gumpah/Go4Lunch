@@ -22,20 +22,30 @@ import fr.barrow.go4lunch.ui.MainActivity;
 
 public class NotificationService extends FirebaseMessagingService {
 
-    private final int NOTIFICATION_ID = 007;
-    private final String NOTIFICATION_TAG = "FIREBASEOC";
     private final String preferencesName = "MyPref";
     private final String preferenceNotifications = "receiving_notifications";
     private String token;
     private String CHANNEL_ID;
     private PendingIntent pendingIntent;
     private NotificationManager notificationManager;
+    private NotificationMaker notificationMaker;
 
 
     @Override
     public void onNewToken(@NonNull String newToken) {
         super.onNewToken(newToken);
         token = newToken;
+    }
+
+    @Override
+    public void onCreate() {
+        String notification_alone_firstPart = getString(R.string.notification_alone_firstPart);
+        String notification_notAlone_firstPart = getString(R.string.notification_notAlone_firstPart);
+        String notification_notAlone_with = getString(R.string.notification_notAlone_with);
+        String notification_notAlone_and = getString(R.string.notification_notAlone_and);
+        String app_name = getString(R.string.app_name);
+        notificationMaker = new NotificationMaker(notification_alone_firstPart, notification_notAlone_firstPart, notification_notAlone_with, notification_notAlone_and, app_name);
+        super.onCreate();
     }
 
     @Override
@@ -65,10 +75,7 @@ public class NotificationService extends FirebaseMessagingService {
 
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID);
 
-            new Handler(Looper.getMainLooper()).post(() -> {
-                NotificationMaker notificationMaker = new NotificationMaker();
-                notificationMaker.fetchingAndReturningString(notificationManager, pendingIntent, notification);
-            });
+            new Handler(Looper.getMainLooper()).post(() -> notificationMaker.fetchingAndReturningString(notificationManager, pendingIntent, notification));
         }
     }
 

@@ -3,13 +3,12 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven {
-            url "https://maven.google.com"
+            url 'https://maven.fabric.io/public'
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "com.google.gms:google-services:4.3.10"
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
@@ -27,13 +26,18 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven {
-            url "https://maven.google.com"
+            url 'https://maven.fabric.io/public'
         }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
 }

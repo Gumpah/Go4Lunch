@@ -16,7 +16,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.barrow.go4lunch.model.User;
+import fr.barrow.go4lunch.data.model.User;
 
 public class UserRepository {
 
@@ -57,7 +57,6 @@ public class UserRepository {
                 }
             }
         }).addOnFailureListener(e -> {
-            //handle error
         });
     }
 
@@ -110,7 +109,6 @@ public class UserRepository {
                     User user = document.toObject(User.class);
                     if (!mFirebaseHelper.getCurrentFirebaseUserUID().equals(user.getUid())) {
                         users.add(user);
-                        System.out.println("Test" + mFirebaseHelper.getCurrentFirebaseUserUID() + " " + user.getUid());
                     }
                 }
                 listOfUsersPickedRestaurant.postValue(users);
@@ -118,7 +116,6 @@ public class UserRepository {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
-            //handle error
             listOfUsersPickedRestaurant.postValue(null);
         });
         return listOfUsersPickedRestaurant;
@@ -137,7 +134,6 @@ public class UserRepository {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
-            //handle error
             listOfUsersPickedRestaurantFromArray.postValue(null);
         });
         return listOfUsersPickedRestaurantFromArray;
@@ -156,16 +152,13 @@ public class UserRepository {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
-            //handle error
             listOfAllUsers.postValue(null);
         });
         return listOfAllUsers;
     }
 
     public MutableLiveData<User> getUpdatedLocalUserData() {
-        System.out.println("1");
         mFirebaseHelper.getFirestoreUserDocumentReference().addOnCompleteListener(task -> {
-            System.out.println("2");
             if (task.isSuccessful()) {
                 User user;
                 user = task.getResult().toObject(User.class);
@@ -174,8 +167,6 @@ public class UserRepository {
                 Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
-            System.out.println("3");
-            //handle error
             localUser.postValue(null);
         });
         return localUser;

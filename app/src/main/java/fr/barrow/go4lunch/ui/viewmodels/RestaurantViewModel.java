@@ -7,13 +7,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.ArrayList;
@@ -23,10 +21,10 @@ import java.util.List;
 import fr.barrow.go4lunch.R;
 import fr.barrow.go4lunch.data.PlacesStreams;
 import fr.barrow.go4lunch.data.RestaurantRepository;
-import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.RestaurantAutocomplete;
-import fr.barrow.go4lunch.model.placedetails.CombinedPlaceAndString;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
+import fr.barrow.go4lunch.data.model.Restaurant;
+import fr.barrow.go4lunch.data.model.RestaurantAutocomplete;
+import fr.barrow.go4lunch.data.model.placedetails.CombinedPlaceAndString;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetailsResult;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 

@@ -8,19 +8,19 @@
     <fragment
         android:id="@+id/navigation_mapView"
         android:name="fr.barrow.go4lunch.ui.MapViewFragment"
-        android:label="@string/title_mapView"
+        android:label="@string/titleToolbar_mapView"
         tools:layout="@layout/fragment_map_view" />
 
     <fragment
         android:id="@+id/navigation_listView"
-        android:name="fr.barrow.go4lunch.ui.ListViewFragment"
-        android:label="@string/title_listView"
-        tools:layout="@layout/fragment_list_view" />
+        android:name="fr.barrow.go4lunch.ui.listrestaurant.ListRestaurantFragment"
+        android:label="@string/titleToolbar_listView"
+        tools:layout="@layout/fragment_list_restaurant" />
 
     <fragment
         android:id="@+id/navigation_workmates"
-        android:name="fr.barrow.go4lunch.ui.WorkmatesFragment"
-        android:label="@string/title_workmates"
+        android:name="fr.barrow.go4lunch.ui.workmates.WorkmatesFragment"
+        android:label="@string/titleToolbar_workmates"
         tools:layout="@layout/fragment_workmates" />
 
 </navigation>

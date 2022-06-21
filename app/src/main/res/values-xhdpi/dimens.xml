@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common Text sizes -->
+    <dimen name="textView_globalTextSize">13sp</dimen>
+    <dimen name="textView_globalTextSize2">15sp</dimen>
+
+    <!-- LOGIN ACTIVITY -->
+    <dimen name="button_LoginIconSize">24dp</dimen>
+
+    <!-- MAIN ACTIVITY -->
+    <!-- nav header -->
+    <dimen name="constraintLayout_headerHeight">200dp</dimen>
+    <dimen name="textView_appNameHeaderTextSize">32sp</dimen>
+    <dimen name="textView_userNameTextSize">@dimen/textView_globalTextSize</dimen>
+    <dimen name="textView_userMailTextSize">@dimen/textView_globalTextSize</dimen>
+
+    <!-- RESTAURANT DETAILS ACTIVITY -->
+    <dimen name="fab_chooseRestaurantMaxImageSize">24dp</dimen>
+    <dimen name="textView_restaurantNameTextSize">18sp</dimen>
+    <dimen name="textView_restaurantTypeAndAddressTextSize">10sp</dimen>
+    <dimen name="textView_restaurantTypeAndAddressMarginTop">3dp</dimen>
+    <dimen name="imageButton_eachPadding">4dp</dimen>
+    <dimen name="textView_eachTextSize">@dimen/textView_globalTextSize</dimen>
+    <!-- workmates item -->
+    <dimen name="textView_userNameListTextSize">@dimen/textView_globalTextSize2</dimen>
+
+    <!-- SETTINGS ACTIVITY -->
+    <dimen name="switch_notificationsMarginEnd">12dp</dimen>
+    <dimen name="textView_notificationsMargin">@dimen/switch_notificationsMarginEnd</dimen>
+    <dimen name="textView_notificationsTextSize">14sp</dimen>
+
+    <!-- MAP VIEW FRAGMENT -->
+    <dimen name="fab_backToCameraMarginEnd">12dp</dimen>
+    <dimen name="fab_backToCameraMarginBottom">@dimen/fab_backToCameraMarginEnd</dimen>
+
+    <!-- LIST VIEW FRAGMENT -->
+    <!-- restaurant list item -->
+    <dimen name="textView_listRestaurantNameTextSize">14sp</dimen>
+    <dimen name="textView_listRestaurantAddressTextSize">12sp</dimen>
+    <dimen name="textView_textView_listRestaurantClosingTimeTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
+    <dimen name="textView_textView_listRestaurantDistanceTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
+    <dimen name="textView_listWorkmatesNumberTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
+    <!-- restaurant search item -->
+    <dimen name="textView_searchListRestaurantNameTextSize">@dimen/textView_globalTextSize</dimen>
+    <dimen name="textView_searchListRestaurantAddressTextSize">11sp</dimen>
+    <dimen name="textView_searchListRestaurantNameMargin">4dp</dimen>
+    <dimen name="textView_searchListRestaurantDistanceTextSize">@dimen/textView_listRestaurantAddressTextSize</dimen>
+    <dimen name="textView_searchListRestaurantDistanceMarginEnd">@dimen/textView_searchListRestaurantNameMargin</dimen>
+
+    <!-- WORKMATES FRAGMENT -->
+    <!-- item -->
+    <dimen name="textView_workmateChoiceTextSize">@dimen/textView_globalTextSize2</dimen>
+
+</resources>

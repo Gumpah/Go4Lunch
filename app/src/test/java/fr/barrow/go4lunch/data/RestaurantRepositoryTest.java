@@ -15,15 +15,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import fr.barrow.go4lunch.model.Restaurant;
-import fr.barrow.go4lunch.model.placedetails.Close;
-import fr.barrow.go4lunch.model.placedetails.Open;
-import fr.barrow.go4lunch.model.placedetails.OpeningHoursDetails;
-import fr.barrow.go4lunch.model.placedetails.Period;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetails;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
-import fr.barrow.go4lunch.model.placesnearby.Geometry;
-import fr.barrow.go4lunch.model.placesnearby.Location;
+import fr.barrow.go4lunch.data.model.Restaurant;
+import fr.barrow.go4lunch.data.model.placedetails.Close;
+import fr.barrow.go4lunch.data.model.placedetails.Open;
+import fr.barrow.go4lunch.data.model.placedetails.OpeningHoursDetails;
+import fr.barrow.go4lunch.data.model.placedetails.Period;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetails;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetailsResult;
+import fr.barrow.go4lunch.data.model.placesnearby.Geometry;
+import fr.barrow.go4lunch.data.model.placesnearby.Location;
 
 public class RestaurantRepositoryTest {
 
@@ -219,14 +219,23 @@ public class RestaurantRepositoryTest {
     @Test
     public void stringToDate() {
         String stringToConvert = "1230";
+        /*
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 12);
         c.set(Calendar.MINUTE, 30);
-
         Date expected_date = c.getTime();
-        Date actual_date = mRestaurantRepository.stringToDate(stringToConvert);
+         */
+        int expected_hours = 12;
+        int expected_minutes = 30;
 
-        assertEquals(expected_date, actual_date);
+        Date actual_date = mRestaurantRepository.stringToDate(stringToConvert);
+        Calendar actual_calendar = Calendar.getInstance();
+        actual_calendar.setTime(actual_date);
+
+        int actual_hours = actual_calendar.get(Calendar.HOUR_OF_DAY);
+        int actual_minutes = actual_calendar.get(Calendar.MINUTE);
+        assertEquals(expected_hours, actual_hours);
+        assertEquals(expected_minutes, actual_minutes);
     }
 
     @Test

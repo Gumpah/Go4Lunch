@@ -21,18 +21,32 @@
         android:layout_height="0dp"
         app:layout_constraintVertical_weight="4"
         app:layout_constraintTop_toTopOf="parent"
-        android:padding="@dimen/constraintLayout_containerPadding"
         app:layout_constraintBottom_toTopOf="@id/constraintLayout_bottomContainer">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9"/>
 
         <ImageView
             android:id="@+id/imageView_loginLogo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintDimensionRatio="H,1:1"
             android:src="@drawable/logo"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="@string/contentDesc_loginLogo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -43,34 +57,66 @@
         android:layout_height="0dp"
         app:layout_constraintVertical_weight="4"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout_topContainer"
-        android:paddingHorizontal="@dimen/constraintLayout_containerPadding"
-        android:paddingBottom="@dimen/constraintLayout_containerPadding">
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout_topContainer">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9"/>
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button_signInFacebook"
+            app:layout_constraintVertical_weight="1"/>
 
         <Button
             android:id="@+id/button_signInFacebook"
             android:layout_width="0dp"
-            android:layout_height="@dimen/button_LoginHeight"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/button_signInGoogle"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/space"
+            app:layout_constraintStart_toStartOf="@id/guideline3"
+            app:layout_constraintEnd_toEndOf="@id/guideline4"
+            app:layout_constraintBottom_toTopOf="@id/space2"
             android:text="@string/button_facebookSignIn"
             android:textColor="@color/textColor"
             app:icon="@drawable/ic_facebook"
             app:iconSize="@dimen/button_LoginIconSize"
             app:iconTint="@color/textColor"
             android:backgroundTint="@color/facebook"
-            app:layout_constraintVertical_chainStyle="spread" />
+            app:layout_constraintVertical_weight="2.5"/>
+
+        <Space
+            android:id="@+id/space2"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintTop_toBottomOf="@id/button_signInFacebook"
+            app:layout_constraintBottom_toTopOf="@id/button_signInGoogle"
+            app:layout_constraintVertical_weight="0.5"/>
 
         <Button
             android:id="@+id/button_signInGoogle"
             android:layout_width="0dp"
-            android:layout_height="@dimen/button_LoginHeight"
-            app:layout_constraintTop_toBottomOf="@id/button_signInFacebook"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/space2"
             app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
             app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
-            app:layout_constraintBottom_toTopOf="@id/button_signInTwitter"
+            app:layout_constraintBottom_toTopOf="@id/space3"
             android:text="@string/button_googleSignIn"
             android:textColor="@color/textColor"
             app:icon="@drawable/ic_google"
@@ -78,16 +124,27 @@
             app:iconTint="@color/textColor"
             android:backgroundTint="@color/google"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            app:layout_constraintVertical_weight="2.5"/>
+
+        <Space
+            android:id="@+id/space3"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintTop_toBottomOf="@id/button_signInGoogle"
+            app:layout_constraintBottom_toTopOf="@id/button_signInTwitter"
+            app:layout_constraintVertical_weight="0.5"/>
 
         <Button
             android:id="@+id/button_signInTwitter"
             android:layout_width="0dp"
-            android:layout_height="@dimen/button_LoginHeight"
-            app:layout_constraintTop_toBottomOf="@id/button_signInGoogle"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/space3"
             app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
             app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
-            app:layout_constraintBottom_toTopOf="@id/button_signInEmail"
+            app:layout_constraintBottom_toTopOf="@id/space4"
             android:text="@string/button_twitterSignIn"
             android:textColor="@color/textColor"
             app:icon="@drawable/ic_twitter"
@@ -95,16 +152,27 @@
             app:iconTint="@color/textColor"
             android:backgroundTint="@color/twitter"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            app:layout_constraintVertical_weight="2.5" />
+
+        <Space
+            android:id="@+id/space4"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintTop_toBottomOf="@id/button_signInTwitter"
+            app:layout_constraintBottom_toTopOf="@id/button_signInEmail"
+            app:layout_constraintVertical_weight="0.5"/>
 
         <Button
             android:id="@+id/button_signInEmail"
             android:layout_width="0dp"
-            android:layout_height="@dimen/button_LoginHeight"
-            app:layout_constraintTop_toBottomOf="@id/button_signInTwitter"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/space4"
             app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
             app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/space5"
             android:text="@string/button_EmailSignIn"
             android:textColor="@color/black"
             app:icon="@drawable/fui_ic_mail_white_24dp"
@@ -112,7 +180,18 @@
             app:iconTint="@color/black"
             android:backgroundTint="@color/mail"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            app:layout_constraintVertical_weight="2.5" />
+
+        <Space
+            android:id="@+id/space5"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/button_signInFacebook"
+            app:layout_constraintEnd_toEndOf="@id/button_signInFacebook"
+            app:layout_constraintTop_toBottomOf="@id/button_signInEmail"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_weight="2"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

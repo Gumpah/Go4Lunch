@@ -3,10 +3,10 @@ package fr.barrow.go4lunch.data;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import fr.barrow.go4lunch.model.placedetails.CombinedPlaceAndString;
-import fr.barrow.go4lunch.model.placedetails.PlaceDetailsResult;
-import fr.barrow.go4lunch.model.placesnearby.Place;
-import fr.barrow.go4lunch.model.placesnearby.PlacesNearbyResult;
+import fr.barrow.go4lunch.data.model.placedetails.CombinedPlaceAndString;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetailsResult;
+import fr.barrow.go4lunch.data.model.placesnearby.Place;
+import fr.barrow.go4lunch.data.model.placesnearby.PlacesNearbyResult;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -37,7 +37,7 @@ public class PlacesStreams {
                     .observeOn(AndroidSchedulers.mainThread())
                     .timeout(10, TimeUnit.SECONDS);
         }
-        return placesService.getPhotoUrlTest(mapApiKey, photoReference)
+        return placesService.getPhotoUrl(mapApiKey, photoReference)
                 .map(body -> {
                     combinedPlaceAndString.setPhotoUrl(body.raw().request().url().toString());
                     return combinedPlaceAndString;
