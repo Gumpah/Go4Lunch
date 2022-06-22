@@ -6,7 +6,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -31,20 +30,17 @@ public class NetworkMonitoring extends ConnectivityManager.NetworkCallback {
     @Override
     public void onAvailable(@NonNull Network network) {
         super.onAvailable(network);
-        Log.d(TAG, "onAvailable() called: Connected to network");
         mNetworkStateManager.setNetworkConnectivityStatus(true);
     }
 
     @Override
     public void onLost(@NonNull Network network) {
         super.onLost(network);
-        Log.e(TAG, "onLost() called: with: Lost network connection");
         mNetworkStateManager.setNetworkConnectivityStatus(false);
     }
 
     public void registerNetworkCallbackEvents() {
         if (!registeringStatus) {
-            Log.d(TAG, "registerNetworkCallbackEvents() called");
             mConnectivityManager.registerNetworkCallback(mNetworkRequest, this);
             registeringStatus = true;
         }

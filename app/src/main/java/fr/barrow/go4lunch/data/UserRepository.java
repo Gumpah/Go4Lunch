@@ -1,7 +1,6 @@
 package fr.barrow.go4lunch.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -112,8 +111,6 @@ public class UserRepository {
                     }
                 }
                 listOfUsersPickedRestaurant.postValue(users);
-            } else {
-                Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
             listOfUsersPickedRestaurant.postValue(null);
@@ -130,8 +127,6 @@ public class UserRepository {
                     if (!mFirebaseHelper.getCurrentFirebaseUserUID().equals(user.getUid())) users.add(user);
                 }
                 listOfUsersPickedRestaurantFromArray.postValue(users);
-            } else {
-                Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
             listOfUsersPickedRestaurantFromArray.postValue(null);
@@ -148,8 +143,6 @@ public class UserRepository {
                     if (!mFirebaseHelper.getCurrentFirebaseUserUID().equals(user.getUid())) users.add(user);
                 }
                 listOfAllUsers.postValue(users);
-            } else {
-                Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
             listOfAllUsers.postValue(null);
@@ -163,8 +156,6 @@ public class UserRepository {
                 User user;
                 user = task.getResult().toObject(User.class);
                 localUser.postValue(user);
-            } else {
-                Log.d("Error", "Error getting documents: ", task.getException());
             }
         }).addOnFailureListener(e -> {
             localUser.postValue(null);

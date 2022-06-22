@@ -1,7 +1,6 @@
 package fr.barrow.go4lunch.utils;
 
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,7 +15,6 @@ public class NetworkStateManager {
 
     public static synchronized NetworkStateManager getInstance() {
         if (INSTANCE == null) {
-            Log.d(TAG, "getInstance() called: Creating new instance");
             INSTANCE = new NetworkStateManager();
         }
         return INSTANCE;
@@ -31,7 +29,6 @@ public class NetworkStateManager {
                 return;
             }
         }
-        Log.d(TAG, "setNetworkConnectivityStatus() called with: connectivityStatus = [" + connectivityStatus + "]");
         if (Looper.myLooper() == Looper.getMainLooper()) {
             activeNetworkStatusMLD.setValue(connectivityStatus);
         } else {
@@ -43,7 +40,6 @@ public class NetworkStateManager {
      * Returns the current network status
      */
     public LiveData<Boolean> getNetworkConnectivityStatus() {
-        Log.d(TAG, "getNetworkConnectivityStatus() called");
         return activeNetworkStatusMLD;
     }
 }

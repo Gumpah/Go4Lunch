@@ -198,7 +198,6 @@ public class UserRepositoryTest {
         String actual_restaurantId = resultUser.getPickedRestaurant();
         String actual_restaurantName = resultUser.getPickedRestaurantName();
 
-        System.out.println(expected_restaurantId + " " + actual_restaurantId);
         assertEquals(expected_restaurantId, actual_restaurantId);
         assertEquals(expected_restaurantName, actual_restaurantName);
         verify(spyUserRepository, times(1)).sendUserDataToFirestore();

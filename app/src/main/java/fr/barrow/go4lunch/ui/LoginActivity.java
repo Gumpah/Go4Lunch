@@ -2,7 +2,6 @@ package fr.barrow.go4lunch.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -158,7 +157,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             showSnackBar(getString(R.string.unknown_error));
-            Log.e("MainActivity", "Sign-in error: ", response.getError());
         }
     }
 
