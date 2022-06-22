@@ -27,3 +27,4 @@
 -dontwarn okio.**
 -dontwarn retrofit2.Call
 -dontwarn java.beans.Transient
+-dontwarn java.beans.ConstructorProperties
