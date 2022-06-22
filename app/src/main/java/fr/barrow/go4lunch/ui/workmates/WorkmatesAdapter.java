@@ -1,6 +1,7 @@
 package fr.barrow.go4lunch.ui.workmates;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -86,9 +87,11 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
         void setTextViewAndClickListener(String username, String restaurantName, String restaurantId, ClickCallback callback) {
             String textView = (username + binding.getRoot().getResources().getString(R.string.workmate_noPickedRestaurant));
             binding.textViewWorkmateChoice.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.greyText, null));
+            binding.textViewWorkmateChoice.setTypeface(binding.textViewWorkmateChoice.getTypeface(), Typeface.ITALIC);
             if (restaurantName != null && restaurantId != null) {
                 textView = (username + binding.getRoot().getResources().getString(R.string.workmate_hasRestaurantPick) + restaurantName);
                 binding.textViewWorkmateChoice.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.black, null));
+                binding.textViewWorkmateChoice.setTypeface(binding.textViewWorkmateChoice.getTypeface(), Typeface.NORMAL);
                 binding.constraintLayoutContainer.setOnClickListener(v -> {
                     callback.myClickCallback(restaurantId);
                 });
