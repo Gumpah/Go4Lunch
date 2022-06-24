@@ -89,7 +89,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
             mapFragment.getMapAsync(this);
         }
         apiKey = BuildConfig.MAPS_API_KEY;
-        configureViewModel();
+        configureViewModels();
         initRestaurantsData();
         setHasOptionsMenu(true);
     }
@@ -205,13 +205,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         }
     }
 
-    private void setupDataRequest() {
+    private void fetchingRestaurantsDataRequest() {
         if (mRestaurantViewModel.getLocation() != null && mRestaurants.isEmpty()) {
             mRestaurantViewModel.fetchAndUpdateRestaurants(apiKey);
         }
     }
 
-    public void configureViewModel() {
+    public void configureViewModels() {
         mRestaurantViewModel = new ViewModelProvider(requireActivity(), RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
         mUserViewModel = new ViewModelProvider(requireActivity(), UserViewModelFactory.getInstance(requireContext())).get(UserViewModel.class);
     }
@@ -231,7 +231,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         binding.fabBackToCamera.setOnClickListener(v -> zoomOnLocation());
     }
 
-    private ActivityResultLauncher<String[]> locationPermissionRequest =
+    private final ActivityResultLauncher<String[]> locationPermissionRequest =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), isGranted -> {
                         if (isGranted.containsValue(true)) {
                             setLocation();
@@ -272,7 +272,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
                 fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
                     if (location != null) {
                         mRestaurantViewModel.setLocation(location);
-                        setupDataRequest();
+                        fetchingRestaurantsDataRequest();
                         enableMyLocation();
                     }
                 });

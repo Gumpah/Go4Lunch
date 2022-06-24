@@ -91,9 +91,13 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
             if (restaurantName != null && restaurantId != null) {
                 textView = (username + binding.getRoot().getResources().getString(R.string.workmate_hasRestaurantPick) + restaurantName);
                 binding.textViewWorkmateChoice.setTextColor(ResourcesCompat.getColor(binding.getRoot().getResources(), R.color.black, null));
-                binding.textViewWorkmateChoice.setTypeface(binding.textViewWorkmateChoice.getTypeface(), Typeface.NORMAL);
+                binding.textViewWorkmateChoice.setTypeface(null, Typeface.NORMAL);
                 binding.constraintLayoutContainer.setOnClickListener(v -> {
                     callback.myClickCallback(restaurantId);
+                });
+            } else {
+                binding.constraintLayoutContainer.setClickable(false);
+                binding.constraintLayoutContainer.setOnClickListener(v -> {
                 });
             }
             binding.textViewWorkmateChoice.setText(textView);

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        configureViewModel();
+        configureViewModels();
         apiKey = BuildConfig.MAPS_API_KEY;
         initUI();
         initAppBarConfiguration();
@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initToolbar();
         initDrawer();
         initBottomNavigationView();
-        updateUIWithUserData();
+        updateUIWithAuthenticationUserData();
         initNetworkStatus();
         mUserViewModel.updateLocalUserData();
-        initTest();
+        initPickedRestaurantFromFirestore();
         initToastObservers();
     }
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void initTest() {
+    private void initPickedRestaurantFromFirestore() {
         mUserViewModel.getUpdatedLocalUserData().observe(this, user -> {
             if (user != null) {
                 restaurantId = user.getPickedRestaurant();
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void configureViewModel() {
+    private void configureViewModels() {
         mRestaurantViewModel = new ViewModelProvider(this, RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
         mUserViewModel = new ViewModelProvider(this, UserViewModelFactory.getInstance(this)).get(UserViewModel.class);
     }
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void updateUIWithUserData(){
+    private void updateUIWithAuthenticationUserData(){
         if(mUserViewModel.isCurrentUserLogged()){
             FirebaseUser user = mUserViewModel.getCurrentUser();
             if (user != null) {

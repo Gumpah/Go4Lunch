@@ -163,7 +163,7 @@ public class UserViewModelTest {
 
     @Test
     public void getUpdatedLocalUserData() {
-        when(mUserRepository.getUpdatedLocalUserData()).thenReturn(mUserMutableLiveData);
+        when(mUserRepository.getUpdatedUserDataToLiveData()).thenReturn(mUserMutableLiveData);
 
         spyUserViewModel.getUpdatedLocalUserData();
 
@@ -184,7 +184,7 @@ public class UserViewModelTest {
         String expected_urlPicture = "url.com";
         User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
 
-        when(mUserRepository.getUser()).thenReturn(expected_user);
+        when(mUserRepository.getLocalUser()).thenReturn(expected_user);
 
         mUserViewModel.updateLocalUserData();
         MutableLiveData<User> userLiveData = mUserViewModel.mUser;
@@ -227,7 +227,7 @@ public class UserViewModelTest {
         User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
         expected_user.setPickedRestaurant(expected_id, expected_name);
 
-        when(mUserRepository.getUser()).thenReturn(expected_user);
+        when(mUserRepository.getLocalUser()).thenReturn(expected_user);
 
         mUserViewModel.setPickedRestaurant(expected_id, expected_name);
 
@@ -245,7 +245,7 @@ public class UserViewModelTest {
         String expected_urlPicture = "url.com";
         User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
 
-        when(mUserRepository.getUser()).thenReturn(expected_user);
+        when(mUserRepository.getLocalUser()).thenReturn(expected_user);
 
         mUserViewModel.removePickedRestaurant();
 
@@ -266,7 +266,7 @@ public class UserViewModelTest {
         User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
         expected_user.addLikedRestaurant(expected_id);
 
-        when(mUserRepository.getUser()).thenReturn(expected_user);
+        when(mUserRepository.getLocalUser()).thenReturn(expected_user);
 
         mUserViewModel.addLikedRestaurant(expected_id);
 
@@ -286,7 +286,7 @@ public class UserViewModelTest {
         String expected_urlPicture = "url.com";
         User expected_user = new User(expected_uid, expected_username, expected_urlPicture);
 
-        when(mUserRepository.getUser()).thenReturn(expected_user);
+        when(mUserRepository.getLocalUser()).thenReturn(expected_user);
 
         mUserViewModel.removeLikedRestaurant(expected_id);
 

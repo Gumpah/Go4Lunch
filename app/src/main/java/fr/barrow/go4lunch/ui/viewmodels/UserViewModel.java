@@ -67,7 +67,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public LiveData<UserStateItem> getUpdatedLocalUserData() {
-        return mapDataToViewState(mUserRepository.getUpdatedLocalUserData());
+        return mapDataToViewState(mUserRepository.getUpdatedUserDataToLiveData());
     }
 
     public void createUser() {
@@ -76,7 +76,7 @@ public class UserViewModel extends ViewModel {
 
     public void updateLocalUserData() {
         mUserRepository.updateLocalUserData();
-        mUser.setValue(mUserRepository.getUser());
+        mUser.setValue(mUserRepository.getLocalUser());
     }
 
     public Boolean isCurrentUserLogged() {
@@ -85,22 +85,22 @@ public class UserViewModel extends ViewModel {
 
     public void setPickedRestaurant(String restaurantId, String restaurantName) {
         mUserRepository.setPickedRestaurant(restaurantId, restaurantName);
-        mUser.setValue(mUserRepository.getUser());
+        mUser.setValue(mUserRepository.getLocalUser());
     }
 
     public void removePickedRestaurant() {
         mUserRepository.removePickedRestaurant();
-        mUser.setValue(mUserRepository.getUser());
+        mUser.setValue(mUserRepository.getLocalUser());
     }
 
     public void addLikedRestaurant(String restaurantId) {
         mUserRepository.addLikedRestaurant(restaurantId);
-        mUser.setValue(mUserRepository.getUser());
+        mUser.setValue(mUserRepository.getLocalUser());
     }
 
     public void removeLikedRestaurant(String restaurantId) {
         mUserRepository.removeLikedRestaurant(restaurantId);
-        mUser.setValue(mUserRepository.getUser());
+        mUser.setValue(mUserRepository.getLocalUser());
     }
 
     @Nullable
@@ -111,10 +111,4 @@ public class UserViewModel extends ViewModel {
     public Task<Void> signOut(Context context){
         return mUserRepository.signOut(context);
     }
-    
-    /*
-    public Task<Void> deleteUserFromFirebase(Context context){
-        return mUserRepository.deleteUserFromFirebase(context);
-    }
-     */
 }

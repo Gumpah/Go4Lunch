@@ -42,6 +42,7 @@ import fr.barrow.go4lunch.data.RestaurantRepository;
 import fr.barrow.go4lunch.data.model.Restaurant;
 import fr.barrow.go4lunch.data.model.RestaurantAutocomplete;
 import fr.barrow.go4lunch.data.model.placedetails.CombinedPlaceAndString;
+import fr.barrow.go4lunch.data.model.placedetails.PlaceDetails;
 import fr.barrow.go4lunch.data.model.placedetails.PlaceDetailsResult;
 import io.reactivex.Observable;
 import kotlin.jvm.JvmField;
@@ -114,8 +115,11 @@ public class RestaurantViewModelTest {
 
         MutableLiveData<List<Restaurant>> result = mRestaurantViewModel.getRestaurantsMutableLiveData();
 
-
+        List<String> types = Collections.singletonList("");
+        PlaceDetails placeDetails = new PlaceDetails();
+        placeDetails.setTypes(types);
         PlaceDetailsResult placeDetailsResult = new PlaceDetailsResult();
+        placeDetailsResult.setResult(placeDetails);
         String expected_photoUrl = "url.com";
         CombinedPlaceAndString combinedPlaceAndString = new CombinedPlaceAndString(placeDetailsResult, expected_photoUrl);
 

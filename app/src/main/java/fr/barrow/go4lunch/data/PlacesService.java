@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 
 public interface PlacesService {
 
-    @GET("maps/api/place/nearbysearch/json?type=restaurant&radius=300&opennow=true") //re-add opennow=true & put radius back to 500
+    @GET("maps/api/place/nearbysearch/json?type=restaurant&radius=300&opennow=true") //default : radius=300 + opennow=true
     Observable<PlacesNearbyResult> getNearbyPlaces(@Query("key") String apiKey, @Query("location") String location);
 
     @GET("maps/api/place/details/json?")

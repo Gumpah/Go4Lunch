@@ -29,7 +29,6 @@ import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModel;
 import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
 import fr.barrow.go4lunch.ui.viewmodels.RestaurantViewModelFactory;
 import fr.barrow.go4lunch.ui.viewmodels.UserViewModelFactory;
-import fr.barrow.go4lunch.ui.workmates.WorkmatesAdapter;
 
 public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTextListener, ClickCallback {
 
@@ -47,7 +46,7 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
         binding = FragmentWorkmatesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         apiKey = BuildConfig.MAPS_API_KEY;
-        configureViewModel();
+        configureViewModels();
         initRecyclerView(view);
         initUsersData();
         setHasOptionsMenu(true);
@@ -88,7 +87,7 @@ public class WorkmatesFragment extends Fragment implements SearchView.OnQueryTex
         }
     }
 
-    public void configureViewModel() {
+    public void configureViewModels() {
         mRestaurantViewModel = new ViewModelProvider(requireActivity(), RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
         mUserViewModel = new ViewModelProvider(requireActivity(), UserViewModelFactory.getInstance(requireContext())).get(UserViewModel.class);
     }

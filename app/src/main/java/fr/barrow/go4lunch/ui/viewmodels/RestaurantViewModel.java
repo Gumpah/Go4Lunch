@@ -114,8 +114,10 @@ public class RestaurantViewModel extends ViewModel {
             @Override
             public void onNext(CombinedPlaceAndString combinedPlaceAndString) {
                 PlaceDetailsResult placeDetailsResult = combinedPlaceAndString.getPlaceDetailsResult();
-                String photoUrl = combinedPlaceAndString.getPhotoUrl();
-                restaurants.add(placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
+                if (!placeDetailsResult.getResult().getTypes().contains("store")) {
+                    String photoUrl = combinedPlaceAndString.getPhotoUrl();
+                    restaurants.add(placeDetailsToRestaurantObject(placeDetailsResult, photoUrl));
+                }
             }
 
             @Override

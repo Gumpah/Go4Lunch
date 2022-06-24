@@ -53,7 +53,7 @@ public class ListRestaurantFragment extends Fragment implements SearchView.OnQue
                              Bundle savedInstanceState) {
         binding = FragmentListRestaurantBinding.inflate(inflater, container, false);
         apiKey = BuildConfig.MAPS_API_KEY;
-        configureViewModel();
+        configureViewModels();
         initPlaceClient();
         initRecyclerView();
         initRestaurantsData();
@@ -115,7 +115,7 @@ public class ListRestaurantFragment extends Fragment implements SearchView.OnQue
         Drawable drawable = ContextCompat.getDrawable(requireContext(), R.drawable.divider_decoration);
         if (drawable != null) {
             dividerItemDecoration.setDrawable(drawable);
-        } //TODO fournir image si null par défaut
+        }
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -132,8 +132,7 @@ public class ListRestaurantFragment extends Fragment implements SearchView.OnQue
         }
     }
 
-    public void configureViewModel() {
-        //mMyViewModel = new ViewModelProvider(requireActivity(), MyViewModelFactory.getInstance(requireContext())).get(MyViewModel.class);
+    public void configureViewModels() {
         mRestaurantViewModel = new ViewModelProvider(requireActivity(), RestaurantViewModelFactory.getInstance()).get(RestaurantViewModel.class);
         mUserViewModel = new ViewModelProvider(requireActivity(), UserViewModelFactory.getInstance(requireContext())).get(UserViewModel.class);
     }

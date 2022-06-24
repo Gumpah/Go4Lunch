@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.barrow.go4lunch.R;
-import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import fr.barrow.go4lunch.data.model.Restaurant;
 import fr.barrow.go4lunch.data.model.UserStateItem;
+import fr.barrow.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import fr.barrow.go4lunch.ui.viewmodels.UserViewModel;
 import fr.barrow.go4lunch.ui.viewmodels.UserViewModelFactory;
 

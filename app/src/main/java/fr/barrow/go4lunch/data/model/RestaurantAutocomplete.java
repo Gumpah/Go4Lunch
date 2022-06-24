@@ -2,10 +2,10 @@ package fr.barrow.go4lunch.data.model;
 
 public class RestaurantAutocomplete {
 
-    private String placeId;
-    private String name;
-    private String distance;
-    private String address;
+    private final String placeId;
+    private final String name;
+    private final String distance;
+    private final String address;
 
     public RestaurantAutocomplete(String id, String name, String distance, String address) {
         this.placeId = id;

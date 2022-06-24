@@ -136,7 +136,7 @@ public class UserRepositoryTest {
     public void getUserData() {
         when(mFirebaseHelper.isFirebaseUserNotNull()).thenReturn(true);
 
-        mUserRepository.getUserData();
+        mUserRepository.getFirestoreUserDocument();
 
         verify(mFirebaseHelper, times(1)).getFirestoreUserDocumentReference();
     }
@@ -144,12 +144,12 @@ public class UserRepositoryTest {
     @Test
     public void sendUserDataToFirestore() {
         when(mFirebaseHelper.getUserDocumentReference()).thenReturn(mDocumentReference);
-        doReturn(null).when(spyUserRepository).getUpdatedLocalUserData();
+        doReturn(null).when(spyUserRepository).getUpdatedUserDataToLiveData();
 
         spyUserRepository.sendUserDataToFirestore();
 
-        verify(mDocumentReference, times(1)).set(spyUserRepository.user);
-        verify(spyUserRepository, times(1)).getUpdatedLocalUserData();
+        verify(mDocumentReference, times(1)).set(spyUserRepository.localUser);
+        verify(spyUserRepository, times(1)).getUpdatedUserDataToLiveData();
     }
 
 
@@ -160,7 +160,7 @@ public class UserRepositoryTest {
         String username = "username";
         String uid = getNextID();
         User expected_user = new User(uid, username, urlPicture);
-        doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
+        doReturn(documentSnapshotTask).when(spyUserRepository).getFirestoreUserDocument();
         when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(expected_user);
 
@@ -168,7 +168,7 @@ public class UserRepositoryTest {
 
         onSuccessListenerCaptorDocumentSnapshot.getValue().onSuccess(documentSnapshot);
 
-        User actual_user = spyUserRepository.getUser();
+        User actual_user = spyUserRepository.getLocalUser();
 
         assertEquals(expected_user, actual_user);
     }
@@ -180,7 +180,7 @@ public class UserRepositoryTest {
         String uid = getNextID();
         User expected_user = new User(uid, username, urlPicture);
 
-        doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
+        doReturn(documentSnapshotTask).when(spyUserRepository).getFirestoreUserDocument();
         when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(expected_user);
 
@@ -194,7 +194,7 @@ public class UserRepositoryTest {
         String expected_restaurantName = "Restaurant";
         spyUserRepository.setPickedRestaurant(expected_restaurantId, expected_restaurantName);
 
-        User resultUser = spyUserRepository.getUser();
+        User resultUser = spyUserRepository.getLocalUser();
         String actual_restaurantId = resultUser.getPickedRestaurant();
         String actual_restaurantName = resultUser.getPickedRestaurantName();
 
@@ -213,7 +213,7 @@ public class UserRepositoryTest {
         String restaurantName = "Restaurant";
         testUser.setPickedRestaurant(restaurantId, restaurantName);
 
-        doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
+        doReturn(documentSnapshotTask).when(spyUserRepository).getFirestoreUserDocument();
         when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(testUser);
 
@@ -224,7 +224,7 @@ public class UserRepositoryTest {
         doNothing().when(spyUserRepository).sendUserDataToFirestore();
 
         spyUserRepository.removePickedRestaurant();
-        User resultUser = spyUserRepository.getUser();
+        User resultUser = spyUserRepository.getLocalUser();
         String actual_restaurantId = resultUser.getPickedRestaurant();
         String actual_restaurantName = resultUser.getPickedRestaurantName();
 
@@ -241,7 +241,7 @@ public class UserRepositoryTest {
         User testUser = new User(uid, username, urlPicture);
         String restaurantId = getNextID();
 
-        doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
+        doReturn(documentSnapshotTask).when(spyUserRepository).getFirestoreUserDocument();
         when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(testUser);
 
@@ -252,7 +252,7 @@ public class UserRepositoryTest {
         doNothing().when(spyUserRepository).sendUserDataToFirestore();
 
         spyUserRepository.addLikedRestaurant(restaurantId);
-        User resultUser = spyUserRepository.getUser();
+        User resultUser = spyUserRepository.getLocalUser();
         ArrayList<String> actual_restaurantId = resultUser.getLikedRestaurants();
 
         assertTrue(actual_restaurantId.contains(restaurantId));
@@ -268,7 +268,7 @@ public class UserRepositoryTest {
         String restaurantId = getNextID();
         testUser.addLikedRestaurant(restaurantId);
 
-        doReturn(documentSnapshotTask).when(spyUserRepository).getUserData();
+        doReturn(documentSnapshotTask).when(spyUserRepository).getFirestoreUserDocument();
         when(documentSnapshotTask.addOnSuccessListener(onSuccessListenerCaptorDocumentSnapshot.capture())).thenReturn(documentSnapshotTask);
         when(documentSnapshot.toObject(User.class)).thenReturn(testUser);
 
@@ -279,7 +279,7 @@ public class UserRepositoryTest {
         doNothing().when(spyUserRepository).sendUserDataToFirestore();
 
         spyUserRepository.removeLikedRestaurant(restaurantId);
-        User resultUser = spyUserRepository.getUser();
+        User resultUser = spyUserRepository.getLocalUser();
 
         assertFalse(resultUser.getLikedRestaurants().contains(restaurantId));
         verify(spyUserRepository, times(1)).sendUserDataToFirestore();
@@ -403,7 +403,7 @@ public class UserRepositoryTest {
         when(documentSnapshot.toObject(User.class)).thenReturn(user);
         when(documentSnapshotTask.isSuccessful()).thenReturn(true);
 
-        MutableLiveData<User> result = mUserRepository.getUpdatedLocalUserData();
+        MutableLiveData<User> result = mUserRepository.getUpdatedUserDataToLiveData();
 
         onCompleteListenerCaptorDocumentSnapshot.getValue().onComplete(documentSnapshotTask);
 

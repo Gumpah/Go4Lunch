@@ -22,20 +22,20 @@ public class UserRepository {
     FirebaseHelper mFirebaseHelper;
 
     @VisibleForTesting
-    public User user;
+    public User localUser;
 
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurant;
     private final MutableLiveData<List<User>> listOfUsersPickedRestaurantFromArray;
     private final MutableLiveData<List<User>> listOfAllUsers;
 
-    private final MutableLiveData<User> localUser;
+    private final MutableLiveData<User> firestoreUserLiveData;
 
     public UserRepository(FirebaseHelper firebaseHelper) {
         mFirebaseHelper = firebaseHelper;
         listOfUsersPickedRestaurant = new MutableLiveData<>();
         listOfUsersPickedRestaurantFromArray = new MutableLiveData<>();
         listOfAllUsers = new MutableLiveData<>();
-        localUser = new MutableLiveData<>();
+        firestoreUserLiveData = new MutableLiveData<>();
     }
 
     // Create User in Firestore
@@ -59,11 +59,11 @@ public class UserRepository {
         });
     }
 
-    public User getUser() {
-        return user;
+    public User getLocalUser() {
+        return localUser;
     }
 
-    public Task<DocumentSnapshot> getUserData() {
+    public Task<DocumentSnapshot> getFirestoreUserDocument() {
         if (mFirebaseHelper.isFirebaseUserNotNull()) {
             return mFirebaseHelper.getFirestoreUserDocumentReference();
         } else {
@@ -72,31 +72,31 @@ public class UserRepository {
     }
 
     public void sendUserDataToFirestore() {
-        mFirebaseHelper.getUserDocumentReference().set(user);
-        getUpdatedLocalUserData();
+        mFirebaseHelper.getUserDocumentReference().set(localUser);
+        getUpdatedUserDataToLiveData();
     }
 
     public void updateLocalUserData() {
-        getUserData().addOnSuccessListener(documentSnapshot -> user = documentSnapshot.toObject(User.class));
+        getFirestoreUserDocument().addOnSuccessListener(documentSnapshot -> localUser = documentSnapshot.toObject(User.class));
     }
 
     public void setPickedRestaurant(String restaurantId, String restaurantName) {
-        getUser().setPickedRestaurant(restaurantId, restaurantName);
+        getLocalUser().setPickedRestaurant(restaurantId, restaurantName);
         sendUserDataToFirestore();
     }
 
     public void removePickedRestaurant() {
-        getUser().removePickedRestaurant();
+        getLocalUser().removePickedRestaurant();
         sendUserDataToFirestore();
     }
 
     public void addLikedRestaurant(String restaurantId) {
-        getUser().addLikedRestaurant(restaurantId);
+        getLocalUser().addLikedRestaurant(restaurantId);
         sendUserDataToFirestore();
     }
 
     public void removeLikedRestaurant(String restaurantId) {
-        getUser().removeLikedRestaurant(restaurantId);
+        getLocalUser().removeLikedRestaurant(restaurantId);
         sendUserDataToFirestore();
     }
 
@@ -150,17 +150,17 @@ public class UserRepository {
         return listOfAllUsers;
     }
 
-    public MutableLiveData<User> getUpdatedLocalUserData() {
+    public MutableLiveData<User> getUpdatedUserDataToLiveData() {
         mFirebaseHelper.getFirestoreUserDocumentReference().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 User user;
                 user = task.getResult().toObject(User.class);
-                localUser.postValue(user);
+                firestoreUserLiveData.postValue(user);
             }
         }).addOnFailureListener(e -> {
-            localUser.postValue(null);
+            firestoreUserLiveData.postValue(null);
         });
-        return localUser;
+        return firestoreUserLiveData;
     }
 
     @Nullable
